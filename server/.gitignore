@@ -1,0 +1,10 @@
+.venv/
+venv/
+env/
+virtual/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.vscode/
+.mypy_cache/
+build/
