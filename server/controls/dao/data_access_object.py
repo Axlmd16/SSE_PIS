@@ -16,9 +16,9 @@ T = TypeVar("T")
 class Data_Access_Object(Generic[T]):
     atype: T
 
-    def __init__(self, atype: T):
+    def _init_(self, atype: T):
         self.atype = atype
-        self.name = self.atype.__name__.lower()
+        self.name = self.atype._name_.lower()
         self.cnx = ConnectionDB().connection()
 
     def _list(self) -> T:
@@ -32,19 +32,36 @@ class Data_Access_Object(Generic[T]):
         return lista
 
     def _save(self, data: T):
-        cursor = self.cnx._db.cursor()
-        columns = ", ".join(data.serializable().keys())
-        placeholders = ", ".join([":" + key for key in data.serializable().keys()])
-        sql = f"INSERT INTO {self.name} ({columns}) VALUES ({placeholders})"
-        params = {}
-        for key, value in data.serializable().items():
-            if isinstance(value, datetime):
-                params[key] = value.strftime("%d-%b-%Y")
-            else:
-                params[key] = value
-        cursor.execute(sql, params)
-        cursor.close()
-        self.cnx.commit()
+        cursor = None
+        try:
+            cursor = self.cnx._db.cursor()
+            columns = ", ".join(data.serializable().keys())
+            placeholders = ", ".join([":" + key for key in data.serializable().keys()])
+            sql = f"INSERT INTO {self.name} ({columns}) VALUES ({placeholders})"
+
+            params = {}
+            for key, value in data.serializable().items():
+                if isinstance(value, datetime):
+                    params[key] = value.strftime("%d-%b-%Y")
+                else:
+                    params[key] = value
+
+            print("SQL:", sql, end="\n\n")
+            print("Params:", params)
+
+            cursor.execute(sql, params)
+            self.cnx.commit()
+
+        except Exception as e:
+            if cursor:
+                cursor.close()
+            print(f"Error al ejecutar el SQL: {e}")
+            self.cnx.rollback()
+            raise e
+
+        finally:
+            if cursor:
+                cursor.close()
 
     def _save_id(self, data: T):
         cursor = self.cnx._db.cursor()
@@ -72,17 +89,19 @@ class Data_Access_Object(Generic[T]):
         self.cnx.commit()
         return id
 
-    def _merge(self, data: T) -> None:
+    def _merge(self, id: int, data: T) -> None:
         cursor = self.cnx._db.cursor()
         columns = ", ".join([f"{key} = :{key}" for key in data.serializable().keys()])
         sql = f"UPDATE {self.name} SET {columns} WHERE ID = :id"
+
         params = {}
         for key, value in data.serializable().items():
             if isinstance(value, datetime):
-                params[key] = value.strftime("%Y-%m-%d %H:%M:%S")
+                params[key] = value.strftime("%d-%b-%Y")
             else:
                 params[key] = value
-        params["id"] = data.serializable()["id"]
+        params["id"] = id
+
         cursor.execute(sql, params)
         cursor.close()
         self.cnx.commit()
@@ -100,19 +119,44 @@ class Data_Access_Object(Generic[T]):
         sql = f"SELECT * FROM {self.name} WHERE ID = :id"
         params = {"id": id}
         cursor.execute(sql, params)
-        row = cursor.fetchone()
+        row = ConnectionDB().fetchone_to_dict(cursor)
         cursor.close()
         return self.atype.deserializable(row)
 
-    def __transform__(self):
+    def _transform_(self):
         return json.dumps(
             [self.lista.get(i).serializable() for i in range(self.lista._length)],
             indent=4,
         )
 
     def _to_dict(self):
-        aux = []
-        self._list()
-        for i in range(self.lista._length):
-            aux.append(self.lista.get(i).serializable())
-        return aux
+        cursor = self.cnx._db.cursor()
+        dict = []
+        cursor.execute(f"SELECT * FROM {self.name}")
+        for row in ConnectionDB().fetchall_to_dict(cursor):
+            dict.append(row)
+        return dict
+
+    def _delete_compound_key(self, primary_keys: dict) -> None:
+        """
+        Elimina un registro de una tabla con clave primaria compuesta.
+
+        Args:
+        - table_name (str): Nombre de la tabla en la base de datos.
+        - primary_keys (dict): Diccionario con las columnas de clave primaria y sus valores.
+
+        Example:
+        - primary_keys = {"ROL_ID": 1, "PERMISO_ID": 2}
+        """
+        cursor = self.cnx._db.cursor()
+        columns = ", ".join(primary_keys.keys())
+        placeholders = " AND ".join([f"{key} = :{key}" for key in primary_keys.keys()])
+        sql = f"DELETE FROM {self.name} WHERE {placeholders}"
+
+        params = {}
+        for key, value in primary_keys.items():
+            params[key] = value
+
+        cursor.execute(sql, params)
+        cursor.close()
+        self.cnx.commit()
