@@ -3,6 +3,10 @@ import { Context } from "../../store/context";
 import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 import BuscarCursaEstudiante from "./BuscarCursaEstudiante";
 import TablaEstudianteCursa from "../../components/notas/tabla_estudiante_cursa";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 const EstudianteCursa = () => {
     const { store, actions } = useContext(Context);
@@ -26,6 +30,7 @@ const EstudianteCursa = () => {
 
     const [selectEstudiante, setSelectEstudiante] = useState(null);
     const [selectedCursa, setSelectedCursa] = useState(null); 
+    const [actualizarTabla, setActualizarTabla] = useState(false); 
 
     const handleDataSelection = (estudiante, cursa) => {
         setSelectEstudiante(estudiante);
@@ -43,11 +48,24 @@ const EstudianteCursa = () => {
         };
 
         try {
-            console.log({ data });
+            // console.log({ data });
             await actions.create_estudiantes_cursa(data);
-            console.log("GUARDADO");
+            MySwal.fire({
+                icon: "success",
+                title: "Registro exitoso",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            setActualizarTabla(prev => !prev);
+            // console.log("GUARDADO");
         } catch (error) {
-            console.log(error);
+            MySwal.fire({
+                icon: "error",
+                title: "Error al registrar",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            // console.log(error);
         }
     };
 
@@ -68,7 +86,7 @@ const EstudianteCursa = () => {
                 </button>
 
             </div>
-            <TablaEstudianteCursa store={store} actions={actions} />
+            <TablaEstudianteCursa store={store} actions={actions} actualizar={actualizarTabla}/>
         </div>
     );
 }

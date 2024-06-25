@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import adminActions from "./adminActions";
 import academicActions from "./academicActions";
 import notesActions from "./notesActions";
-import reportsActions from "./reportsActions";
+//import reportsActions from "./reportsActions";
 import loginActions from "./loginActions";
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -94,7 +94,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       ...adminActions({ getStore, getActions, setStore }),
       ...academicActions({ getStore, getActions, setStore }),
       ...notesActions({ getStore, getActions, setStore }),
-      ...reportsActions({ getStore, getActions, setStore }),
+      //...reportsActions({ getStore, getActions, setStore }),
       ...loginActions({ getStore, getActions, setStore }),
     },
   };
