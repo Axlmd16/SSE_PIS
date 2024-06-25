@@ -9,13 +9,13 @@ def create_app():
 
     with app.app_context():
 
-        from routes.reports import reports
+        # from routes.reports import reports
         from routes.academic import academic
         from routes.auth import auth
         from routes.admin import admin
         from routes.load_notes import load_notes
 
-        app.register_blueprint(reports)
+        # app.register_blueprint(reports)
         app.register_blueprint(academic)
         app.register_blueprint(auth)
         app.register_blueprint(admin)
