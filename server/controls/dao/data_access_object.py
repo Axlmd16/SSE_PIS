@@ -12,7 +12,6 @@ from controls.dao.connection import ConnectionDB
 
 T = TypeVar("T")
 
-
 class Data_Access_Object(Generic[T]):
     atype: T
 
