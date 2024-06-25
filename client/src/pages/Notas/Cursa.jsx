@@ -3,6 +3,10 @@ import { Context } from "../../store/context";
 import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 import TablaCursa from "../../components/notas/tabla_cursa";
 import BuscarAsignacionDocente from "../Academico/BuscarAsignacionDocente";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 
 const Cursa = () => {
@@ -22,6 +26,7 @@ const Cursa = () => {
 
     const [selectDocenteAsignatura, setSelectDocenteAsignatura] = useState(null);
     const [selectedParalelo, setSelectedParalelo] = useState(""); // Estado para almacenar el paralelo seleccionado
+    const [actualizarTabla, setActualizarTabla] = useState(false); 
 
     // Para recibir los datos seleccionados desde BuscarAsignaturaDocente
     const handleDataSelection = (person) => {
@@ -43,11 +48,22 @@ const Cursa = () => {
         };
 
         try {
-            // console.log({ data });
             await actions.create_cursa(data);
-            // console.log("GUARDADO");
+            MySwal.fire({
+                icon: "success",
+                title: "Registro exitoso",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            setActualizarTabla(prev => !prev);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            MySwal.fire({
+                icon: "error",
+                title: "Error al registrar",
+                showConfirmButton: false,
+                timer: 1500,
+              });
         }
     };
 
@@ -84,7 +100,7 @@ const Cursa = () => {
                 </button>
                 
             </div>
-            <TablaCursa store={store} actions={actions} />
+            <TablaCursa store={store} actions={actions} actualizar={actualizarTabla}/>
         </div>
     );
 }
