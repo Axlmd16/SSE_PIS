@@ -122,70 +122,32 @@ export function DropdownMenu({ icon, text, children }) {
 
 export function Navbar() {
   return (
-    <div className="navbar bg-gray-800 text-white w-full shadow-md">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <button className="btn btn-ghost lg:hidden">
-            <MoreVertical />
-          </button>
-          <ul
-            tabIndex="0"
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-gray-800 rounded-box w-52 text-white"
-          >
-            <li>
-              <Link to="/">Item 1</Link>
-            </li>
-            <li>
-              <Link to="/">Parent</Link>
-              <ul className="p-2 bg-gray-700 rounded-md">
-                <li>
-                  <Link to="/">Submenu 1</Link>
-                </li>
-                <li>
-                  <Link to="/">Submenu 2</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to="/">Item 3</Link>
-            </li>
-          </ul>
+    <nav className="bg-gray-800 text-white shadow-lg fixed w-full z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex-shrink-0 flex items-center">
+            <Link to="/" className="text-2xl font-bold tracking-wider">
+              <span className="text-blue-400">UNL</span>
+            </Link>
+          </div>
+          <div className="hidden lg:flex space-x-4">
+            {/* Links adicionales pueden ser añadidos aquí */}
+          </div>
+          <div className="flex items-center space-x-2">
+            <Link
+              to="/login"
+              className="text-gray-300 hover:text-white focus:outline-none focus:text-white"
+            >
+              Iniciar Sesión
+            </Link>
+          </div>
+          <div className="lg:hidden flex items-center">
+            <button className="text-gray-300 hover:text-white focus:outline-none focus:text-white">
+              <MoreVertical />
+            </button>
+          </div>
         </div>
-        <Link to={"/"} className="btn btn-ghost text-xl">
-          UNL
-        </Link>
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link to="/">Item 1</Link>
-          </li>
-          <li>
-            <details>
-              <summary>Parent</summary>
-              <ul className="p-2 bg-gray-700 rounded-md">
-                <li>
-                  <Link to="/">Submenu 1</Link>
-                </li>
-                <li>
-                  <Link to="/">Submenu 2</Link>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <Link to="/">Item 3</Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <Link
-          className="btn bg-gray-700 hover:bg-gray-600 text-white"
-          to={"/login"}
-        >
-          Iniciar Sesión
-        </Link>
-      </div>
-    </div>
+    </nav>
   );
 }
