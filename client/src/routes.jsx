@@ -93,7 +93,7 @@ const Rutas = () => {
           <Nav_Rol actions={actions} store={store} />
           <Routes>
             <Route>
-              <Route path="/home" element={<Home_Docente />} />
+              <Route path="/home" element={<Home_Principal />} />
               <Route
                 path="/cursos_docente"
                 element={<CursosDocente actions={actions} store={store} />}
