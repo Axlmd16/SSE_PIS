@@ -72,7 +72,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
           return true;
         } catch (error) {
-          alert("Error en el servidor al iniciar sesión");
           return false;
         }
       },
