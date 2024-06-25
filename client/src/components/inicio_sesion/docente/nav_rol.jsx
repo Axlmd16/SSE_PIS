@@ -16,8 +16,8 @@ function Nav_Rol() {
   // converir el string de la persona guardda en el session storage a un objeto
   const personaString = sessionStorage.getItem("persona");
   const persona = JSON.parse(personaString || "{}");
-  console.log("Persona autenticada:", persona);
-  console.log("Persona ID:", persona.id);
+  //console.log("Persona autenticada:", persona);
+  //console.log("Persona ID:", persona.id);
 
   // Llamada a la API para obtener todos los permisos de la base de datos asociados al usuario
   useEffect(() => {

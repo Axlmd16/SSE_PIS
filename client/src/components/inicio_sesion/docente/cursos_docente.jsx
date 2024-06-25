@@ -10,8 +10,8 @@ const CursosDocente = () => {
 
     const personaString = sessionStorage.getItem("persona");
     const persona = JSON.parse(personaString || "{}");
-    console.log("Persona autenticada:", persona);
-    console.log("Persona ID:", persona.id);
+    //console.log("Persona autenticada:", persona);
+    //console.log("Persona ID:", persona.id);
 
     const id_docente = persona.id
 

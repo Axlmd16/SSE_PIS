@@ -40,6 +40,7 @@ import { Context } from "./store/context";
 import Roles_Usuarios from "./pages/Adminitracion/roles_usuarios";
 import CursosDocente from "./components/inicio_sesion/docente/cursos_docente";
 import TablaCalificaciones from "./components/inicio_sesion/docente/TablaCalificaciones";
+import Reportes from "./components/reportes/Reportes";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -102,6 +103,10 @@ const Rutas = () => {
                 path="/tabla_calificaciones/:id_asignacion/:asignatura_nombre"
                 element={<TablaCalificaciones />}
               />
+              <Route
+                path="/reportes"
+                element={<Reportes />}
+                />
             </Route>
           </Routes>
         </div>
