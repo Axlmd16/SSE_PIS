@@ -7,7 +7,7 @@ from controls.admin.malla_control import MallaControl
 from controls.admin.asignatura_control import AsignaturaControl
 from controls.admin.grupo_control import GrupoControl
 
-admin = Blueprint("admin", _name_)
+admin = Blueprint("admin", __name__)
 
 cc = CarreraControl()
 mc = MallaControl()
