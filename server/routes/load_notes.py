@@ -19,13 +19,14 @@ def get_info_cursa():
 @jwt_required
 @load_notes.route('/cursa', methods=['POST'])
 def guardar_cursa():
-    data = request.json
-    cursa_control._cursa._paralelo = data["paralelo"]
-    cursa_control._cursa._asignacion_id = data["id_docente_asignatura"]
-    if cursa_control.save():
-        return jsonify(data), 201
-    else:
-        return jsonify({"msg": "Error al guardar el Curso"}), 500
+    try:
+        data = request.json
+        cursa_control._cursa._paralelo = data["paralelo"]
+        cursa_control._cursa._asignacion_id = data["id_docente_asignatura"]
+        cursa_control.save()
+        return jsonify({"msg": "Cursa guardada correctamente"}), 201
+    except Exception as e:
+        return jsonify({"msg": "Error al guardar el Cursa"}), 500
 
 @jwt_required
 @load_notes.route("/estudiante_cursa", methods=["GET"])
@@ -36,10 +37,11 @@ def get_info_estudiantes_cursa():
 @jwt_required
 @load_notes.route('/estudiante_cursa', methods=['POST'])
 def guardar_estudiante_cursa():
-    data = request.json
-    estudiante_cursa_control._estudiante_cursa._estudiante_id = data["id_estudiante"]
-    estudiante_cursa_control._estudiante_cursa._cursa_id = data["id_cursa"]
-    if estudiante_cursa_control.save():
-        return jsonify(data), 201
-    else:
+    try:
+        data = request.json
+        estudiante_cursa_control._estudiante_cursa._estudiante_id = data["id_estudiante"]
+        estudiante_cursa_control._estudiante_cursa._cursa_id = data["id_cursa"]
+        estudiante_cursa_control.save()
+        return jsonify({"msg": "Estudiante Cursa guardado correctamente"}), 201
+    except Exception as e:
         return jsonify({"msg": "Error al guardar el Curso"}), 500

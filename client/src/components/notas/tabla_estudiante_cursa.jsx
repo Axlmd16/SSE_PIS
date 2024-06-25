@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Pencil, Trash2 } from "lucide-react";
 import SearchBar from "../inicio_sesion/search_bar";
 
-const TablaEstudianteCursa = ({ actions, store }) => {
+const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
   const [DocenteAsignaturas, setDocenteAsignaturas] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
       setLoading(true);
       try {
         const data = await actions.get_all_estudiantes_cursas();
@@ -21,10 +20,11 @@ const TablaEstudianteCursa = ({ actions, store }) => {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchData();
   }, [actions]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData, actualizar]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
