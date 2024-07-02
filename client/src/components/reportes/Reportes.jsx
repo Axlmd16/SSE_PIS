@@ -1,69 +1,72 @@
-// Importa las bibliotecas jsPDF
-import { useRef } from 'react';
-import { jsPDF } from 'jspdf';
+import { BookOpen, Folder } from "lucide-react";
+import React, { useState } from "react";
+import CourseSelector from "./searchs/CourseSelector";
+import StudentTable from "./searchs/StudentTable";
+import SubjectSelector from "./searchs/SubjectSelector";
+import UnitSelector from "./searchs/UnitSelector";
 
-// Define un componente funcional llamado 'Reportes'
 const Reportes = () => {
-    // Definición de variables con información estática
-    const nombre = 'Juan Pérez';
-    const fecha = '24 de junio de 2024';
-    const contenido = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisl eget turpis interdum aliquet.';
-    const asignatura = "Base de datos";
-    
-    // useRef se usa para crear una referencia que se asociará con el contenido a incluir en el PDF
-    const contentRef = useRef(null);
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("");
 
-    // Función para generar el PDF
-    const generatePDF = () => {
-        const doc = new jsPDF(); // Crea una nueva instancia de jsPDF
-        
-        // Utiliza el método html para añadir contenido HTML al PDF
-        doc.html(contentRef.current, {
-            callback: function (pdf) { // Callback que se ejecuta cuando el contenido se ha añadido
-                const pdfBlob = pdf.output('blob'); // Convierte el PDF a un Blob
+  const handleSelectCourse = (course) => {
+    setSelectedCourse(course);
+    setSelectedSubject("");
+    setSelectedUnit("");
+  };
 
-                const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el Blob
+  const handleSelectSubject = (subject) => {
+    setSelectedSubject(subject);
+    setSelectedUnit("");
+  };
 
-                // Crea un enlace para descargar el PDF
-                const downloadLink = document.createElement('a');
-                downloadLink.href = pdfUrl;
-                downloadLink.download = 'reporte.pdf'; // Nombre del archivo a descargar
-                downloadLink.click(); // Simula el clic para descargar el archivo
+  return (
+    <div className="p-6 max-w-full mx-auto space-y-6">
+      <header className="text-center mb-6">
+        <h1 className="text-3xl font-semibold text-gray-700">
+          Informe de Rendimiento de Estudiantes
+        </h1>
+      </header>
 
-                URL.revokeObjectURL(pdfUrl); // Revoca la URL para liberar memoria
-            },
-            x: 10, // Posición x inicial en el PDF
-            y: 10  // Posición y inicial en el PDF
-        });
-    };
+      <div className="space-y-4">
+        <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
+          <div className="flex items-center w-full lg:w-1/3">
+            <Folder className="text-gray-500 w-6 h-6 mr-2" />
+            <CourseSelector onSelectCourse={handleSelectCourse} />
+          </div>
 
-    // JSX que define la estructura del componente
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="bg-white shadow-md rounded-lg p-8 m-4 max-w-lg mx-auto">
-                <div className="text-center mb-4">
-                    <h1 className="text-2xl font-bold">{asignatura}</h1> {/* Muestra la asignatura */}
-                    <p className="text-sm text-gray-600">Fecha de emisión: {fecha}</p> {/* Muestra la fecha */}
-                </div>
-                <div className="mb-4" ref={contentRef}> {/* Contenido que se referenciará para el PDF */}
-                    <h2 className="text-lg font-semibold mb-2">Información</h2>
-                    <p className="text-sm"><strong>Nombre:</strong> {nombre}</p> {/* Muestra el nombre */}
-                    <p className="text-sm"><strong>Asignatura:</strong>{asignatura}</p> {/* Muestra la asignatura */}
-                </div>
-                <div className="mb-4">
-                    <h2 className="text-lg font-semibold mb-2">Proyeccion de Notas</h2>
-                    <p className="text-sm">{contenido}</p> {/* Muestra el contenido */}
-                </div>
-                <div className="text-center text-xs text-gray-600">
-                    <p>Informe emitido por el sistema de gestión.</p> {/* Muestra el pie de página */}
-                </div>
-                <button onClick={generatePDF} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Descargar PDF {/* Botón para generar y descargar el PDF */}
-                </button>
+          {selectedCourse && (
+            <div className="flex items-center w-full lg:w-1/3">
+              <BookOpen className="text-gray-500 w-6 h-6 mr-2" />
+              <SubjectSelector
+                course={selectedCourse}
+                onSelectSubject={handleSelectSubject}
+              />
             </div>
+          )}
         </div>
-    );
-}
 
-// Exporta el componente para que pueda ser usado en otras partes de la aplicación
+        {selectedSubject && (
+          <>
+            <div className="flex justify-end items-center w-full lg:w-1/3 ml-auto">
+              <UnitSelector
+                subject={selectedSubject}
+                onSelectUnit={setSelectedUnit}
+              />
+            </div>
+            <div className="mt-6">
+              <StudentTable
+                subject={selectedSubject}
+                unit={selectedUnit}
+                course={selectedCourse}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default Reportes;

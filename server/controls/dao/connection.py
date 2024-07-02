@@ -39,3 +39,7 @@ class ConnectionDB:
 
     def commit(self):
         self._db.commit()
+
+    def fetchone_to_dict(self, cursor):
+        columns = [i[0].lower() for i in cursor.description]
+        return dict(zip(columns, cursor.fetchone()))

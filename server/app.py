@@ -14,11 +14,13 @@ def create_app():
         from routes.auth import auth
         from routes.admin import admin
         from routes.load_notes import load_notes
+        from routes.reports import reports
 
         # app.register_blueprint(reports)
         app.register_blueprint(academic)
         app.register_blueprint(auth)
         app.register_blueprint(admin)
         app.register_blueprint(load_notes)
+        app.register_blueprint(reports)
 
     return app

@@ -4,6 +4,7 @@ import adminActions from "./adminActions";
 import academicActions from "./academicActions";
 import notesActions from "./notesActions";
 import loginActions from "./loginActions";
+import reportActions from "./reportsActions";
 
 const getState = ({ getStore, getActions, setStore }) => {
   const API_BASE_URL = "http://127.0.0.1:3000";
@@ -93,6 +94,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       ...academicActions({ getStore, getActions, setStore }),
       ...notesActions({ getStore, getActions, setStore }),
       ...loginActions({ getStore, getActions, setStore }),
+      ...reportActions({ getStore, getActions, setStore }),
     },
   };
 };
