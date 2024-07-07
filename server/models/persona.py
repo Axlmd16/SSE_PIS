@@ -104,7 +104,8 @@ class Persona:
         self.__genero_id = value
 
     def __str__(self):
-        return self.__nombres + " " + self.__apellidos
+        # return self._primer_nombre + " " + self._primer_apellido
+        return f"{self._id} --> {self._primer_nombre} {self._primer_apellido}\n"
 
     def serializable(self) -> dict:
         return {

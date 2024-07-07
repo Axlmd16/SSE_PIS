@@ -16,7 +16,7 @@ T = TypeVar("T")
 class Data_Access_Object(Generic[T]):
     atype: T
 
-    def _init_(self, atype: T):
+    def __init__(self, atype: T):
         self.atype = atype
         self.name = self.atype.__name__.lower()
         self.cnx = ConnectionDB().connection()
@@ -123,7 +123,7 @@ class Data_Access_Object(Generic[T]):
         cursor.close()
         return self.atype.deserializable(row)
 
-    def _transform_(self):
+    def __transform__(self):
         return json.dumps(
             [self.lista.get(i).serializable() for i in range(self.lista._length)],
             indent=4,
