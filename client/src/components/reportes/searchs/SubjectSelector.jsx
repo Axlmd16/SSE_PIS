@@ -22,7 +22,6 @@ const SubjectSelector = ({ course, onSelectSubject }) => {
   return (
     <Dropdown
       options={subjects}
-      label="Seleccione una asignatura"
       onSelect={onSelectSubject}
       displayKey="nombre"
     />

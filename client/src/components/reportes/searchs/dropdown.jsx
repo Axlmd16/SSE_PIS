@@ -18,8 +18,8 @@ const Dropdown = ({ options, label, onSelect, displayKey }) => {
         className="flex items-center border border-gray-300 rounded focus-within:ring p-1 bg-white cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-sm flex-1">
-          {selectedOption ? selectedOption[displayKey] : "Seleccione..."}
+        <span className="text-sm flex-1 truncate pr-2 text-gray-500">
+          {selectedOption ? selectedOption[displayKey] : "Seleccione"}
         </span>
         <ChevronDown className="text-gray-500 w-4 h-4" />
       </div>
@@ -31,7 +31,7 @@ const Dropdown = ({ options, label, onSelect, displayKey }) => {
             }`}
             onMouseDown={() => handleSelect(null)}
           >
-            Todos
+            Ninguna
           </li>
           {options.map((option, index) => (
             <li

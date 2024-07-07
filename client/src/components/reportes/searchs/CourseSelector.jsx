@@ -22,7 +22,6 @@ const CourseSelector = ({ onSelectCourse }) => {
   return (
     <SearchableDropdown
       options={cursos}
-      label="Seleccione un curso"
       placeholder="Buscar curso..."
       onSelect={onSelectCourse}
       displayKey="paralelo"

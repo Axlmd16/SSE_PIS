@@ -20,7 +20,12 @@ function Login() {
       const userRoles = JSON.parse(sessionStorage.getItem("roles"));
       let path = "/";
 
-      if (userRoles.some((role) => role.rol_nombre === "admin")) {
+      if (
+        userRoles.some(
+          (role) =>
+            role.rol_nombre === "admin" || role.rol_nombre === "Administrador"
+        )
+      ) {
         path = "/home-admin";
       } else if (
         userRoles.some((role) =>

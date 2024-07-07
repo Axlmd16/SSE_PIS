@@ -94,6 +94,7 @@ class Util:
         p.SEGUNDO_APELLIDO,
         ue.UNIDAD_ID,
         ue.NOTA_UNIDAD,
+        e.NRO_MATRICULA,
         u.NOMBRE AS UNIDAD_NOMBRE,
         U.ASIGNATURA_ID,
         u.NRO_UNIDAD
@@ -129,4 +130,25 @@ class Util:
     WHERE
         ue.UNIDAD_ID = :unidad_id"""
         self.__cursor.execute(query, {"unidad_id": unidad_id})
+        return ConnectionDB().fetchall_to_dict(self.__cursor)
+
+    def get_cursos_por_docente(self, docente_id):
+        query = f"""SELECT
+            c.id AS curso_id,
+            asg.NOMBRE AS asignatura_nombre,
+            pa.FECHA_INICIO AS periodo_academico_fecha_inicio,
+            pa.FECHA_FIN AS periodo_academico_fecha_fin
+        FROM
+            CURSA c
+        JOIN
+            ASIGNACION a ON c.ASIGNACION_ID = a.ID
+        JOIN
+            ASIGNATURA asg ON a.ASIGNATURA_ID = asg.ID
+        JOIN
+            PERIODO_ACADEMICO pa ON a.PERIODO_ACADEMICO_ID = pa.ID
+        JOIN
+            PERSONA p ON a.DOCENTE_ID = p.ID
+        WHERE
+            p.ID = :docente_id"""
+        self.__cursor.execute(query, {"docente_id": docente_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)

@@ -5,11 +5,14 @@ import { Context } from "../../../store/context";
 import SearchBar from "../../inicio_sesion/search_bar";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import Filtred_notes from "../filtred_notes";
 
 const StudentTable = ({ subject, unit, course }) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [performanceFilter, setPerformanceFilter] = useState("");
+  const [studentCount, setStudentCount] = useState("");
   const { actions } = useContext(Context);
 
   useEffect(() => {
@@ -111,8 +114,8 @@ const StudentTable = ({ subject, unit, course }) => {
           selector: (row) =>
             row[`criterio_${id}`] !== undefined ? row[`criterio_${id}`] : "N/A",
           sortable: true,
-          center: "true",
-          right: "true",
+          center: true,
+          right: true,
           with: "100px",
           reorder: true,
         })
@@ -167,12 +170,45 @@ const StudentTable = ({ subject, unit, course }) => {
     setFilteredData(filtered);
   };
 
+  // Filtrar datos basado en el rendimiento y la cantidad de estudiantes
+  useEffect(() => {
+    if (!performanceFilter || !studentCount) {
+      setFilteredData(estudiantes);
+      return;
+    }
+
+    let sortedData;
+    if (unit) {
+      sortedData = [...estudiantes].sort((a, b) =>
+        performanceFilter === "Bajo rendimiento"
+          ? a.nota_unidad - b.nota_unidad
+          : b.nota_unidad - a.nota_unidad
+      );
+    } else {
+      sortedData = [...estudiantes].sort((a, b) => {
+        const aSum = Object.keys(a)
+          .filter((key) => key.startsWith("unidad_"))
+          .reduce((sum, key) => sum + a[key], 0);
+        const bSum = Object.keys(b)
+          .filter((key) => key.startsWith("unidad_"))
+          .reduce((sum, key) => sum + b[key], 0);
+
+        return performanceFilter === "Bajo rendimiento"
+          ? aSum - bSum
+          : bSum - aSum;
+      });
+    }
+
+    setFilteredData(sortedData.slice(0, Number(studentCount)));
+  }, [performanceFilter, studentCount, estudiantes, unit]);
+
   // Opciones de paginación
   const paginationComponentOptions = {
     rowsPerPageText: "Filas por página",
     rangeSeparatorText: "de",
     selectAllRowsItem: true,
     selectAllRowsItemText: "Todos",
+    selectAllRowsItemToolTip: "Seleccionar todas las filas",
   };
 
   // Estilos personalizados para la tabla
@@ -227,18 +263,27 @@ const StudentTable = ({ subject, unit, course }) => {
   };
 
   return (
-    <div>
-      <SearchBar handleSearch={handleSearch} />
+    <div className="p-3">
+      <div className="flex mb-4">
+        <Filtred_notes
+          handleSearch={handleSearch}
+          performanceFilter={performanceFilter}
+          setPerformanceFilter={setPerformanceFilter}
+          studentCount={studentCount}
+          setStudentCount={setStudentCount}
+        />
+      </div>
+
       <DataTable
+        title="Notas de Estudiantes"
         columns={columns}
         data={filteredData}
         pagination
         highlightOnHover
         striped
         responsive
-        selectableRows
         progressPending={loading}
-        progressComponent={<h2>Cargando...</h2>}
+        progressComponent={<progress className="progress w-56"></progress>}
         noDataComponent={<h2>No se encontraron resultados</h2>}
         paginationComponentOptions={paginationComponentOptions}
         customStyles={customStyles}
