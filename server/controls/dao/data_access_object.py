@@ -18,7 +18,7 @@ class Data_Access_Object(Generic[T]):
 
     def _init_(self, atype: T):
         self.atype = atype
-        self.name = self.atype._name_.lower()
+        self.name = self.atype.__name__.lower()
         self.cnx = ConnectionDB().connection()
 
     def _list(self) -> T:
