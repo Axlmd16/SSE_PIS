@@ -39,6 +39,23 @@ const notesActions = ({ getStore, getActions, setStore }) => ({
     setStore({ selectedCursa: cursa });
   },
 
+  update_cursa: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/cursa/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el Cursa", error);
+      throw error;
+    }
+  },
+
   //ESTUDIANTES-CURSA
 
   get_all_estudiantes_cursas: async () => {
@@ -79,6 +96,22 @@ const notesActions = ({ getStore, getActions, setStore }) => ({
     setStore({ selectedEstudianteCursa: estudiante_cursa });
   },
 
+  update_estudiante_cursa: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/estudiante_cursa/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el EstudianteCursa", error);
+      throw error;
+    }
+  },
 
 });
 

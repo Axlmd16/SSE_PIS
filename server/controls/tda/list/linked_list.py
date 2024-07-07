@@ -270,6 +270,25 @@ class Linked_List(object):
                 der = medio - 1
         return None
     
+    # Buscar por atributo y retornar el objeto con busqueda binaria
+    def busqueda_binaria_atribute(self, array, attribute, value):
+        valor_encontrado = None
+        left = 0
+        rigth = len(array) - 1
+        
+        while left <= rigth:
+            middle = (left + rigth) // 2
+            
+            if getattr(array[middle], attribute) == value:
+                valor_encontrado = array[middle]
+                return valor_encontrado
+            elif getattr(array[middle], attribute) < value:
+                left = middle + 1
+            else:
+                rigth = middle - 1
+        
+        return -1
+    
     def busqueda_binaria_lineal_atribute(self, array, attribute, value):
         results = []
         left = 0

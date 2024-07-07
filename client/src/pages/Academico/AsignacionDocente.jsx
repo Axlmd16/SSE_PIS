@@ -4,8 +4,9 @@ import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 import BuscarAsignaturaDocente from "./BuscarAigDoc";
 import TablaDocenteAsignatura from "../../components/academico/tabla_docente_asignatura";
 import withReactContent from "sweetalert2-react-content";
+import Modal_Form from "../../components/modal_form";
+import FormAsingancionDocente from "../../components/academico/FormAsingancionDocente";
 import Swal from "sweetalert2";
-
 const MySwal = withReactContent(Swal);
 
 const AsignacionDocente = () => {
@@ -115,14 +116,20 @@ const AsignacionDocente = () => {
         {/* <button className="mt-6 bg-indigo-600 text-white font-bold" onClick={verDocentesAsignaturas}>
                     <p>Ver info</p>
                 </button> */}
-      </div>
-      <TablaDocenteAsignatura
-        store={store}
-        actions={actions}
-        actualizar={actualizarTabla}
-      />
-    </div>
-  );
-};
+            </div>
+            <TablaDocenteAsignatura store={store} actions={actions} actualizar={actualizarTabla}/>
+            {store.modal && (
+                <Modal_Form>
+                <FormAsingancionDocente
+                    update={!!store.selectedDocenteAsignatura}
+                    docente_asignacion={store.selectedDocenteAsignatura || {}}
+                    actions={actions} store={store}
+                    setActualizarTabla={setActualizarTabla}
+                />
+                </Modal_Form>
+            )}
+        </div>
+    );
+}
 
 export default AsignacionDocente;
