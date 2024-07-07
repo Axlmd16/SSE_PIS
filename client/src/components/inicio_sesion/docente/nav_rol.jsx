@@ -35,9 +35,12 @@ function Nav_Rol() {
   const permisosUsuario = JSON.parse(permisosString || "[]");
 
   const permisosList = {
-    INFORMES: { name: "Gestionar Informes", route: "/#" },
+    INFORMES: { name: "Generar Informes", route: "/reportes" },
     // CARGA_NOTAS: { name: "Carga de Notas", route: "/#" },
-    CURSOS_ASIGNADOS: { name: "Visualización de Cursos", route: "/cursos_docente" },
+    CURSOS_ASIGNADOS: {
+      name: "Cursos Asignados",
+      route: "/cursos_docente",
+    },
     PROYECCIONES: { name: "Proyecciones", route: "/#" },
   };
 

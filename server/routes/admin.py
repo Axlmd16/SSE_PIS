@@ -6,6 +6,8 @@ from controls.admin.carrera_control import CarreraControl
 from controls.admin.malla_control import MallaControl
 from controls.admin.asignatura_control import AsignaturaControl
 from controls.admin.grupo_control import GrupoControl
+from controls.admin.unidad_control import UnidadControl
+from controls.reportes.util import Util
 
 admin = Blueprint("admin", __name__)
 
@@ -13,6 +15,7 @@ cc = CarreraControl()
 mc = MallaControl()
 ac = AsignaturaControl()
 gc = GrupoControl()
+uc = UnidadControl()
 
 
 # ----------------------------------------------------------------------------------------
@@ -209,3 +212,57 @@ def update_group(id):
         return jsonify(data), 201
     else:
         return jsonify({"msg": "Error al actualizar el grupo"}), 500
+
+
+# ----------------------------------------------------------------------------------------
+# Unidades
+@jwt_required
+@admin.route("/units", methods=["POST"])
+def create_unit():
+    data = request.json
+    uc._unidad._nombre = data["nombre"]
+    uc._unidad._nro_unidad = data["nro_unidad"]
+    uc._unidad._nro_semanas = data["nro_semanas"]
+    uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
+    uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
+    uc._unidad._asignatura_id = data["asignatura_id"]
+
+    if uc.save():
+
+        # data = Util().get_estudiantes_por_curso(curso_id)
+
+        return jsonify(data), 201
+
+    else:
+        return jsonify({"msg": "Error al guardar la unidad"}), 500
+
+
+@jwt_required
+@admin.route("/units", methods=["GET"])
+def get_units():
+    data = uc._to_dict()
+    return jsonify(data), 201
+
+
+@jwt_required
+@admin.route("/units/<int:id>", methods=["GET"])
+def get_unit(id):
+    unit = uc._find(id)
+    return jsonify(unit), 201
+
+
+@jwt_required
+@admin.route("/units/<int:id>", methods=["PUT"])
+def update_unit(id):
+    data = request.json
+    uc._unidad._nombre = data["nombre"]
+    uc._unidad._nro_unidad = data["nro_unidad"]
+    uc._unidad._nro_semanas = data["nro_semanas"]
+    uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
+    uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
+    uc._unidad._asignatura_id = data["asignatura_id"]
+
+    if uc.update(id):
+        return jsonify(data), 201
+    else:
+        return jsonify({"msg": "Error al actualizar la unidad"}), 500

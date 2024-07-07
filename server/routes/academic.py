@@ -235,7 +235,9 @@ def guardar_docente_asignado():
         data = request.json
         asignacion_docente_control._asignacion._docente_id = data["id_docente"]
         asignacion_docente_control._asignacion._asignatura_id = data["id_asignatura"]
-        asignacion_docente_control._asignacion._periodo_academico_id = data["id_periodo_academico"]
+        asignacion_docente_control._asignacion._periodo_academico_id = data[
+            "id_periodo_academico"
+        ]
         asignacion_docente_control.save()
 
         return jsonify({"message": "Asignación guardada correctamente"}), 201
