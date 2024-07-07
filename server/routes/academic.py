@@ -8,7 +8,7 @@ from controls.inicio_sesion.persona_control import PersonaControl
 from controls.inicio_sesion.tipo_ide_control import TipoIdeControl
 from controls.admin.asignatura_control import AsignaturaControl
 from controls.academic.periodo_academico_control import PeriodoAcademicoControl
-
+from asyncio import run
 
 academic = Blueprint("academic", __name__)
 
@@ -223,7 +223,7 @@ def update_docente(id):
 @jwt_required
 @academic.route("/asignacion_docente_asignatura", methods=["GET"])
 def get_asignacion_docente_info_completa():
-    asignacion_info_completa = asignacion_docente_control.get_asignacion_info_completa()
+    asignacion_info_completa = run(asignacion_docente_control.get_asignacion_info_completa())
     return jsonify(asignacion_info_completa), 200
 
 
@@ -244,4 +244,23 @@ def guardar_docente_asignado():
 
     except Exception as e:
         print(f"Error al guardar el docente: {e}")
+        return jsonify({"error": "Error al guardar la asignación"}), 500
+
+@jwt_required
+@academic.route("/asignacion_docente_asignatura/<int:id>", methods=["PUT"])
+def update_docente_asignado(id):
+    try:
+        data = request.json
+        # print("\n\n\n\n")
+        # print(data)
+        # print(id)
+        # print("\n\n\n\n")
+        asignacion_docente_control._asignacion._docente_id = data["id_docente"]
+        asignacion_docente_control._asignacion._asignatura_id = data["id_asignatura"]
+        asignacion_docente_control._asignacion._periodo_academico_id = data["id_periodo_academico"]
+        asignacion_docente_control.update(id)
+        return jsonify({"message": "Asignación guardada correctamente"}), 201
+
+    except Exception as e:
+        print(f"Error al guardar el docente_asignatura: {e}")
         return jsonify({"error": "Error al guardar la asignación"}), 500

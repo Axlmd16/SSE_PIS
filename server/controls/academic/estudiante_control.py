@@ -3,7 +3,11 @@ from models.estudiante import Estudiante
 from controls.inicio_sesion.persona_control import PersonaControl
 from controls.inicio_sesion.cuenta_control import CuentaControl
 from models.persona import Persona
+from controls.tda.list.linked_list import Linked_List
 from controls.dao.connection import ConnectionDB
+import colorama
+import asyncio
+import time
 
 class EstudianteControl(Data_Access_Object):
     def __init__(self):
@@ -63,6 +67,9 @@ class EstudianteControl(Data_Access_Object):
             print(f"Error actualizando el estudiante: {e}")
             return False
 
+    def list(self):
+        return self._list()
+    
     def list_with_person_details(self) -> list:
         try:
             return self._list_estudiante()
@@ -70,31 +77,47 @@ class EstudianteControl(Data_Access_Object):
             print(f"Error listando estudiantes con detalles de persona: {e}")
             return []
 
+    #* Metodo para obtener toda la informacion de los estudiantes
+    
     def _list_estudiante(self) -> list:
-        estudiante_info_completa = []
-        data_estudiantes = self._to_dict()
-        data_personas = self.__persona_control._to_dict()
+        try:
+            inicio_tiempo = time.time()
+            estudiante_info_completa = []
 
-        for estudiante in data_estudiantes:
-            persona_id = estudiante['id']
-            persona_info = next((p for p in data_personas if p['id'] == persona_id), None)
+            #* Carga de datos en listas
+            data_estudiantes = self.list()
+            data_personas = self.__persona_control.list()
 
-            if persona_info:
-                estudiante_info = {
-                    'id': estudiante['id'],
-                    'primer_nombre': persona_info['primer_nombre'],
-                    'segundo_nombre': persona_info['segundo_nombre'],
-                    'primer_apellido': persona_info['primer_apellido'],
-                    'segundo_apellido': persona_info['segundo_apellido'],
-                    'telefono': persona_info['telefono'],
-                    'dni': persona_info['dni'],
-                    'fecha_nacimiento': persona_info['fecha_nacimiento'],
-                    'email': persona_info['email'],
-                    'tipo_identificacion_id': persona_info['tipo_identificacion_id'],
-                    'genero_id': persona_info['genero_id'],
-                    'nro_matricula': estudiante['nro_matricula'],
-                    'codigo_estudiante': estudiante['codigo_estudiante'],
+             #* Ordenamiento de datos
+            data_estudiante_ordenada = data_estudiantes.quick_sort_with_attribute(data_estudiantes.to_array, "_id", 1)
+            data_personas_ordenada = data_personas.quick_sort_with_attribute(data_personas.to_array, "_id", 1)
+                        
+            for estudiante in data_estudiante_ordenada:
+                persona_id = estudiante._id
+                persona_info = data_personas.busqueda_binaria_atribute(data_personas_ordenada,"_id", persona_id)
+                
+                if persona_info:
+                    estudiante_info = {
+                        #* Atributos del estudiante
+                        "id": estudiante._id,
+                        "codigo_estudiante": estudiante._codigo_estudiante,
+                        "nro_matricula": estudiante._nro_matricula,
+                        #* Atributos de la persona ligada al estudiante
+                        "primer_nombre": persona_info._primer_nombre,
+                        "segundo_nombre": persona_info._segundo_nombre,
+                        "primer_apellido": persona_info._primer_apellido,
+                        "segundo_apellido": persona_info._segundo_apellido,
+                        "telefono": persona_info._telefono,
+                        "dni": persona_info._dni,
+                        "fecha_nacimiento": persona_info._fecha_nacimiento,
+                        "email": persona_info._email,
+                        "tipo_identificacion_id": persona_info._tipo_identificacion_id,
+                        "genero_id": persona_info._genero_id,
                 }
                 estudiante_info_completa.append(estudiante_info)
+            final_tiempo = time.time()
+            # print(colorama.Fore.RED + f"\nTiempo de ejecucion busqueda estudiantes: {final_tiempo - inicio_tiempo}\n" + colorama.Fore.RESET)
+            return estudiante_info_completa
 
-        return estudiante_info_completa
+        except Exception as e:
+            print(f"Error en listar_estudiante: {e}")

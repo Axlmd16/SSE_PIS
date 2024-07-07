@@ -5,7 +5,10 @@ from controls.inicio_sesion.cuenta_control import CuentaControl
 from models.persona import Persona
 from controls.dao.connection import ConnectionDB
 from controls.inicio_sesion.rol_persona_control import RolPersonaControl
-
+from controls.tda.list.linked_list import Linked_List
+import colorama
+import asyncio
+import time 
 
 class DocenteControl(Data_Access_Object):
     def __init__(self):
@@ -73,43 +76,69 @@ class DocenteControl(Data_Access_Object):
         except Exception as e:
             print(f"Error actualizando el docente: {e}")
             return False
+    
+    def list(self):
+        return self._list()
 
     def list_with_person_details(self) -> list:
         try:
-            return self._list_docente()
+            lista = self._list_docente()
+            lista_docentes = lista.to_array
+            return lista_docentes
         except Exception as e:
             print(f"Error listando docentes con detalles de persona: {e}")
             return []
-
+        
+    def list_with_person_linked(self) -> list:
+        try:
+            lista = self._list_docente()
+            return lista
+        except Exception as e:
+            print(f"Error listando estudiantes con detalles de persona: {e}")
+            return []
+        
     def _list_docente(self) -> list:
-        docente_info_completa = []
-        data_docentes = self._to_dict()
-        data_personas = self.__persona_control._to_dict()
+        try:
+            inicio_tiempo = time.time()
+            docente_info_completa = Linked_List()
 
-        for docente in data_docentes:
-            persona_id = docente['id']
-            persona_info = next((p for p in data_personas if p['id'] == persona_id), None)
+            #* Carga de datos en listas
+            data_docentes = self.list()
+            data_personas = self.__persona_control.list()
 
-            if persona_info:
-                estudiante_info = {
-                    'id': docente['id'],
-                    'primer_nombre': persona_info['primer_nombre'],
-                    'segundo_nombre': persona_info['segundo_nombre'],
-                    'primer_apellido': persona_info['primer_apellido'],
-                    'segundo_apellido': persona_info['segundo_apellido'],
-                    'dni': persona_info['dni'],
-                    'telefono': persona_info['telefono'],
-                    'fecha_nacimiento': persona_info['fecha_nacimiento'],
-                    'email': persona_info['email'],
-                    'tipo_identificacion_id': persona_info['tipo_identificacion_id'],
-                    'genero_id': persona_info['genero_id'],
-                    'titulo': docente['titulo'],
-                    'experiencia_laboral': docente['experiencia_laboral'],
-                    'cubiculo': docente['cubiculo'],
+            #* Ordenamiento de datos
+            data_docente_ordenada = data_docentes.quick_sort_with_attribute(data_docentes.to_array, "_id", 1)
+            data_personas_ordenada = data_personas.quick_sort_with_attribute(data_personas.to_array, "_id", 1)
+            
+            for docente in data_docente_ordenada:
+                persona_id = docente._id
+                persona_info = data_personas.busqueda_binaria_atribute(data_personas_ordenada,"_id", persona_id)
+                
+                if persona_info:
+                    docente_info = {
+                        #* Atributos del docente
+                        "id": docente._id,
+                        "titulo": docente._titulo,
+                        "experiencia_laboral": docente._experiencia_laboral,
+                        "cubiculo": docente._cubiculo,
+                        #* Atributos de la persona ligada al docente
+                        "primer_nombre": persona_info._primer_nombre,
+                        "segundo_nombre": persona_info._segundo_nombre,
+                        "primer_apellido": persona_info._primer_apellido,
+                        "segundo_apellido": persona_info._segundo_apellido,
+                        "telefono": persona_info._telefono,
+                        "dni": persona_info._dni,
+                        "fecha_nacimiento": persona_info._fecha_nacimiento,
+                        "email": persona_info._email,
+                        "tipo_identificacion_id": persona_info._tipo_identificacion_id,
+                        "genero_id": persona_info._genero_id,
                 }
-                docente_info_completa.append(estudiante_info)
+                docente_info_completa.add(docente_info)
+            final_tiempo = time.time()
+            # print(colorama.Fore.RED + f"\nTiempo de ejecucion busqueda docentes: {final_tiempo - inicio_tiempo}\n" + colorama.Fore.RESET)
+            return docente_info_completa
 
-        return docente_info_completa
-    
-    
+        except Exception as e:
+            print(f"Error en listar_estudiante: {e}")
+            
  

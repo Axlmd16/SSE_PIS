@@ -174,22 +174,22 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
     setStore({ selectedDocenteAsignatura: docente_asignatura });
   },
 
-  // update_docente_asignatura: async (id, data) => {
-  //   const { token } = getStore();
-  //   const api = getStore().api;
+  update_docente_asignatura: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
 
-  //   try {
-  //     const response = await api.put(`/docentes/${id}`, data, {
-  //       headers: {
-  //         //Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Flux: Error actualizando el Docente", error);
-  //     throw error;
-  //   }
-  // },
+    try {
+      const response = await api.put(`/asignacion_docente_asignatura/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el Docente", error);
+      throw error;
+    }
+  },
 
 
   //* ------------------DOCENTES-----------------
