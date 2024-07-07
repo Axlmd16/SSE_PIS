@@ -4,7 +4,9 @@ import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 import BuscarCursaEstudiante from "./BuscarCursaEstudiante";
 import TablaEstudianteCursa from "../../components/notas/tabla_estudiante_cursa";
 import withReactContent from "sweetalert2-react-content";
+import Modal_Form from "../../components/modal_form";
 import Swal from "sweetalert2";
+import FormEstudiantesCursa from "../../components/notas/form_estudiante_cursa";
 
 const MySwal = withReactContent(Swal);
 
@@ -87,6 +89,16 @@ const EstudianteCursa = () => {
 
             </div>
             <TablaEstudianteCursa store={store} actions={actions} actualizar={actualizarTabla}/>
+            {store.modal && (
+                <Modal_Form>
+                    <FormEstudiantesCursa
+                        update={!!store.selectedCursa}
+                        cursa={store.selectedEstudianteCursa || {}}
+                        actions={actions} store={store}
+                        setActualizarTabla={setActualizarTabla}
+                    />
+                </Modal_Form>
+            )}
         </div>
     );
 }
