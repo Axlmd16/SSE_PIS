@@ -76,7 +76,7 @@ const StudentTable = ({ subject, unit, course }) => {
           nombre: `${item.primer_nombre} ${item.segundo_nombre} ${item.primer_apellido} ${item.segundo_apellido}`,
         };
       }
-      estudiantesMap[item.persona_id][`unidad_${item.unidad_id}`] =
+      estudiantesMap[item.persona_id][`unidad_${item.nro_unidad}`] =
         item.nota_unidad;
     });
 

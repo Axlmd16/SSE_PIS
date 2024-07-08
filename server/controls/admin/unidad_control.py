@@ -17,13 +17,12 @@ class UnidadControl(Data_Access_Object):
     def _unidad(self, value):
         self.__unidad = value
 
-    def save(self) -> bool:
+    def save(self) -> int:
         try:
-            self._save(self._unidad)
-            return True
+            id = self._save_id(self._unidad)
+            return id
         except Exception as e:
             print(f"Error al guardar la unidad: {e}")
-            return False
 
     def update(self, id) -> bool:
         try:

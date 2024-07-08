@@ -8,6 +8,10 @@ from controls.admin.asignatura_control import AsignaturaControl
 from controls.admin.grupo_control import GrupoControl
 from controls.admin.unidad_control import UnidadControl
 from controls.reportes.util import Util
+from controls.cargar_notas.unidad_estudiante_control import UnidadEstudianteControl
+from controls.academic.estudiante_control import EstudianteControl
+from controls.admin.criterio_control import CriterioControl
+from controls.cargar_notas.nota_criterio_control import NotaCriterioControl
 
 admin = Blueprint("admin", __name__)
 
@@ -16,6 +20,10 @@ mc = MallaControl()
 ac = AsignaturaControl()
 gc = GrupoControl()
 uc = UnidadControl()
+uec = UnidadEstudianteControl()
+estudiante_control = EstudianteControl()
+crc = CriterioControl()
+ncc = NotaCriterioControl()
 
 
 # ----------------------------------------------------------------------------------------
@@ -217,24 +225,38 @@ def update_group(id):
 # ----------------------------------------------------------------------------------------
 # Unidades
 @jwt_required
-@admin.route("/units", methods=["POST"])
-def create_unit():
-    data = request.json
-    uc._unidad._nombre = data["nombre"]
-    uc._unidad._nro_unidad = data["nro_unidad"]
-    uc._unidad._nro_semanas = data["nro_semanas"]
-    uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
-    uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
-    uc._unidad._asignatura_id = data["asignatura_id"]
+@admin.route("/units/<int:curso_id>", methods=["POST"])
+def create_unit(curso_id):
+    try:
+        data = request.json
+        uc._unidad._nombre = data["nombre"]
+        uc._unidad._nro_unidad = int(data["nro_unidad"])
+        uc._unidad._nro_semanas = int(data["nro_semanas"])
+        uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
+        uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
+        uc._unidad._asignatura_id = int(data["asignatura_id"])
 
-    if uc.save():
+        id_unidad = uc.save()
+        estudiantes_cursas = Util().estudiantes_por_curso(curso_id)
+        criterios = crc._to_dict()
 
-        # data = Util().get_estudiantes_por_curso(curso_id)
+        for estudiante in estudiantes_cursas:
+            uec._unidad_estudiante._unidad_id = int(id_unidad)
+            uec._unidad_estudiante._estudiante_cursa_id = int(
+                estudiante["id_estudiante_cursa"]
+            )
+            id_unidad_estudiante = uec.save()
+
+            for criterio in criterios:
+                ncc._nota_criterio._unidad_estudiante_id = int(id_unidad_estudiante)
+                ncc._nota_criterio._criterio_id = int(criterio["id"])
+                ncc.save()
 
         return jsonify(data), 201
 
-    else:
-        return jsonify({"msg": "Error al guardar la unidad"}), 500
+    except Exception as e:
+        print(f"Exception: {e}")
+        return jsonify({"msg": f"Error procesando la solicitud: {e}"}), 500
 
 
 @jwt_required

@@ -104,7 +104,7 @@ const Rutas = () => {
                 element={<CursosDocente actions={actions} store={store} />}
               />
               <Route
-                path="/course/detail/:id/:asignatura_id"
+                path="/course/detail/:curso_id/:asignatura_id"
                 element={<Sidebar_Docente actions={actions} store={store} />}
               />
 

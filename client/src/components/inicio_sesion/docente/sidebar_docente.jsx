@@ -6,9 +6,9 @@ import Form_Unidad from "../../administrativo/form_unidad";
 import { Users, FileText, PlusCircle } from "lucide-react";
 
 function Sidebar_Docente({ actions, store }) {
-  let { id, asignatura_id } = useParams();
+  let { curso_id, asignatura_id } = useParams();
 
-  console.log("ID_Curso", id);
+  console.log("ID_Curso", curso_id);
   console.log("ID_Asignatura", asignatura_id);
 
   const [units, setUnits] = useState([]);
@@ -29,7 +29,7 @@ function Sidebar_Docente({ actions, store }) {
     };
 
     fetchData();
-  }, [actions, id, asignatura_id]);
+  }, [actions, curso_id, asignatura_id]);
 
   return (
     <div className="drawer lg:drawer-open">
@@ -90,6 +90,7 @@ function Sidebar_Docente({ actions, store }) {
             update={!!store.selectedUnit}
             unit={store.selectedUnit || {}}
             id_subject={asignatura_id}
+            id_curso={curso_id}
           />
         </Modal_Form>
       )}

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Context } from "../../../store/context";
+import { Menu, LogOut, FileText, BookOpen, TrendingUp } from "lucide-react";
 
 function Nav_Rol() {
   const { store, actions } = useContext(Context);
   const navigate = useNavigate();
-
   const [permisosdb, setPermisosdb] = useState([]);
   const permisosString = sessionStorage.getItem("permisos");
   const handleLogout = () => {
@@ -13,13 +13,9 @@ function Nav_Rol() {
     navigate("/");
   };
 
-  // converir el string de la persona guardda en el session storage a un objeto
   const personaString = sessionStorage.getItem("persona");
   const persona = JSON.parse(personaString || "{}");
-  //console.log("Persona autenticada:", persona);
-  //console.log("Persona ID:", persona.id);
 
-  // Llamada a la API para obtener todos los permisos de la base de datos asociados al usuario
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,13 +31,21 @@ function Nav_Rol() {
   const permisosUsuario = JSON.parse(permisosString || "[]");
 
   const permisosList = {
-    INFORMES: { name: "Generar Informes", route: "/reportes" },
-    // CARGA_NOTAS: { name: "Carga de Notas", route: "/#" },
+    INFORMES: {
+      name: "Generar Informes",
+      route: "/reportes",
+      icon: <FileText size={20} className="mr-2" />,
+    },
     CURSOS_ASIGNADOS: {
       name: "Cursos Asignados",
       route: "/cursos_docente",
+      icon: <BookOpen size={20} className="mr-2" />,
     },
-    PROYECCIONES: { name: "Proyecciones", route: "/#" },
+    PROYECCIONES: {
+      name: "Proyecciones",
+      route: "/#",
+      icon: <TrendingUp size={20} className="mr-2" />,
+    },
   };
 
   const permisosDisponibles = permisosUsuario
@@ -49,29 +53,41 @@ function Nav_Rol() {
       const permisoNombre = permiso.permiso_nombre;
       return permisosList[permisoNombre] ? permisosList[permisoNombre] : null;
     })
-    .filter(Boolean); // Filtra nulos
+    .filter(Boolean);
 
   return (
-    <div className="navbar bg-gray-800 text-white w-full shadow-md">
-      <div className="navbar-start">
-        <Link to={"/home"} className="btn btn-ghost text-xl">
+    <div className="navbar bg-white text-gray-800 shadow-md w-full px-4 py-2 flex items-center justify-between">
+      <div className="navbar-start flex items-center">
+        <Menu className="mr-2 text-gray-800" size={24} />
+        <NavLink to="/home" className="text-xl font-semibold">
           UNL
-        </Link>
+        </NavLink>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="flex space-x-4">
           {permisosDisponibles.map((permiso, index) => (
             <li key={index}>
-              <Link to={permiso.route}>{permiso.name}</Link>
+              <NavLink
+                to={permiso.route}
+                className={({ isActive }) =>
+                  `flex items-center px-3 py-2 rounded-md text-gray-800 hover:text-gray-600 hover:bg-gray-100 ${
+                    isActive ? "bg-blue-700 text-white" : ""
+                  }`
+                }
+              >
+                {permiso.icon}
+                {permiso.name}
+              </NavLink>
             </li>
           ))}
         </ul>
       </div>
       <div className="navbar-end">
         <button
-          className="btn bg-gray-700 hover:bg-gray-600 text-white"
+          className="flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-md"
           onClick={handleLogout}
         >
+          <LogOut className="mr-1" size={20} />
           Cerrar Sesión
         </button>
       </div>

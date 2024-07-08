@@ -6,7 +6,7 @@ import { Context } from "../../store/context";
 
 const MySwal = withReactContent(Swal);
 
-function Form_Unidad({ update = false, unit = {}, id_subject }) {
+function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
   const {
     register,
     handleSubmit,
@@ -32,7 +32,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject }) {
       if (update) {
         await actions.update_unit(unit.id, data);
       } else {
-        await actions.create_unit(data);
+        await actions.create_unit(data, id_curso);
       }
       MySwal.fire({
         icon: "success",

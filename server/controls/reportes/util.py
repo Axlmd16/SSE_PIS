@@ -136,8 +136,10 @@ class Util:
         query = f"""SELECT
             c.id AS curso_id,
             asg.NOMBRE AS asignatura_nombre,
+            asg.ID AS asignatura_id,
             pa.FECHA_INICIO AS periodo_academico_fecha_inicio,
-            pa.FECHA_FIN AS periodo_academico_fecha_fin
+            pa.FECHA_FIN AS periodo_academico_fecha_fin,
+            a.ID AS asignacion_id
         FROM
             CURSA c
         JOIN
@@ -151,4 +153,16 @@ class Util:
         WHERE
             p.ID = :docente_id"""
         self.__cursor.execute(query, {"docente_id": docente_id})
+        return ConnectionDB().fetchall_to_dict(self.__cursor)
+
+    def estudiantes_por_curso(self, curso_id):
+        query = f"""SELECT
+            ec.ID as id_estudiante_cursa
+        FROM
+            ESTUDIANTE_CURSA ec
+        JOIN
+            CURSA c ON ec.CURSA_ID = c.ID
+        WHERE
+            c.ID = :curso_id"""
+        self.__cursor.execute(query, {"curso_id": curso_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)

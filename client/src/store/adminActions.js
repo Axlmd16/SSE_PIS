@@ -475,12 +475,12 @@ const adminActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
-  create_unit: async (data) => {
+  create_unit: async (data, curso_id) => {
     const { token } = getStore();
     const api = getStore().api;
 
     try {
-      const response = await api.post("/units", data, {
+      const response = await api.post(`/units/${curso_id}`, data, {
         headers: {
           //Authorization: `Bearer ${token}`,
         },
