@@ -456,6 +456,64 @@ const adminActions = ({ getStore, getActions, setStore }) => ({
       throw error;
     }
   },
+  //--------------------------------------------------------------------------------------------
+  // Unidades
+  get_all_units: async () => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.get("/units", {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error obtenido las unidades", error);
+      throw error;
+    }
+  },
+
+  create_unit: async (data, curso_id) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.post(`/units/${curso_id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error creando la unidad", error);
+      throw error;
+    }
+  },
+
+  setSelectedUnit: (unit) => {
+    setStore({ selectedUnit: unit });
+  },
+
+  update_unit: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/units/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando la unidad", error);
+      throw error;
+    }
+  },
+
+  //--------------------------------------------------------------------------------------------
 });
 
 export default adminActions;

@@ -41,6 +41,9 @@ import Roles_Usuarios from "./pages/Adminitracion/roles_usuarios";
 import CursosDocente from "./components/inicio_sesion/docente/cursos_docente";
 import TablaCalificaciones from "./components/inicio_sesion/docente/TablaCalificaciones";
 import Reportes from "./components/reportes/Reportes";
+import N_asignatura from "./components/administrativo/n_asignatura";
+import DetailCourse from "./pages/Docente/detail_course";
+import Sidebar_Docente from "./components/inicio_sesion/docente/sidebar_docente";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -74,6 +77,7 @@ const Rutas = () => {
                 <Route path="/careers" element={<Carreras />} />
                 <Route path="/meshes" element={<Mallas />} />
                 <Route path="/subjects" element={<Asignaturas />} />
+                <Route path="/new" element={<N_asignatura />} />
                 <Route path="/roles" element={<Roles />} />
                 <Route path="/roles/permissions/:id" element={<Permisos />} />
                 <Route path="/users/detail/:id" element={<Roles_Usuarios />} />
@@ -100,13 +104,15 @@ const Rutas = () => {
                 element={<CursosDocente actions={actions} store={store} />}
               />
               <Route
+                path="/course/detail/:curso_id/:asignatura_id"
+                element={<Sidebar_Docente actions={actions} store={store} />}
+              />
+
+              <Route
                 path="/tabla_calificaciones/:id_asignacion/:asignatura_nombre"
                 element={<TablaCalificaciones />}
               />
-              <Route
-                path="/reportes"
-                element={<Reportes />}
-                />
+              <Route path="/reportes" element={<Reportes />} />
             </Route>
           </Routes>
         </div>

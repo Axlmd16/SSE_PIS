@@ -12,7 +12,7 @@ const TablaCursa = ({ actions, store, actualizar }) => {
       setLoading(true);
       try {
         const data = await actions.get_all_cursas();
-        console.log((data));
+        // console.log((data));
         setCursa(data);
         setFilteredData(data);
       } catch (error) {
@@ -41,7 +41,7 @@ const TablaCursa = ({ actions, store, actualizar }) => {
   };
 
   const handleUpdate = (row) => {
-    actions.setSelectedEstudiante(row);
+    actions.setSelectedCursa(row);
     actions.handleModal();
   };
 

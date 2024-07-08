@@ -4,7 +4,9 @@ import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 import TablaCursa from "../../components/notas/tabla_cursa";
 import BuscarAsignacionDocente from "../Academico/BuscarAsignacionDocente";
 import withReactContent from "sweetalert2-react-content";
+import Modal_Form from "../../components/modal_form";
 import Swal from "sweetalert2";
+import FormCursa from "../../components/notas/form_cursa";
 
 const MySwal = withReactContent(Swal);
 
@@ -26,7 +28,7 @@ const Cursa = () => {
 
     const [selectDocenteAsignatura, setSelectDocenteAsignatura] = useState(null);
     const [selectedParalelo, setSelectedParalelo] = useState(""); // Estado para almacenar el paralelo seleccionado
-    const [actualizarTabla, setActualizarTabla] = useState(false); 
+    const [actualizarTabla, setActualizarTabla] = useState(false);
 
     // Para recibir los datos seleccionados desde BuscarAsignaturaDocente
     const handleDataSelection = (person) => {
@@ -39,12 +41,12 @@ const Cursa = () => {
     };
 
     // Para crear un registro de un docente con su asignatura y paralelo
-    const creareAsignacionDocente = async () => {
+    const creareCursa = async () => {
         const id_docente_asignatura = selectDocenteAsignatura.id;
 
         const data = {
             id_docente_asignatura: id_docente_asignatura,
-            paralelo: selectedParalelo, 
+            paralelo: selectedParalelo,
         };
 
         try {
@@ -54,7 +56,7 @@ const Cursa = () => {
                 title: "Registro exitoso",
                 showConfirmButton: false,
                 timer: 1500,
-              });
+            });
             setActualizarTabla(prev => !prev);
         } catch (error) {
             // console.log(error);
@@ -63,7 +65,7 @@ const Cursa = () => {
                 title: "Error al registrar",
                 showConfirmButton: false,
                 timer: 1500,
-              });
+            });
         }
     };
 
@@ -95,12 +97,22 @@ const Cursa = () => {
                 </div>
             </div>
             <div className="text-center">
-                <button className="mt-6 bg-indigo-600 text-white font-bold" onClick={creareAsignacionDocente}>
+                <button className="mt-6 bg-indigo-600 text-white font-bold" onClick={creareCursa}>
                     <p>Asignar Curso</p>
                 </button>
-                
+
             </div>
-            <TablaCursa store={store} actions={actions} actualizar={actualizarTabla}/>
+            <TablaCursa store={store} actions={actions} actualizar={actualizarTabla} />
+            {store.modal && (
+                <Modal_Form>
+                    <FormCursa
+                        update={!!store.selectedCursa}
+                        cursa={store.selectedCursa || {}}
+                        actions={actions} store={store}
+                        setActualizarTabla={setActualizarTabla}
+                    />
+                </Modal_Form>
+            )}
         </div>
     );
 }
