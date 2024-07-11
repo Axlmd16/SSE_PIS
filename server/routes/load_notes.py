@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
@@ -6,10 +7,13 @@ from controls.cargar_notas.estudiante_cursa_control import EstudianteCursaContro
 from asyncio import run
 import asyncio
 
+from controls.cargar_notas.matricula_control import MatriculaControl
+
 load_notes = Blueprint("load_notes", __name__)
 
 cursa_control = CursaControl()
 estudiante_cursa_control = EstudianteCursaControl()
+mc = MatriculaControl()
 
 
 @jwt_required
@@ -44,7 +48,7 @@ def actualizar_cursa(id):
         # print("\n\n\n")
         cursa_control._cursa._asignacion_id = data["id_docente_asignatura"]
         cursa_control._cursa._paralelo = data["paralelo"]
-        cursa_control._cursa._ciclo_id = data["id_ciclo"] 
+        cursa_control._cursa._ciclo_id = data["id_ciclo"]
         cursa_control.update(id)
         return jsonify({"msg": "Cursa guardada correctamente"}), 201
     except Exception as e:
@@ -65,12 +69,22 @@ def get_info_estudiantes_cursa():
 def guardar_estudiante_cursa():
     try:
         data = request.json
-        estudiante_cursa_control._estudiante_cursa._estudiante_id = data[
-            "id_estudiante"
-        ]
-        estudiante_cursa_control._estudiante_cursa._cursa_id = data["id_cursa"]
-        estudiante_cursa_control.save()
-        return jsonify({"msg": "Estudiante Cursa guardado correctamente"}), 201
+        estudiante_cursa_control._estudiante_cursa._estudiante_id = int(
+            data["id_estudiante"]
+        )
+        estudiante_cursa_control._estudiante_cursa._cursa_id = int(data["id_cursa"])
+        id_es_cur = estudiante_cursa_control.save()
+
+        mc._matricula._estudiante_cursa_id = id_es_cur
+        mc._matricula._codigo_matricula = data["codigo_matricula"]
+        mc._matricula._nro_de_matricula = data["nro_de_matricula"]
+        mc._matricula._fecha_matricula = datetime.datetime.now()
+
+        if mc.save():
+            return jsonify({"msg": "Estudiante cursa guardado correctamente"}), 201
+        else:
+            return jsonify({"msg": "Error al guardar el Estudiante Cursa"}), 500
+
     except Exception as e:
         return jsonify({"msg": "Error al guardar el Curso"}), 500
 
