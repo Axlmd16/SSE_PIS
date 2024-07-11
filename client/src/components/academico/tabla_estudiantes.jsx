@@ -35,7 +35,6 @@ const TableEstudiante = ({ actions, store }) => {
         record.segundo_nombre.toString().toLowerCase().includes(searchTerm) ||
         record.primer_apellido.toLowerCase().includes(searchTerm) ||
         record.segundo_apellido.toLowerCase().includes(searchTerm) ||
-        record.nro_matricula.toLowerCase().includes(searchTerm) ||
         record.codigo_estudiante.toLowerCase().includes(searchTerm)
     );
     setFilteredData(filtered);
@@ -73,11 +72,6 @@ const TableEstudiante = ({ actions, store }) => {
     {
       name: "Apellidos",
       selector: (row) => `${row.primer_apellido} ${row.segundo_apellido}`,
-      sortable: true,
-    },
-    {
-      name: "Matricula",
-      selector: (row) => `${row.nro_matricula}`,
       sortable: true,
     },
     {

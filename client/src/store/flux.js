@@ -35,6 +35,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       selectedCursa: null,
       selectedEstudianteCursa: null,
       selectedUnit: null,
+      selectedCycle: null,
     },
     actions: {
       syncTokenfromSessionStorage: () => {

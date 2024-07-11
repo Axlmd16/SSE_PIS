@@ -514,6 +514,64 @@ const adminActions = ({ getStore, getActions, setStore }) => ({
   },
 
   //--------------------------------------------------------------------------------------------
+  // Ciclos
+
+  get_all_cycles: async () => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.get("/cycles", {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error obtenido los ciclos", error);
+      throw error;
+    }
+  },
+
+  create_cycle: async (data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.post("/cycles", data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error creando el ciclo", error);
+      throw error;
+    }
+  },
+
+  setSelectedCycle: (cycle) => {
+    setStore({ selectedCycle: cycle });
+  },
+
+  update_cycle: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/cycles/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el ciclo", error);
+      throw error;
+    }
+  },
+
+  //--------------------------------------------------------------------------------------------
 });
 
 export default adminActions;
