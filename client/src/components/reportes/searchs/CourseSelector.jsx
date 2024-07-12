@@ -9,7 +9,7 @@ const CourseSelector = ({ onSelectCourse }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await actions.get_all_cursas();
+        const data = await actions.get_cursos_info();
         setCursos(data);
       } catch (error) {
         console.error("Error al obtener los cursos", error);
@@ -24,7 +24,7 @@ const CourseSelector = ({ onSelectCourse }) => {
       options={cursos}
       placeholder="Buscar curso..."
       onSelect={onSelectCourse}
-      displayKey="paralelo"
+      displayKey="ciclo_nombre"
     />
   );
 };

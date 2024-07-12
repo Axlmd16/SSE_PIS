@@ -5,6 +5,16 @@ from controls.reportes.util import Util
 reports = Blueprint("reports", __name__)
 
 
+@reports.route("/cursos_detalle", methods=["GET"])
+def get_cursa_info():
+    try:
+        data = Util().get_cursos()
+        return jsonify(data), 200
+
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+
 @reports.route("/asig_by_curso/<int:curso_id>", methods=["GET"])
 def get_asignaturas_por_curso(curso_id):
     try:

@@ -475,6 +475,23 @@ const adminActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
+  get_unit: async (id) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.get(`/units/${id}`, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error obtenido la unidad", error);
+      throw error;
+    }
+  },
+
   create_unit: async (data, curso_id) => {
     const { token } = getStore();
     const api = getStore().api;

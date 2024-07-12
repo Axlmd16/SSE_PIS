@@ -63,8 +63,6 @@ const Reportes = () => {
           )}
         </div>
 
-        <hr className="my-6 border-gray-500 border-t" />
-
         {selectedSubject && (
           <>
             <div className="flex justify-end items-center lg:w-1/3 ml-auto mb-4">

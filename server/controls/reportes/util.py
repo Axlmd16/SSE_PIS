@@ -90,11 +90,12 @@ class Util:
         p.id AS persona_id,
         p.primer_nombre,
         P.SEGUNDO_NOMBRE,
+        P.dni,
         p.primer_apellido,
         p.SEGUNDO_APELLIDO,
+        e.codigo_estudiante,
         ue.UNIDAD_ID,
         ue.NOTA_UNIDAD,
-        e.NRO_MATRICULA,
         u.NOMBRE AS UNIDAD_NOMBRE,
         U.ASIGNATURA_ID,
         u.NRO_UNIDAD
@@ -118,7 +119,8 @@ class Util:
         ue.NOTA_UNIDAD,
         nc.ID AS CRITERIO_ID,
         c.NOMBRE AS CRITERIO_NOMBRE,
-        nc.NOTA_CRITERIO
+        nc.NOTA_CRITERIO,
+        c.PORCENTAJE
     FROM
         persona p
         JOIN ESTUDIANTE e ON p.id = e.ID
@@ -165,4 +167,14 @@ class Util:
         WHERE
             c.ID = :curso_id"""
         self.__cursor.execute(query, {"curso_id": curso_id})
+        return ConnectionDB().fetchall_to_dict(self.__cursor)
+
+    def get_cursos(self):
+        query = f"""SELECT
+            C.ID,
+            CL.CICLO AS CICLO_NOMBRE,
+            C.PARALELO
+        FROM
+            CURSA C JOIN CICLO CL ON C.CICLO_ID = CL.ID"""
+        self.__cursor.execute(query)
         return ConnectionDB().fetchall_to_dict(self.__cursor)

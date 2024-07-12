@@ -272,6 +272,7 @@ def get_units():
 @admin.route("/units/<int:id>", methods=["GET"])
 def get_unit(id):
     unit = uc._find(id)
+    print(unit)
     return jsonify(unit), 201
 
 

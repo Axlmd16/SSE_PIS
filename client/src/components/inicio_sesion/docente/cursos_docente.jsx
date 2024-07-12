@@ -18,6 +18,7 @@ const CursosDocente = () => {
       setLoading(true);
       try {
         const data = await actions.get_all_cursos_docente(id_docente);
+        // const data = await actions.get_all_docentes_asignaturas(id_docente);
         setCursos(data);
       } catch (error) {
         console.error("Error al obtener los docentesAsignaturas:", error);

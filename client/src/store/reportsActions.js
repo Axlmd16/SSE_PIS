@@ -67,6 +67,23 @@ const reportActions = ({ getStore, getActions, setStore }) => ({
       throw error;
     }
   },
+
+  get_cursos_info: async () => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.get(`/cursos_detalle`, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error ", error);
+      throw error;
+    }
+  },
 });
 
 export default reportActions;

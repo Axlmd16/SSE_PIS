@@ -5,9 +5,6 @@ function DetailCourse() {
     <div>
       <div className="flex justify-between items-center w-full mb-4">
         <span className="text-2xl">Detalles del Curso</span>
-        <button className="btn btn-info btn-sm text-gray-800">
-          Nuevo Estudiante
-        </button>
       </div>
       <div className="grid grid-cols-1 gap-4">
         <div className="bg-white rounded-lg overflow-hidden shadow-md">

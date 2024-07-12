@@ -44,6 +44,8 @@ import Reportes from "./components/reportes/Reportes";
 import N_asignatura from "./components/administrativo/n_asignatura";
 import DetailCourse from "./pages/Docente/detail_course";
 import Sidebar_Docente from "./components/inicio_sesion/docente/sidebar_docente";
+import Estudiantes_Curso from "./components/inicio_sesion/docente/estudiantes_curso";
+import Unidad_Curso from "./components/inicio_sesion/docente/unidad_curso";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -105,6 +107,23 @@ const Rutas = () => {
               />
               <Route
                 path="/course/detail/:curso_id/:asignatura_id"
+                element={<Sidebar_Docente actions={actions} store={store} />}
+              >
+                <Route
+                  path="estudiantes"
+                  element={
+                    <Estudiantes_Curso actions={actions} store={store} />
+                  }
+                />
+                {/* <Route path="calificaciones" element={<Calificaciones />} /> */}
+                <Route
+                  path="unidad/:unidad_id"
+                  element={<Unidad_Curso actions={actions} store={store} />}
+                />
+              </Route>
+
+              <Route
+                path="/course/detail/:curso_id/:asignatura_id/students"
                 element={<Sidebar_Docente actions={actions} store={store} />}
               />
 

@@ -78,7 +78,7 @@ const EstudianteCursa = () => {
   };
 
   return (
-    <div>
+    <div className="font-poppins">
       <Bread_Crumbs items={breadcrumbItems} />
       <div className="mt-10 font-poppins flex justify-between items-center">
         <h1 className="text-3xl my-5">Asignar Estudiantes a Cursos</h1>
@@ -98,7 +98,7 @@ const EstudianteCursa = () => {
                 {...register("nro_de_matricula", {
                   required: "Este campo es requerido",
                 })}
-                className="block w-full ml-3 leading-tight text-gray-700 border rounded shadow  focus:outline-none focus:shadow-outline h-9 mx-4"
+                className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
                 <option className="text-gray-300" value="">
                   Seleccione...
