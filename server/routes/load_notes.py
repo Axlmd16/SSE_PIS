@@ -8,12 +8,14 @@ from asyncio import run
 import asyncio
 
 from controls.cargar_notas.matricula_control import MatriculaControl
+from controls.cargar_notas.nota_criterio_control import NotaCriterioControl
 
 load_notes = Blueprint("load_notes", __name__)
 
 cursa_control = CursaControl()
 estudiante_cursa_control = EstudianteCursaControl()
 mc = MatriculaControl()
+ncc = NotaCriterioControl()
 
 
 @jwt_required
@@ -106,3 +108,30 @@ def actualizar_estudiante_cursa(id):
         return jsonify({"msg": "Cursa guardada correctamente"}), 201
     except Exception as e:
         return jsonify({"msg": "Error al guardar el Cursa"}), 500
+
+
+# TODO: Implementar la actualización de la matrícula
+
+
+@jwt_required
+@load_notes.route("/notas_criterio/<int:id>", methods=["PUT"])
+def actualizar_nota_criterio(id):
+    try:
+        data = request.json
+
+        print(f"ID: {id}")
+        print(f"Data: {data}")
+
+        ncc._nota_criterio._unidad_estudiante_id = data["unidad_estudiante_id"]
+        ncc._nota_criterio._criterio_id = data["criterio_id"]
+        ncc._nota_criterio._nota_criterio = data["nota_criterio"]
+
+        if ncc.update(id):
+            return jsonify({"msg": "Nota criterio actualizada correctamente"}), 201
+        else:
+            return jsonify({"msg": "Error al guardar la nota criterio"}), 500
+
+        # return jsonify({"msg": "Nota criterio actualizada correctamente"}), 201
+
+    except Exception as e:
+        return jsonify({"msg": "Error al guardar la nota criterio"}), 500

@@ -108,7 +108,7 @@ class Util:
         self.__cursor.execute(query, {"curso_id": id_curso})
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
-    def get_notas_criterio_por_unidad(self, unidad_id):
+    def get_notas_criterio_por_unidad(self, unidad_id, cursa_id):
         query = f"""SELECT
         p.id AS persona_id,
         p.primer_nombre,
@@ -117,10 +117,12 @@ class Util:
         p.SEGUNDO_APELLIDO,
         e.ID AS ESTUDIANTE_ID,
         ue.NOTA_UNIDAD,
-        nc.ID AS CRITERIO_ID,
-        c.NOMBRE AS CRITERIO_NOMBRE,
+        cri.ID AS CRITERIO_ID,
+        cri.NOMBRE AS CRITERIO_NOMBRE,
         nc.NOTA_CRITERIO,
-        c.PORCENTAJE
+        cri.PORCENTAJE,
+        nc.ID AS NOTA_CRITERIO_ID,
+        ue.ID AS UNIDAD_ESTUDIANTE_ID
     FROM
         persona p
         JOIN ESTUDIANTE e ON p.id = e.ID
@@ -128,10 +130,11 @@ class Util:
         JOIN CURSA c ON ec.CURSA_ID = c.ID
         JOIN UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
         JOIN NOTA_CRITERIO nc ON ue.ID = nc.UNIDAD_ESTUDIANTE_ID
-        JOIN CRITERIO c ON nc.CRITERIO_ID = c.ID
+        JOIN CRITERIO cri ON nc.CRITERIO_ID = cri.ID
     WHERE
-        ue.UNIDAD_ID = :unidad_id"""
-        self.__cursor.execute(query, {"unidad_id": unidad_id})
+        ue.UNIDAD_ID = :unidad_id
+        AND ec.CURSA_ID = :cursa_id"""
+        self.__cursor.execute(query, {"unidad_id": unidad_id, "cursa_id": cursa_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
     def get_cursos_por_docente(self, docente_id):
@@ -141,7 +144,8 @@ class Util:
             asg.ID AS asignatura_id,
             pa.FECHA_INICIO AS periodo_academico_fecha_inicio,
             pa.FECHA_FIN AS periodo_academico_fecha_fin,
-            a.ID AS asignacion_id
+            a.ID AS asignacion_id,
+            c.PARALELO AS curso_paralelo
         FROM
             CURSA c
         JOIN

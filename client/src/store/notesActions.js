@@ -1,5 +1,4 @@
 const notesActions = ({ getStore, getActions, setStore }) => ({
-  
   //Cursa
   get_all_cursas: async () => {
     const { token } = getStore();
@@ -113,7 +112,23 @@ const notesActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
-});
+  //NOTAS
+  update_notas_criterio: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
 
+    try {
+      const response = await api.put(`/notas_criterio/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando las notas del criterio", error);
+      throw error;
+    }
+  },
+});
 
 export default notesActions;

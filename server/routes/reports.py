@@ -45,10 +45,10 @@ def get_estudiantes_por_curso(curso_id):
         return jsonify({"message": str(e)}), 500
 
 
-@reports.route("/notes_by_criterio/<int:unidad_id>", methods=["GET"])
-def get_notas_criterio_por_unidad(unidad_id):
+@reports.route("/notes_by_criterio/<int:unidad_id>/<int:cursa_id>", methods=["GET"])
+def get_notas_criterio_por_unidad(unidad_id, cursa_id):
     try:
-        data = Util().get_notas_criterio_por_unidad(unidad_id)
+        data = Util().get_notas_criterio_por_unidad(unidad_id, cursa_id)
         return jsonify(data), 200
 
     except Exception as e:

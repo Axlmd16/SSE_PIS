@@ -7,6 +7,7 @@ import Notas_Unidad from "./tabla_notas_unidad";
 
 function Unidad_Curso({ actions, store }) {
   const { unidad_id } = useParams();
+  const { curso_id } = useParams();
   const [unidad, setUnidad] = useState([]);
 
   // Llamada a la API para obtener la unidad
@@ -26,7 +27,7 @@ function Unidad_Curso({ actions, store }) {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center w-full mb-4">
-        <span className="text-2xl">
+        <span className="text-2xl font-poppins">
           Unidad {unidad.nro_unidad}: {unidad.nombre}{" "}
         </span>
       </div>
@@ -37,6 +38,7 @@ function Unidad_Curso({ actions, store }) {
               actions={actions}
               store={store}
               unidad_id={unidad_id}
+              curso_id={curso_id}
             />
           </div>
         </div>

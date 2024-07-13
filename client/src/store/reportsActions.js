@@ -51,16 +51,19 @@ const reportActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
-  get_notas_criterio: async (unidad_id) => {
+  get_notas_criterio: async (unidad_id, cursa_id) => {
     const { token } = getStore();
     const api = getStore().api;
 
     try {
-      const response = await api.get(`/notes_by_criterio/${unidad_id}`, {
-        headers: {
-          //Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(
+        `/notes_by_criterio/${unidad_id}/${cursa_id}`,
+        {
+          headers: {
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Flux: Error ", error);
