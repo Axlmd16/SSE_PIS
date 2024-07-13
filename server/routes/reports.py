@@ -38,7 +38,7 @@ def get_units_by_asignatura(asignatura_id):
 @reports.route("/students_by_course/<int:curso_id>", methods=["GET"])
 def get_estudiantes_por_curso(curso_id):
     try:
-        data = Util().get_estudiantes_por_curso(curso_id)
+        data = Util().estudiantes_por_curso(curso_id)
         return jsonify(data), 200
 
     except Exception as e:

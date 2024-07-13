@@ -24,7 +24,7 @@ const StudentTable = ({ subject, unit, course }) => {
           data = await actions.get_notas_criterio(unit.id);
           data = transformDataByCriteria(data);
         } else {
-          data = await actions.get_estudiantes_por_curso(course.id);
+          data = await actions.get_estudiantes_por_curso(course.cursa_id_min);
           data = transformDataByUnit(data);
         }
         setEstudiantes(data);
@@ -37,7 +37,7 @@ const StudentTable = ({ subject, unit, course }) => {
     };
 
     fetchData();
-  }, [actions, subject, unit, course.id]);
+  }, [actions, subject, unit, course.cursa_id_min]);
 
   // Transformar los datos para agrupar por estudiante y criterios si hay unidad
   const transformDataByCriteria = (data) => {

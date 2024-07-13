@@ -9,7 +9,9 @@ const SubjectSelector = ({ course, onSelectSubject }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await actions.get_asignaturas_por_curso(course.id);
+        const data = await actions.get_asignaturas_por_curso(
+          course.cursa_id_min
+        );
         setSubjects(data);
       } catch (error) {
         console.error("Error al obtener las asignaturas por curso", error);

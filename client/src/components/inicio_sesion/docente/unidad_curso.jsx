@@ -22,7 +22,7 @@ function Unidad_Curso({ actions, store }) {
     };
 
     fetchData();
-  }, [actions]);
+  }, [actions, unidad_id]);
 
   return (
     <div className="p-4">

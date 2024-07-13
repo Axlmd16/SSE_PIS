@@ -239,7 +239,9 @@ def create_unit(curso_id):
         uc._unidad._asignatura_id = int(data["asignatura_id"])
 
         id_unidad = uc.save()
-        estudiantes_cursas = Util().estudiantes_por_curso(curso_id)
+        estudiantes_cursas = Util().get_estudiantes_por_asignatura(
+            int(data["asignatura_id"])
+        )
         criterios = crc._to_dict()
 
         for estudiante in estudiantes_cursas:

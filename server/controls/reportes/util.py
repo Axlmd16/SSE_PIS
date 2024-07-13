@@ -85,28 +85,6 @@ class Util:
     #             unidades_en_asignatura.add(unidad_obj)
 
     #     return unidades_en_asignatura
-    def get_estudiantes_por_curso(self, id_curso):
-        query = f"""SELECT
-        p.id AS persona_id,
-        p.primer_nombre,
-        P.SEGUNDO_NOMBRE,
-        P.dni,
-        p.primer_apellido,
-        p.SEGUNDO_APELLIDO,
-        e.codigo_estudiante,
-        ue.UNIDAD_ID,
-        ue.NOTA_UNIDAD,
-        u.NOMBRE AS UNIDAD_NOMBRE,
-        U.ASIGNATURA_ID,
-        u.NRO_UNIDAD
-    FROM
-        persona p
-    JOIN ESTUDIANTE e ON p.id = e.ID
-    JOIN ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID AND ec.CURSA_ID = :curso_id
-    JOIN UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
-    JOIN UNIDAD u ON ue.UNIDAD_ID = u.ID"""
-        self.__cursor.execute(query, {"curso_id": id_curso})
-        return ConnectionDB().fetchall_to_dict(self.__cursor)
 
     def get_notas_criterio_por_unidad(self, unidad_id, cursa_id):
         query = f"""SELECT
@@ -163,22 +141,84 @@ class Util:
 
     def estudiantes_por_curso(self, curso_id):
         query = f"""SELECT
-            ec.ID as id_estudiante_cursa
+            ec.ID as id_estudiante_cursa,
+            p.id AS persona_id,
+            p.primer_nombre,
+            P.SEGUNDO_NOMBRE,
+            p.primer_apellido,
+            p.SEGUNDO_APELLIDO,
+            P.dni,
+            e.codigo_estudiante,
+            p.EMAIL
         FROM
             ESTUDIANTE_CURSA ec
         JOIN
             CURSA c ON ec.CURSA_ID = c.ID
+        JOIN
+            ESTUDIANTE E ON ec.ESTUDIANTE_ID = E.ID
+        JOIN
+            PERSONA P ON E.ID = P.ID
         WHERE
             c.ID = :curso_id"""
         self.__cursor.execute(query, {"curso_id": curso_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
+    def get_estudiantes_por_curso(self, id_curso):
+        query = f"""SELECT
+        p.id AS persona_id,
+        p.primer_nombre,
+        P.SEGUNDO_NOMBRE,
+        P.dni,
+        p.primer_apellido,
+        p.SEGUNDO_APELLIDO,
+        e.codigo_estudiante,
+        ue.UNIDAD_ID,
+        ue.NOTA_UNIDAD,
+        u.NOMBRE AS UNIDAD_NOMBRE,
+        U.ASIGNATURA_ID,
+        u.NRO_UNIDAD
+    FROM
+        persona p
+    JOIN ESTUDIANTE e ON p.id = e.ID
+    JOIN ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID AND ec.CURSA_ID = :curso_id
+    JOIN UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
+    JOIN UNIDAD u ON ue.UNIDAD_ID = u.ID"""
+        self.__cursor.execute(query, {"curso_id": id_curso})
+        return ConnectionDB().fetchall_to_dict(self.__cursor)
+
     def get_cursos(self):
         query = f"""SELECT
-            C.ID,
-            CL.CICLO AS CICLO_NOMBRE,
-            C.PARALELO
-        FROM
-            CURSA C JOIN CICLO CL ON C.CICLO_ID = CL.ID"""
+            CL.CICLO AS ciclo_nombre,
+            C.PARALELO,
+            MIN(C.ID) AS cursa_id_min
+        FROM CURSA C
+        JOIN CICLO CL ON C.CICLO_ID = CL.ID
+        GROUP BY CL.CICLO, C.PARALELO"""
         self.__cursor.execute(query)
+        return ConnectionDB().fetchall_to_dict(self.__cursor)
+
+    def get_estudiantes_por_asignatura(self, asignatura_id):
+        query = f"""SELECT
+            ec.ID as id_estudiante_cursa
+        FROM
+            ESTUDIANTE_CURSA ec
+        JOIN
+            CURSA c ON ec.CURSA_ID = c.ID
+        JOIN
+            ESTUDIANTE E ON ec.ESTUDIANTE_ID = E.ID
+        JOIN
+            PERSONA P ON E.ID = P.ID
+        JOIN
+            ASIGNACION A ON c.ASIGNACION_ID = A.ID
+        JOIN
+            ASIGNATURA ASI ON A.ASIGNATURA_ID = ASI.ID
+        JOIN
+            PERIODO_ACADEMICO PA ON A.PERIODO_ACADEMICO_ID = PA.ID
+        WHERE
+            ASI.ID = :asignatura_id
+            AND PA.ID = :periodo_academico_id"""
+        p = 1
+        self.__cursor.execute(
+            query, {"asignatura_id": asignatura_id, "periodo_academico_id": p}
+        )
         return ConnectionDB().fetchall_to_dict(self.__cursor)

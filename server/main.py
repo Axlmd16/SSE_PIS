@@ -1,9 +1,10 @@
 from controls.reportes.util import Util
 import time
 
+from controls.admin.asignatura_control import AsignaturaControl
 
-utils = Util()
+ac = AsignaturaControl()
 
-start_time = time.time()
-print(utils.get_asignaturas_por_curso(2))
-print("--- %s seconds ---" % (time.time() - start_time))
+estudiantes_cursas = Util().get_estudiantes_por_asignatura(1)
+
+print(estudiantes_cursas)
