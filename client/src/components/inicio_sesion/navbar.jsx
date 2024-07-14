@@ -1,4 +1,4 @@
-import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
+import { MoreVertical, ChevronLast, ChevronFirst, Menu } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronUp, ChevronDown } from "lucide-react";
@@ -121,33 +121,63 @@ export function DropdownMenu({ icon, text, children }) {
 }
 
 export function Navbar() {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuAbierto(!menuAbierto);
+  };
+
+  const closeMenu = () => {
+    setMenuAbierto(false);
+  };
+
   return (
-    <nav className="bg-gray-800 text-white shadow-lg fixed w-full z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="text-2xl font-bold tracking-wider">
-              <span className="text-blue-400">UNL</span>
-            </Link>
-          </div>
-          <div className="hidden lg:flex space-x-4">
-            {/* Links adicionales pueden ser añadidos aquí */}
-          </div>
-          <div className="flex items-center space-x-2">
-            <Link
-              to="/login"
-              className="text-gray-300 hover:text-white focus:outline-none focus:text-white"
-            >
-              Iniciar Sesión
-            </Link>
-          </div>
-          <div className="lg:hidden flex items-center">
-            <button className="text-gray-300 hover:text-white focus:outline-none focus:text-white">
-              <MoreVertical />
-            </button>
-          </div>
+    <nav className="flex items-center justify-between bg-gray-800 p-4">
+      <div>
+        <Link to="/" className="text-2xl font-bold tracking-wider ml-2">
+          <span className="text-blue-400 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:text-transparent hover:bg-clip-text">
+            UNL
+          </span>
+        </Link>
+      </div>
+      <div className="relative">
+        <button
+          onClick={toggleMenu}
+          className="text-gray-400 focus:text-gray-900 focus:outline-none"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+
+        <div
+          className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 transition-all duration-600 ease-in-out transform ${
+            menuAbierto ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 z-50'
+          }`}
+          style={{ display: menuAbierto ? 'block' : 'none' }}
+        >
+          <Link
+            to="/login"
+            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+            onClick={closeMenu}
+          >
+            Inicio Sesion
+          </Link>
+          <Link
+            to="/acciones_password"
+            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+            onClick={closeMenu}
+          >
+            Acciones - Contraseña
+          </Link>
+          <Link
+            to="/"
+            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+            onClick={closeMenu}
+          >
+            Contactanos
+          </Link>
         </div>
       </div>
     </nav>
   );
 }
+
