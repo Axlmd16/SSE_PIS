@@ -5,6 +5,7 @@ from controls.inicio_sesion.cuenta_control import CuentaControl
 from models.persona import Persona
 from controls.tda.list.linked_list import Linked_List
 from controls.dao.connection import ConnectionDB
+from controls.tda.list.utilidades import encrypt_password 
 import colorama
 import asyncio
 import time

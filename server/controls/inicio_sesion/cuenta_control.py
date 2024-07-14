@@ -1,6 +1,6 @@
 from controls.dao.data_access_object import Data_Access_Object
 from models.cuenta import Cuenta
-
+import colorama
 
 class CuentaControl(Data_Access_Object):
     def __init__(self):
@@ -25,9 +25,10 @@ class CuentaControl(Data_Access_Object):
             print(f"Error guardando la cuenta: {e}")
             return False
 
-    def update(self):
+    def update(self, id):
         try:
-            self._update(self._cuenta)
+            print(colorama.Fore.RED + f"\n\nId: {id}" + colorama.Fore.RESET)
+            self._merge(id, self._cuenta)
             return True
         except Exception as e:
             print(f"Error actualizando la cuenta: {e}")
