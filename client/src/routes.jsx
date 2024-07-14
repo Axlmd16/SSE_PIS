@@ -46,6 +46,15 @@ import DetailCourse from "./pages/Docente/detail_course";
 import Sidebar_Docente from "./components/inicio_sesion/docente/sidebar_docente";
 import Estudiantes_Curso from "./components/inicio_sesion/docente/estudiantes_curso";
 import Unidad_Curso from "./components/inicio_sesion/docente/unidad_curso";
+import AccionesPassword from "./components/inicio_sesion/password/Acciones_Password";
+import VerificarUsuario from "./components/inicio_sesion/password/VerificarUsuario";
+import CambiarPassword from "./components/inicio_sesion/password/CambiarPassword";
+import RecuperarPassword from "./components/inicio_sesion/password/RecuperarPassword";
+import ResetPassword from "./components/inicio_sesion/password/ResetPassword";
+import CrearCatalogo from "./pages/Catalogos/Catalogo";
+import Generos from "./pages/Catalogos/Generos";
+import Ciclos from "./pages/Catalogos/Ciclos";
+import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
