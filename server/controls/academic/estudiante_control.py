@@ -10,6 +10,7 @@ import colorama
 import asyncio
 import time
 
+
 class EstudianteControl(Data_Access_Object):
     def __init__(self):
         super().__init__(Estudiante)
@@ -30,32 +31,31 @@ class EstudianteControl(Data_Access_Object):
         try:
             persona = PersonaControl()
             cuenta = CuentaControl()
-            primer_nombre = args[0]
-            persona._persona._primer_nombre = primer_nombre
+
+            # Asignación de valores
+            persona._persona._primer_nombre = args[0]
             persona._persona._segundo_nombre = args[1]
-            primer_apellido = args[2]
-            persona._persona._primer_apellido = primer_apellido
+            persona._persona._primer_apellido = args[2]
             persona._persona._segundo_apellido = args[3]
             persona._persona._telefono = args[4]
-            dni = args[5]
-            persona._persona._dni = dni
-            fecha_nacimiento = args[6]
-            persona._persona._fecha_nacimiento = fecha_nacimiento
+            persona._persona._dni = args[5]
+            persona._persona._fecha_nacimiento = args[6]
             persona._persona._email = args[7]
             persona._persona._tipo_identificacion_id = args[8]
             persona._persona._genero_id = args[9]
+
+            # Guarda la persona y obtiene su ID
             id = persona.save()
+            if not id:
+                raise ValueError("No se pudo guardar la persona")
+
             self._estudiante._id = id
             self._estudiante._codigo_estudiante = args[10]
-            self._estudiante._nro_matricula = args[11]
-            self._save(self._estudiante)
-            cuenta._cuenta._usuario = f"{primer_nombre}_{primer_apellido}@unl.edu.ec"
-            # cuenta._cuenta._clave = f"{dni}"
-            hashed_password = encrypt_password(dni)
-            cuenta._cuenta._estado = 1
-            cuenta._cuenta._persona_id = self._estudiante._id
-            cuenta.save()
-            
+
+            # Guarda el estudiante
+            if not self._save(self._estudiante):
+                raise ValueError("No se pudo guardar el estudiante")
+
             return True
         except Exception as e:
             print(f"Error guardando el estudiante: {e}")
@@ -71,7 +71,7 @@ class EstudianteControl(Data_Access_Object):
 
     def list(self):
         return self._list()
-    
+
     def list_with_person_details(self) -> list:
         try:
             return self._list_estudiante()
@@ -79,32 +79,37 @@ class EstudianteControl(Data_Access_Object):
             print(f"Error listando estudiantes con detalles de persona: {e}")
             return []
 
-    #* Metodo para obtener toda la informacion de los estudiantes
-    
+    # * Metodo para obtener toda la informacion de los estudiantes
+
     def _list_estudiante(self) -> list:
         try:
             inicio_tiempo = time.time()
             estudiante_info_completa = []
 
-            #* Carga de datos en listas
+            # * Carga de datos en listas
             data_estudiantes = self.list()
             data_personas = self.__persona_control.list()
 
-             #* Ordenamiento de datos
-            data_estudiante_ordenada = data_estudiantes.quick_sort_with_attribute(data_estudiantes.to_array, "_id", 1)
-            data_personas_ordenada = data_personas.quick_sort_with_attribute(data_personas.to_array, "_id", 1)
-                        
+            # * Ordenamiento de datos
+            data_estudiante_ordenada = data_estudiantes.quick_sort_with_attribute(
+                data_estudiantes.to_array, "_id", 1
+            )
+            data_personas_ordenada = data_personas.quick_sort_with_attribute(
+                data_personas.to_array, "_id", 1
+            )
+
             for estudiante in data_estudiante_ordenada:
                 persona_id = estudiante._id
-                persona_info = data_personas.busqueda_binaria_atribute(data_personas_ordenada,"_id", persona_id)
-                
+                persona_info = data_personas.busqueda_binaria_atribute(
+                    data_personas_ordenada, "_id", persona_id
+                )
+
                 if persona_info:
                     estudiante_info = {
-                        #* Atributos del estudiante
+                        # * Atributos del estudiante
                         "id": estudiante._id,
                         "codigo_estudiante": estudiante._codigo_estudiante,
-                        "nro_matricula": estudiante._nro_matricula,
-                        #* Atributos de la persona ligada al estudiante
+                        # * Atributos de la persona ligada al estudiante
                         "primer_nombre": persona_info._primer_nombre,
                         "segundo_nombre": persona_info._segundo_nombre,
                         "primer_apellido": persona_info._primer_apellido,
@@ -115,7 +120,7 @@ class EstudianteControl(Data_Access_Object):
                         "email": persona_info._email,
                         "tipo_identificacion_id": persona_info._tipo_identificacion_id,
                         "genero_id": persona_info._genero_id,
-                }
+                    }
                 estudiante_info_completa.append(estudiante_info)
             final_tiempo = time.time()
             # print(colorama.Fore.RED + f"\nTiempo de ejecucion busqueda estudiantes: {final_tiempo - inicio_tiempo}\n" + colorama.Fore.RESET)

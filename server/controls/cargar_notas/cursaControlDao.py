@@ -1,11 +1,11 @@
-
 from controls.dao.data_access_object import Data_Access_Object
 from controls.academic.asignacion_control import AsignacionControl
 from controls.tda.list.utilidades import binary_search
 from models.cursa import Cursa
 from asyncio import run
-import time 
+import time
 import colorama
+
 
 class CursaControl(Data_Access_Object):
     def __init__(self):
@@ -60,13 +60,18 @@ class CursaControl(Data_Access_Object):
 
             # Obtener la informacion en una lista
             data_cursa = self._list()
+            print(f"Data cursa: {data_cursa}")
 
             # Obtener la informacion de la asignacion(asincronia)
-            data_asignacion = run(self._asignacion_control.get_asignacion_info_completa())
+            data_asignacion = run(
+                self._asignacion_control.get_asignacion_info_completa()
+            )
 
             # Ordenar por id el cursa
-            data_cursa_ordenada = data_cursa.quick_sort_with_attribute(data_cursa.to_array, '_id', 1)
-            
+            data_cursa_ordenada = data_cursa.quick_sort_with_attribute(
+                data_cursa.to_array, "_id", 1
+            )
+
             for cursa in data_cursa_ordenada:
                 asignacion_id = cursa._asignacion_id
                 asignacion_info = binary_search(data_asignacion, asignacion_id)
@@ -74,11 +79,12 @@ class CursaControl(Data_Access_Object):
                 # Crear el diccionario
                 if asignacion_info:
                     cursa_info = {
-                        'id': cursa._id,
+                        "id": cursa._id,
+                        "ciclo_id": cursa._ciclo_id,
                         "titulo": asignacion_info["titulo"],
                         "experiencia_laboral": asignacion_info["experiencia_laboral"],
                         "cubiculo": asignacion_info["cubiculo"],
-                        'docente_nombre': asignacion_info["docente_nombre"],
+                        "docente_nombre": asignacion_info["docente_nombre"],
                         "primer_nombre": asignacion_info["primer_nombre"],
                         "segundo_nombre": asignacion_info["segundo_nombre"],
                         "primer_apellido": asignacion_info["primer_apellido"],
@@ -87,15 +93,21 @@ class CursaControl(Data_Access_Object):
                         "dni": asignacion_info["dni"],
                         "fecha_nacimiento": asignacion_info["fecha_nacimiento"],
                         "email": asignacion_info["email"],
-                        "tipo_identificacion_id": asignacion_info["tipo_identificacion_id"],
+                        "tipo_identificacion_id": asignacion_info[
+                            "tipo_identificacion_id"
+                        ],
                         "genero_id": asignacion_info["genero_id"],
-                        'asignatura_id': asignacion_info["asignatura_id"],
-                        'asignatura_nombre': asignacion_info["asignatura_nombre"],
-                        'periodo_academico_id': asignacion_info["periodo_academico_id"],
-                        'periodo_academico_fecha_inicio': asignacion_info["periodo_academico_fecha_inicio"],
-                        'periodo_academico_fecha_fin': asignacion_info["periodo_academico_fecha_fin"],
-                        'paralelo': cursa._paralelo,
-                        'asignacion_id': asignacion_id,
+                        "asignatura_id": asignacion_info["asignatura_id"],
+                        "asignatura_nombre": asignacion_info["asignatura_nombre"],
+                        "periodo_academico_id": asignacion_info["periodo_academico_id"],
+                        "periodo_academico_fecha_inicio": asignacion_info[
+                            "periodo_academico_fecha_inicio"
+                        ],
+                        "periodo_academico_fecha_fin": asignacion_info[
+                            "periodo_academico_fecha_fin"
+                        ],
+                        "paralelo": cursa._paralelo,
+                        "asignacion_id": asignacion_id,
                     }
                     # Agregar el diccionario al array
                     cursa_info_completa.append(cursa_info)
@@ -105,4 +117,3 @@ class CursaControl(Data_Access_Object):
         except Exception as e:
             print(f"Error listando asignaciones con detalles de docente: {e}")
             return []
-            

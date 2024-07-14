@@ -1,19 +1,10 @@
-from datetime import datetime
-from controls.inicio_sesion.persona_control import PersonaControl
-from controls.inicio_sesion.tipo_ide_control import TipoIdeControl
-from controls.inicio_sesion.genero_control import GeneroControl
-from controls.inicio_sesion.cuenta_control import CuentaControl
-from controls.inicio_sesion.utils_2 import Utils_D
-from controls.inicio_sesion.utils import Util
+from controls.reportes.util import Util
+import time
 
+from controls.admin.asignatura_control import AsignaturaControl
 
-utils = Utils_D()
+ac = AsignaturaControl()
 
-permisos_user = utils.get_permisos_by_rols_from_user(10)
+estudiantes_cursas = Util().get_estudiantes_por_asignatura(1)
 
-print(permisos_user.print)
-
-print("-------------------------------------")
-permisos_rol2 = Util().get_permisos(14)
-
-print(permisos_rol2)
+print(estudiantes_cursas)

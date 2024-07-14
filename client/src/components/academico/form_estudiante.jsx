@@ -57,7 +57,6 @@ function Form_Estudiante({ update = false, estudiante = {} }) {
       );
       setValue("genero_id", estudiante.genero_id || "");
       setValue("codigo_estudiante", estudiante.codigo_estudiante || "");
-      setValue("nro_matricula", estudiante.nro_matricula || "");
     }
   }, [update, estudiante, setValue, generos, tipoId]);
 
@@ -200,9 +199,10 @@ function Form_Estudiante({ update = false, estudiante = {} }) {
               required: "Seleccione un tipo de identificación",
             })}
           >
-            {tipoId.map((tipo_id) => (
-              <option key={tipo_id.id} value={tipo_id.id}>
-                {tipo_id.nombre}
+            <option value="">Seleccione</option>
+            {tipoId.map((tipo) => (
+              <option key={tipo.id} value={tipo.id}>
+                {tipo.nombre}
               </option>
             ))}
           </select>
@@ -312,6 +312,7 @@ function Form_Estudiante({ update = false, estudiante = {} }) {
               required: "Seleccione un género",
             })}
           >
+            <option value="">Seleccione</option>
             {generos.map((genero) => (
               <option key={genero.id} value={genero.id}>
                 {genero.nombre}
@@ -339,29 +340,6 @@ function Form_Estudiante({ update = false, estudiante = {} }) {
           {errors.codigo_estudiante && (
             <p className="text-red-500 text-sm">
               {errors.codigo_estudiante.message}
-            </p>
-          )}
-        </div>
-
-        <div className="my-2">
-          <label className="text-black text-sm" htmlFor="nro_matricula">
-            Número de matrícula
-          </label>
-          <select
-            className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
-            id="nro_matricula"
-            aria-label="Número de matrícula"
-            {...register("nro_matricula", {
-              required: "Seleccione un número de matrícula",
-            })}
-          >
-            <option value="PRIMERA">PRIMERA</option>
-            <option value="SEGUNDA">SEGUNDA</option>
-            <option value="TERCERA">TERCERA</option>
-          </select>
-          {errors.nro_matricula && (
-            <p className="text-red-500 text-sm">
-              {errors.nro_matricula.message}
             </p>
           )}
         </div>

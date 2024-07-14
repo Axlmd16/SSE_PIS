@@ -22,14 +22,14 @@ class Ciclo:
     def serializable(self):
         return {
             "id": self.__id,
-            "nro_ciclo": self.__nro_ciclo,
+            "ciclo": self.__ciclo,
         }
 
     def __str__(self):
-        return str(self.__nro_ciclo)
+        return f"{self.__id} --> {self.__ciclo}\n"
 
     def deserializable(data: dict):
         ciclo = Ciclo()
         ciclo._id = data["id"]
-        ciclo._nro_ciclo = data["nro_ciclo"]
+        ciclo._ciclo = data["ciclo"]
         return ciclo

@@ -41,15 +41,11 @@ import Roles_Usuarios from "./pages/Adminitracion/roles_usuarios";
 import CursosDocente from "./components/inicio_sesion/docente/cursos_docente";
 import TablaCalificaciones from "./components/inicio_sesion/docente/TablaCalificaciones";
 import Reportes from "./components/reportes/Reportes";
-import AccionesPassword from "./components/inicio_sesion/password/Acciones_Password";
-import VerificarUsuario from "./components/inicio_sesion/password/VerificarUsuario";
-import CambiarPassword from "./components/inicio_sesion/password/CambiarPassword";
-import RecuperarPassword from "./components/inicio_sesion/password/RecuperarPassword";
-import ResetPassword from "./components/inicio_sesion/password/ResetPassword";
-import CrearCatalogo from "./pages/Catalogos/Catalogo";
-import Generos from "./pages/Catalogos/Generos";
-import Ciclos from "./pages/Catalogos/Ciclos";
-import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
+import N_asignatura from "./components/administrativo/n_asignatura";
+import DetailCourse from "./pages/Docente/detail_course";
+import Sidebar_Docente from "./components/inicio_sesion/docente/sidebar_docente";
+import Estudiantes_Curso from "./components/inicio_sesion/docente/estudiantes_curso";
+import Unidad_Curso from "./components/inicio_sesion/docente/unidad_curso";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -83,6 +79,7 @@ const Rutas = () => {
                 <Route path="/careers" element={<Carreras />} />
                 <Route path="/meshes" element={<Mallas />} />
                 <Route path="/subjects" element={<Asignaturas />} />
+                <Route path="/new" element={<N_asignatura />} />
                 <Route path="/roles" element={<Roles />} />
                 <Route path="/roles/permissions/:id" element={<Permisos />} />
                 <Route path="/users/detail/:id" element={<Roles_Usuarios />} />
@@ -113,13 +110,32 @@ const Rutas = () => {
                 element={<CursosDocente actions={actions} store={store} />}
               />
               <Route
+                path="/course/detail/:curso_id/:asignatura_id"
+                element={<Sidebar_Docente actions={actions} store={store} />}
+              >
+                <Route
+                  path="estudiantes"
+                  element={
+                    <Estudiantes_Curso actions={actions} store={store} />
+                  }
+                />
+                {/* <Route path="calificaciones" element={<Calificaciones />} /> */}
+                <Route
+                  path="unidad/:unidad_id"
+                  element={<Unidad_Curso actions={actions} store={store} />}
+                />
+              </Route>
+
+              <Route
+                path="/course/detail/:curso_id/:asignatura_id/students"
+                element={<Sidebar_Docente actions={actions} store={store} />}
+              />
+
+              <Route
                 path="/tabla_calificaciones/:id_asignacion/:asignatura_nombre"
                 element={<TablaCalificaciones />}
               />
-              <Route
-                path="/reportes"
-                element={<Reportes />}
-              />
+              <Route path="/reportes" element={<Reportes />} />
             </Route>
           </Routes>
         </div>

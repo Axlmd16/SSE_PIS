@@ -1,69 +1,100 @@
-// Importa las bibliotecas jsPDF
-import { useRef } from 'react';
-import { jsPDF } from 'jspdf';
+import { BookOpen, Folder, Layers } from "lucide-react";
+import React, { useState } from "react";
+import CourseSelector from "./searchs/CourseSelector";
+import StudentTable from "./searchs/StudentTable";
+import SubjectSelector from "./searchs/SubjectSelector";
+import UnitSelector from "./searchs/UnitSelector";
+import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 
-// Define un componente funcional llamado 'Reportes'
 const Reportes = () => {
-    // Definición de variables con información estática
-    const nombre = 'Juan Pérez';
-    const fecha = '24 de junio de 2024';
-    const contenido = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisl eget turpis interdum aliquet.';
-    const asignatura = "Base de datos";
-    
-    // useRef se usa para crear una referencia que se asociará con el contenido a incluir en el PDF
-    const contentRef = useRef(null);
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("");
+  const [subjectResetKey, setSubjectResetKey] = useState(0);
 
-    // Función para generar el PDF
-    const generatePDF = () => {
-        const doc = new jsPDF(); // Crea una nueva instancia de jsPDF
-        
-        // Utiliza el método html para añadir contenido HTML al PDF
-        doc.html(contentRef.current, {
-            callback: function (pdf) { // Callback que se ejecuta cuando el contenido se ha añadido
-                const pdfBlob = pdf.output('blob'); // Convierte el PDF a un Blob
+  const handleSelectCourse = (course) => {
+    setSelectedCourse(course);
+    setSelectedSubject("");
+    setSelectedUnit("");
+    setSubjectResetKey((prevKey) => prevKey + 1);
+  };
 
-                const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el Blob
+  const handleSelectSubject = (subject) => {
+    setSelectedSubject(subject);
+    setSelectedUnit("");
+  };
 
-                // Crea un enlace para descargar el PDF
-                const downloadLink = document.createElement('a');
-                downloadLink.href = pdfUrl;
-                downloadLink.download = 'reporte.pdf'; // Nombre del archivo a descargar
-                downloadLink.click(); // Simula el clic para descargar el archivo
+  const breadcrumbItems = [
+    {
+      label: "Home",
+      link: "/home",
+      icon: "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z",
+    },
+    {
+      label: "Reportes",
+      link: "/reportes",
+      icon: "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z",
+    },
+  ];
 
-                URL.revokeObjectURL(pdfUrl); // Revoca la URL para liberar memoria
-            },
-            x: 10, // Posición x inicial en el PDF
-            y: 10  // Posición y inicial en el PDF
-        });
-    };
+  return (
+    <div className="p-6 max-w-full mx-auto font-poppins">
+      <header className="text-center mb-6">
+        <Bread_Crumbs items={breadcrumbItems} />
+        <h1 className="text-3xl font-semibold text-gray-700">
+          Informe de Rendimiento de Estudiantes
+        </h1>
+      </header>
 
-    // JSX que define la estructura del componente
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="bg-white shadow-md rounded-lg p-8 m-4 max-w-lg mx-auto">
-                <div className="text-center mb-4">
-                    <h1 className="text-2xl font-bold">{asignatura}</h1> {/* Muestra la asignatura */}
-                    <p className="text-sm text-gray-600">Fecha de emisión: {fecha}</p> {/* Muestra la fecha */}
-                </div>
-                <div className="mb-4" ref={contentRef}> {/* Contenido que se referenciará para el PDF */}
-                    <h2 className="text-lg font-semibold mb-2">Información</h2>
-                    <p className="text-sm"><strong>Nombre:</strong> {nombre}</p> {/* Muestra el nombre */}
-                    <p className="text-sm"><strong>Asignatura:</strong>{asignatura}</p> {/* Muestra la asignatura */}
-                </div>
-                <div className="mb-4">
-                    <h2 className="text-lg font-semibold mb-2">Proyeccion de Notas</h2>
-                    <p className="text-sm">{contenido}</p> {/* Muestra el contenido */}
-                </div>
-                <div className="text-center text-xs text-gray-600">
-                    <p>Informe emitido por el sistema de gestión.</p> {/* Muestra el pie de página */}
-                </div>
-                <button onClick={generatePDF} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Descargar PDF {/* Botón para generar y descargar el PDF */}
-                </button>
+      <div className="p-6 rounded-lg shadow-md border border-gray-300 bg-white">
+        <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
+          <div className="flex items-center lg:w-1/5">
+            <span className="mx-3">
+              <strong>Curso:</strong>
+            </span>
+            <Folder size={28} className="text-gray-700 mr-4" />
+            <CourseSelector onSelectCourse={handleSelectCourse} />
+          </div>
+
+          {selectedCourse && (
+            <div className="flex items-center ml-auto w-1/3">
+              <span className="mx-3">
+                <strong>Asignatura:</strong>
+              </span>
+              <BookOpen size={28} className="text-gray-700 mr-4" />
+              <SubjectSelector
+                course={selectedCourse}
+                onSelectSubject={handleSelectSubject}
+                resetKey={subjectResetKey}
+              />
             </div>
+          )}
         </div>
-    );
-}
 
-// Exporta el componente para que pueda ser usado en otras partes de la aplicación
+        {selectedSubject && (
+          <>
+            <div className="flex justify-end items-center lg:w-1/5 ml-auto mb-4 mt-6">
+              <span className="mx-3">
+                <strong>Unidad:</strong>
+              </span>
+              <Layers size={28} className="text-gray-700 mr-4" />
+              <UnitSelector
+                subject={selectedSubject}
+                onSelectUnit={setSelectedUnit}
+              />
+            </div>
+            <div className="mt-6">
+              <StudentTable
+                subject={selectedSubject}
+                unit={selectedUnit}
+                course={selectedCourse}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default Reportes;
