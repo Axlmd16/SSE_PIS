@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import SearchableDropdown from "./SearchableDropdown";
 import { Context } from "../../../store/context";
+import Dropdown from "./dropdown";
 
 const CourseSelector = ({ onSelectCourse }) => {
   const [cursos, setCursos] = useState([]);
@@ -10,7 +10,11 @@ const CourseSelector = ({ onSelectCourse }) => {
     const fetchData = async () => {
       try {
         const data = await actions.get_cursos_info();
-        setCursos(data);
+        const updatedData = data.map((curso) => ({
+          ...curso,
+          displayName: `${curso.ciclo_nombre} - ${curso.paralelo}`,
+        }));
+        setCursos(updatedData);
       } catch (error) {
         console.error("Error al obtener los cursos", error);
       }
@@ -20,11 +24,10 @@ const CourseSelector = ({ onSelectCourse }) => {
   }, [actions]);
 
   return (
-    <SearchableDropdown
+    <Dropdown
       options={cursos}
-      placeholder="Buscar curso..."
       onSelect={onSelectCourse}
-      displayKey="ciclo_nombre"
+      displayKey="displayName" // Usar la nueva propiedad concatenada
     />
   );
 };

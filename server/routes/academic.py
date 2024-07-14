@@ -113,7 +113,7 @@ def guardar_estudiante():
     if saved:
         return jsonify(message="Estudiante guardado correctamente"), 201
     else:
-        return jsonify({"msg": "Error al guardar el estudiante"}), 500
+        return jsonify({"msg": "Error al guardar el estudiante"}), 201
 
 
 # ? Modificar un estudiante

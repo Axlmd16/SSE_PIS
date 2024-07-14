@@ -10,46 +10,23 @@ class Util:
     def __init__(self):
         self.__cursor = ConnectionDB().connection()._db.cursor()
 
-    def get_asignaturas_por_curso(self, id):
+    def get_asignaturas_por_curso(self, paralelo, ciclo_id):
         query = f"""SELECT
-        A.ID, 
-        A.NOMBRE
-    FROM
-        CURSA C
-        JOIN ASIGNACION ASG ON C.ASIGNACION_ID = ASG.ID
-        JOIN ASIGNATURA A ON ASG.ASIGNATURA_ID = A.ID
-    WHERE
-        C.ID = {id}"""
-        self.__cursor.execute(query)
+            ASI.ID AS ASIGNATURA_ID,
+            ASI.NOMBRE
+        FROM
+            CURSA C
+        JOIN
+            ASIGNACION A ON C.ASIGNACION_ID = A.ID
+        JOIN
+            ASIGNATURA ASI ON A.ASIGNATURA_ID = ASI.ID
+        JOIN
+            CICLO CL ON C.CICLO_ID = CL.ID
+        WHERE
+            CL.ID = :id_ciclo
+            AND C.PARALELO = :paralelo"""
+        self.__cursor.execute(query, {"paralelo": paralelo, "id_ciclo": ciclo_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)
-
-    # def get_asignaturas_por_curso(self, curso_id):
-    #     ac = AsignacionControl()
-    #     asignaciones = ac.list()
-    #     cc = CursaControl()
-    #     cursos = cc.list()
-    #     asc = AsignaturaControl()
-    #     asignaturas = asc.list()
-
-    #     asignaciones.sort_models("id")
-
-    #     curso = cursos.search_models_binary("id", curso_id)
-
-    #     asignacion_id = curso._asignacion_id
-
-    #     asignaturas_en_curso = Linked_List()
-    #     asignatura_ids = asignaciones.busqueda_binaria_lineal_atribute(
-    #         asignaciones.to_array, "_id", asignacion_id
-    #     )
-
-    #     for asignatura in asignatura_ids:
-    #         asignatura_obj = asignaturas.search_models_binary(
-    #             "id", asignatura._asignatura_id
-    #         )
-    #         if asignatura_obj:
-    #             asignaturas_en_curso.add(asignatura_obj)
-
-    #     return asignaturas_en_curso
 
     def get_units_by_asignatura(self, asignatura_id):
         query = f"""SELECT
@@ -65,26 +42,6 @@ class Util:
         A.ID = {asignatura_id}"""
         self.__cursor.execute(query)
         return ConnectionDB().fetchall_to_dict(self.__cursor)
-
-    # def get_units_by_asignatura(self, asignatura_id):
-    #     ac = AsignaturaControl()
-    #     uc = UnidadControl()
-    #     asignaturas = ac.list()
-    #     unidades = uc.list()
-
-    #     asignatura = asignaturas.search_models_binary("id", asignatura_id)
-
-    #     unidades_en_asignatura = Linked_List()
-    #     unidades_ids = unidades.busqueda_binaria_lineal_atribute(
-    #         unidades.to_array, "_asignatura_id", asignatura_id
-    #     )
-
-    #     for unidad in unidades_ids:
-    #         unidad_obj = unidades.search_models_binary("id", unidad._id)
-    #         if unidad_obj:
-    #             unidades_en_asignatura.add(unidad_obj)
-
-    #     return unidades_en_asignatura
 
     def get_notas_criterio_por_unidad(self, unidad_id, cursa_id):
         query = f"""SELECT
@@ -163,37 +120,42 @@ class Util:
         self.__cursor.execute(query, {"curso_id": curso_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
-    def get_estudiantes_por_curso(self, id_curso):
+    def get_notas_por_curso_y_estudiantes(self, id_curso, id_asignatura):
         query = f"""SELECT
-        p.id AS persona_id,
-        p.primer_nombre,
-        P.SEGUNDO_NOMBRE,
-        P.dni,
-        p.primer_apellido,
-        p.SEGUNDO_APELLIDO,
-        e.codigo_estudiante,
-        ue.UNIDAD_ID,
-        ue.NOTA_UNIDAD,
-        u.NOMBRE AS UNIDAD_NOMBRE,
-        U.ASIGNATURA_ID,
-        u.NRO_UNIDAD
-    FROM
-        persona p
-    JOIN ESTUDIANTE e ON p.id = e.ID
-    JOIN ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID AND ec.CURSA_ID = :curso_id
-    JOIN UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
-    JOIN UNIDAD u ON ue.UNIDAD_ID = u.ID"""
-        self.__cursor.execute(query, {"curso_id": id_curso})
+            p.id AS persona_id,
+            p.primer_nombre,
+            P.SEGUNDO_NOMBRE,
+            P.dni,
+            p.primer_apellido,
+            p.SEGUNDO_APELLIDO,
+            e.codigo_estudiante,
+            ue.UNIDAD_ID,
+            ue.NOTA_UNIDAD,
+            u.NOMBRE AS UNIDAD_NOMBRE,
+            U.ASIGNATURA_ID,
+            u.NRO_UNIDAD
+        FROM
+            persona p
+        JOIN ESTUDIANTE e ON p.id = e.ID
+        JOIN ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID AND ec.CURSA_ID = :curso_id
+        JOIN UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
+        JOIN UNIDAD u ON ue.UNIDAD_ID = u.ID
+        WHERE
+            U.ASIGNATURA_ID = :id_asignatura"""
+        self.__cursor.execute(
+            query, {"curso_id": id_curso, "id_asignatura": id_asignatura}
+        )
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
     def get_cursos(self):
         query = f"""SELECT
             CL.CICLO AS ciclo_nombre,
+            CL.ID AS ciclo_id,
             C.PARALELO,
             MIN(C.ID) AS cursa_id_min
         FROM CURSA C
         JOIN CICLO CL ON C.CICLO_ID = CL.ID
-        GROUP BY CL.CICLO, C.PARALELO"""
+        GROUP BY CL.CICLO, C.PARALELO, CL.ID"""
         self.__cursor.execute(query)
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 

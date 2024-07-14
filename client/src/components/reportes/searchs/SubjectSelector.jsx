@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../../store/context";
 import Dropdown from "./dropdown";
 
-const SubjectSelector = ({ course, onSelectSubject }) => {
+const SubjectSelector = ({ course, onSelectSubject, resetKey }) => {
   const [subjects, setSubjects] = useState([]);
   const { actions } = useContext(Context);
+
+  console.log("curso", course);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await actions.get_asignaturas_por_curso(
-          course.cursa_id_min
+          course.ciclo_id,
+          course.paralelo
         );
         setSubjects(data);
       } catch (error) {
@@ -26,6 +29,7 @@ const SubjectSelector = ({ course, onSelectSubject }) => {
       options={subjects}
       onSelect={onSelectSubject}
       displayKey="nombre"
+      resetKey={resetKey}
     />
   );
 };

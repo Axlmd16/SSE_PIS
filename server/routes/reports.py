@@ -15,10 +15,11 @@ def get_cursa_info():
         return jsonify({"message": str(e)}), 500
 
 
-@reports.route("/asig_by_curso/<int:curso_id>", methods=["GET"])
-def get_asignaturas_por_curso(curso_id):
+@reports.route("/asig_by_curso/<int:ciclo_id>/<string:paralelo>", methods=["GET"])
+def get_asignaturas_por_curso(ciclo_id, paralelo):
     try:
-        data = Util().get_asignaturas_por_curso(curso_id)
+        data = Util().get_asignaturas_por_curso(paralelo, ciclo_id)
+        print(data)
         return jsonify(data), 200
 
     except Exception as e:
@@ -29,6 +30,8 @@ def get_asignaturas_por_curso(curso_id):
 def get_units_by_asignatura(asignatura_id):
     try:
         data = Util().get_units_by_asignatura(asignatura_id)
+        data = sorted(data, key=lambda x: x["nro_unidad"])
+
         return jsonify(data), 200
 
     except Exception as e:
@@ -36,9 +39,21 @@ def get_units_by_asignatura(asignatura_id):
 
 
 @reports.route("/students_by_course/<int:curso_id>", methods=["GET"])
-def get_estudiantes_por_curso(curso_id):
+def get_notas_curso_estudiantes(curso_id):
     try:
         data = Util().estudiantes_por_curso(curso_id)
+        return jsonify(data), 200
+
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+
+@reports.route(
+    "/notes_by_course_students/<int:curso_id>/<int:asignatura_id>", methods=["GET"]
+)
+def get_estudiantes_por_curso(curso_id, asignatura_id):
+    try:
+        data = Util().get_notas_por_curso_y_estudiantes(curso_id, asignatura_id)
         return jsonify(data), 200
 
     except Exception as e:
