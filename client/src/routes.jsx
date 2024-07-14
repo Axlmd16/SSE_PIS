@@ -41,6 +41,15 @@ import Roles_Usuarios from "./pages/Adminitracion/roles_usuarios";
 import CursosDocente from "./components/inicio_sesion/docente/cursos_docente";
 import TablaCalificaciones from "./components/inicio_sesion/docente/TablaCalificaciones";
 import Reportes from "./components/reportes/Reportes";
+import AccionesPassword from "./components/inicio_sesion/password/Acciones_Password";
+import VerificarUsuario from "./components/inicio_sesion/password/VerificarUsuario";
+import CambiarPassword from "./components/inicio_sesion/password/CambiarPassword";
+import RecuperarPassword from "./components/inicio_sesion/password/RecuperarPassword";
+import ResetPassword from "./components/inicio_sesion/password/ResetPassword";
+import CrearCatalogo from "./pages/Catalogos/Catalogo";
+import Generos from "./pages/Catalogos/Generos";
+import Ciclos from "./pages/Catalogos/Ciclos";
+import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -85,6 +94,10 @@ const Rutas = () => {
                 />
                 <Route path="/cursa" element={<Cursa />} />
                 <Route path="/estudiante-cursa" element={<EstudianteCursa />} />
+                <Route path="/crear-catalogo" element={<CrearCatalogo />} />
+                <Route path="/generos" element={<Generos />} />
+                <Route path="/ciclos" element={<Ciclos />} />
+                <Route path="/criterio-evaluacion" element={<CriterioEvaluacion />} />
               </Route>
             </Routes>
           </div>
@@ -106,7 +119,7 @@ const Rutas = () => {
               <Route
                 path="/reportes"
                 element={<Reportes />}
-                />
+              />
             </Route>
           </Routes>
         </div>
@@ -117,6 +130,11 @@ const Rutas = () => {
             <Route path="/" element={<Landing />} />
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/acciones_password" element={<AccionesPassword />} />
+            <Route path="/verificar_usuario" element={<VerificarUsuario />} />
+            <Route path="/cambiar_password/:data" element={<CambiarPassword />} />
+            <Route path="/recuperar_password" element={<RecuperarPassword />} />
+            <Route path="/reset_password/:id_cuenta" element={<ResetPassword />} />
           </Routes>
         </div>
       )}
@@ -171,6 +189,11 @@ function Navigation_Auth() {
         text="Mallas Académicas"
         icon={<Library size={20} />}
         to="/meshes"
+      />
+      <SidebarItem
+        text="Catalogos"
+        icon={<Library size={20} />}
+        to="/crear-catalogo"
       />
       <SidebarItem
         text="Asignaturas"

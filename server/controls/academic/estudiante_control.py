@@ -5,6 +5,7 @@ from controls.inicio_sesion.cuenta_control import CuentaControl
 from models.persona import Persona
 from controls.tda.list.linked_list import Linked_List
 from controls.dao.connection import ConnectionDB
+from controls.tda.list.utilidades import encrypt_password 
 import colorama
 import asyncio
 import time
@@ -49,7 +50,8 @@ class EstudianteControl(Data_Access_Object):
             self._estudiante._nro_matricula = args[11]
             self._save(self._estudiante)
             cuenta._cuenta._usuario = f"{primer_nombre}_{primer_apellido}@unl.edu.ec"
-            cuenta._cuenta._clave = f"{dni}"
+            # cuenta._cuenta._clave = f"{dni}"
+            hashed_password = encrypt_password(dni)
             cuenta._cuenta._estado = 1
             cuenta._cuenta._persona_id = self._estudiante._id
             cuenta.save()

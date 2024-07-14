@@ -12,6 +12,8 @@ class Config:
     # Configuración general
     FLASK_APP = environ.get("FLASK_APP")
     FLASK_ENV = environ.get("FLASK_ENV")
+    CLAVE_SECRETA = environ.get("CLAVE_APP_ADMIN")
+    CORREO = environ.get("CORREO_ADMIN")
 
     if not FLASK_APP or not FLASK_ENV:
         raise EnvironmentError(

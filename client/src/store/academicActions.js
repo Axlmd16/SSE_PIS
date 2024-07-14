@@ -1,23 +1,23 @@
 const academicActions = ({ getStore, getActions, setStore }) => ({
 
-  //* ------------------Generos-----------------
+  // //* ------------------Generos-----------------
 
-  get_all_generos: async () => {
-    const { token } = getStore();
-    const api = getStore().api;
+  // get_all_generos: async () => {
+  //   const { token } = getStore();
+  //   const api = getStore().api;
 
-    try {
-      const response = await api.get("/generos", {
-        headers: {
-          //Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Flux: Error obtenido los generos", error);
-      throw error;
-    }
-  },
+  //   try {
+  //     const response = await api.get("/generos", {
+  //       headers: {
+  //         //Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Flux: Error obtenido los generos", error);
+  //     throw error;
+  //   }
+  // },
 
   //* ----------TIPO_IDENTIFICACION--------------
 
