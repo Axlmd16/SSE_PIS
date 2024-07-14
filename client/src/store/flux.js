@@ -5,6 +5,8 @@ import academicActions from "./academicActions";
 import notesActions from "./notesActions";
 import loginActions from "./loginActions";
 import reportActions from "./reportsActions";
+import passwordActions from "./passwordActions";
+import catalogoActions from "./catalogoActionx";
 
 const getState = ({ getStore, getActions, setStore }) => {
   const API_BASE_URL = "http://127.0.0.1:3000";
@@ -36,6 +38,9 @@ const getState = ({ getStore, getActions, setStore }) => {
       selectedEstudianteCursa: null,
       selectedUnit: null,
       selectedCycle: null,
+      selectedGenero: null,
+      selectCiclos: null,
+      selectCriterioEvaluacion: null,
     },
     actions: {
       syncTokenfromSessionStorage: () => {
@@ -97,6 +102,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       ...notesActions({ getStore, getActions, setStore }),
       ...loginActions({ getStore, getActions, setStore }),
       ...reportActions({ getStore, getActions, setStore }),
+      ...passwordActions({ getStore, getActions, setStore }),
+      ...catalogoActions({ getStore, getActions, setStore }),
     },
   };
 };
