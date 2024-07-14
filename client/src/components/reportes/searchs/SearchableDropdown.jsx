@@ -62,7 +62,7 @@ const SearchableDropdown = ({
               }`}
               onMouseDown={() => handleSelect(option)}
             >
-              {option[displayKey]}
+              {option[displayKey] + " " + option.paralelo}
             </li>
           ))}
         </ul>

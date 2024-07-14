@@ -9,8 +9,14 @@ const UnitSelector = ({ subject, onSelectUnit }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await actions.get_unidades_por_asignatura(subject.id);
-        setUnits(data);
+        const data = await actions.get_unidades_por_asignatura(
+          subject.asignatura_id
+        );
+        const updateData = data.map((unit) => ({
+          ...unit,
+          displayName: `Unidad ${unit.nro_unidad}`,
+        }));
+        setUnits(updateData);
       } catch (error) {
         console.error("Error al obtener las unidades por asignatura", error);
       }
@@ -23,7 +29,7 @@ const UnitSelector = ({ subject, onSelectUnit }) => {
     <Dropdown
       options={units}
       onSelect={onSelectUnit}
-      displayKey="unidad_nombre"
+      displayKey="displayName"
     />
   );
 };

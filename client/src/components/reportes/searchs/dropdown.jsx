@@ -1,9 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
-const Dropdown = ({ options, label, onSelect, displayKey }) => {
+const Dropdown = ({ options, label, onSelect, displayKey, resetKey }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    setSelectedOption(null);
+  }, [resetKey]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSelect = (option) => {
     setSelectedOption(option === selectedOption ? null : option);
@@ -12,21 +30,23 @@ const Dropdown = ({ options, label, onSelect, displayKey }) => {
   };
 
   return (
-    <div className="relative w-full">
-      <label className="block text-gray-700 mb-1 text-sm">{label}</label>
+    <div className="relative w-full" ref={dropdownRef}>
+      <label className="block text-gray-700 mb-1 text-sm font-medium">
+        {label}
+      </label>
       <div
-        className="flex items-center border border-gray-300 rounded focus-within:ring p-1 bg-white cursor-pointer"
+        className="flex items-center border border-gray-300 rounded-md focus-within:ring focus-within:ring-blue-500 p-2 bg-white cursor-pointer shadow-sm transition duration-200 ease-in-out"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-sm flex-1 truncate pr-2 text-gray-500">
           {selectedOption ? selectedOption[displayKey] : "Seleccione"}
         </span>
-        <ChevronDown className="text-gray-500 w-4 h-4" />
+        <ChevronDown className="text-gray-500 w-5 h-5" />
       </div>
       {isOpen && (
-        <ul className="absolute z-10 bg-white border border-gray-300 w-full rounded shadow mt-1 max-h-40 overflow-y-auto text-sm">
+        <ul className="absolute z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto text-sm transition duration-200 ease-in-out">
           <li
-            className={`px-3 py-1 cursor-pointer hover:bg-gray-100 ${
+            className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
               selectedOption === null ? "bg-gray-100" : ""
             }`}
             onMouseDown={() => handleSelect(null)}
@@ -36,7 +56,7 @@ const Dropdown = ({ options, label, onSelect, displayKey }) => {
           {options.map((option, index) => (
             <li
               key={index}
-              className={`px-3 py-1 cursor-pointer hover:bg-gray-100 ${
+              className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
                 option === selectedOption ? "bg-gray-100" : ""
               }`}
               onMouseDown={() => handleSelect(option)}

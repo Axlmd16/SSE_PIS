@@ -12,6 +12,7 @@ from controls.cargar_notas.unidad_estudiante_control import UnidadEstudianteCont
 from controls.academic.estudiante_control import EstudianteControl
 from controls.admin.criterio_control import CriterioControl
 from controls.cargar_notas.nota_criterio_control import NotaCriterioControl
+from controls.admin.ciclo_control import CicloControl
 
 admin = Blueprint("admin", __name__)
 
@@ -24,6 +25,7 @@ uec = UnidadEstudianteControl()
 estudiante_control = EstudianteControl()
 crc = CriterioControl()
 ncc = NotaCriterioControl()
+clc = CicloControl()
 
 
 # ----------------------------------------------------------------------------------------
@@ -237,7 +239,9 @@ def create_unit(curso_id):
         uc._unidad._asignatura_id = int(data["asignatura_id"])
 
         id_unidad = uc.save()
-        estudiantes_cursas = Util().estudiantes_por_curso(curso_id)
+        estudiantes_cursas = Util().get_estudiantes_por_asignatura(
+            int(data["asignatura_id"])
+        )
         criterios = crc._to_dict()
 
         for estudiante in estudiantes_cursas:
@@ -270,6 +274,7 @@ def get_units():
 @admin.route("/units/<int:id>", methods=["GET"])
 def get_unit(id):
     unit = uc._find(id)
+    print(unit)
     return jsonify(unit), 201
 
 
@@ -288,3 +293,44 @@ def update_unit(id):
         return jsonify(data), 201
     else:
         return jsonify({"msg": "Error al actualizar la unidad"}), 500
+
+
+# ----------------------------------------------------------------------------------------
+# Ciclos
+
+
+@jwt_required
+@admin.route("/cycles", methods=["POST"])
+def create_cycle():
+    data = request.json
+    clc._ciclo._ciclo = data["ciclo"]
+
+    if clc.save():
+        return jsonify(data), 201
+    else:
+        return jsonify({"msg": "Error al guardar el ciclo"}), 500
+
+
+@jwt_required
+@admin.route("/cycles", methods=["GET"])
+def get_cycles():
+    data = clc._to_dict()
+    return jsonify(data), 201
+
+
+@jwt_required
+@admin.route("/cycles/<int:id>", methods=["GET"])
+def get_cycle(id):
+    cycle = clc._find(id)
+    return jsonify(cycle), 201
+
+
+@jwt_required
+@admin.route("/cycles/<int:id>", methods=["PUT"])
+def update_cycle(id):
+    data = request.json
+    clc._ciclo._ciclo = data["ciclo"]
+    if clc.update(id):
+        return jsonify(data), 201
+    else:
+        return jsonify({"msg": "Error al actualizar el ciclo"}), 500

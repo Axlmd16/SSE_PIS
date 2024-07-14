@@ -5,17 +5,18 @@ import StudentTable from "./searchs/StudentTable";
 import SubjectSelector from "./searchs/SubjectSelector";
 import UnitSelector from "./searchs/UnitSelector";
 import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
-import Filtred_notes from "./filtred_notes";
 
 const Reportes = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
+  const [subjectResetKey, setSubjectResetKey] = useState(0);
 
   const handleSelectCourse = (course) => {
     setSelectedCourse(course);
     setSelectedSubject("");
     setSelectedUnit("");
+    setSubjectResetKey((prevKey) => prevKey + 1);
   };
 
   const handleSelectSubject = (subject) => {
@@ -47,34 +48,42 @@ const Reportes = () => {
 
       <div className="p-6 rounded-lg shadow-md border border-gray-300 bg-white">
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
-          <div className="flex items-center lg:w-1/2">
+          <div className="flex items-center lg:w-1/5">
+            <span className="mx-3">
+              <strong>Curso:</strong>
+            </span>
             <Folder size={28} className="text-gray-700 mr-4" />
             <CourseSelector onSelectCourse={handleSelectCourse} />
           </div>
 
           {selectedCourse && (
-            <div className="flex items-center ml-auto w-1/2">
+            <div className="flex items-center ml-auto w-1/3">
+              <span className="mx-3">
+                <strong>Asignatura:</strong>
+              </span>
               <BookOpen size={28} className="text-gray-700 mr-4" />
               <SubjectSelector
                 course={selectedCourse}
                 onSelectSubject={handleSelectSubject}
+                resetKey={subjectResetKey}
               />
             </div>
           )}
         </div>
 
-        <hr className="my-6 border-gray-500 border-t" />
-
         {selectedSubject && (
           <>
-            <div className="flex justify-end items-center lg:w-1/3 ml-auto mb-4">
+            <div className="flex justify-end items-center lg:w-1/5 ml-auto mb-4 mt-6">
+              <span className="mx-3">
+                <strong>Unidad:</strong>
+              </span>
               <Layers size={28} className="text-gray-700 mr-4" />
               <UnitSelector
                 subject={selectedSubject}
                 onSelectUnit={setSelectedUnit}
               />
             </div>
-            <div className="">
+            <div className="mt-6">
               <StudentTable
                 subject={selectedSubject}
                 unit={selectedUnit}

@@ -18,6 +18,7 @@ const CursosDocente = () => {
       setLoading(true);
       try {
         const data = await actions.get_all_cursos_docente(id_docente);
+        // const data = await actions.get_all_docentes_asignaturas(id_docente);
         setCursos(data);
       } catch (error) {
         console.error("Error al obtener los docentesAsignaturas:", error);
@@ -59,7 +60,7 @@ const CursosDocente = () => {
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">
-                    {curso.asignatura_nombre}
+                    {curso.asignatura_nombre} - {curso.curso_paralelo}
                   </h3>
                   <p className="text-sm text-gray-600">
                     Periodo académico: <br />

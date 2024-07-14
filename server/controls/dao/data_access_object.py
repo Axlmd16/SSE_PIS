@@ -121,7 +121,7 @@ class Data_Access_Object(Generic[T]):
         cursor.execute(sql, params)
         row = ConnectionDB().fetchone_to_dict(cursor)
         cursor.close()
-        return self.atype.deserializable(row)
+        return row
 
     def __transform__(self):
         return json.dumps(

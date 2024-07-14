@@ -21,10 +21,13 @@ const StudentTable = ({ subject, unit, course }) => {
       try {
         let data;
         if (unit) {
-          data = await actions.get_notas_criterio(unit.id);
+          data = await actions.get_notas_criterio(unit.id, course.cursa_id_min);
           data = transformDataByCriteria(data);
         } else {
-          data = await actions.get_estudiantes_por_curso(course.id);
+          data = await actions.get_notas_por_curso_estudiantes(
+            course.cursa_id_min,
+            subject.asignatura_id
+          );
           data = transformDataByUnit(data);
         }
         setEstudiantes(data);
@@ -37,7 +40,7 @@ const StudentTable = ({ subject, unit, course }) => {
     };
 
     fetchData();
-  }, [actions, subject, unit, course.id]);
+  }, [actions, subject, unit, course.cursa_id_min]);
 
   // Transformar los datos para agrupar por estudiante y criterios si hay unidad
   const transformDataByCriteria = (data) => {
@@ -108,18 +111,20 @@ const StudentTable = ({ subject, unit, course }) => {
         });
       });
 
-      const criteriaColumns = Array.from(criterios.entries()).map(
-        ([id, nombre]) => ({
-          name: nombre,
-          selector: (row) =>
-            row[`criterio_${id}`] !== undefined ? row[`criterio_${id}`] : "N/A",
-          sortable: true,
-          center: true,
-          right: true,
-          with: "100px",
-          reorder: true,
-        })
+      const sortedCriterios = Array.from(criterios.entries()).sort(
+        (a, b) => a[0] - b[0]
       );
+
+      const criteriaColumns = sortedCriterios.map(([id, nombre]) => ({
+        name: nombre,
+        selector: (row) =>
+          row[`criterio_${id}`] !== undefined ? row[`criterio_${id}`] : "N/A",
+        sortable: true,
+        center: "true",
+        right: "true",
+        with: "100px",
+        reorder: true,
+      }));
 
       // Añadir columna para la nota de unidad
       const unitColumn = {
@@ -145,7 +150,11 @@ const StudentTable = ({ subject, unit, course }) => {
         });
       });
 
-      const unitColumns = Array.from(unidades).map((unidad) => ({
+      const sortedUnidades = Array.from(unidades).sort(
+        (a, b) => a.split("_")[1] - b.split("_")[1]
+      );
+
+      const unitColumns = sortedUnidades.map((unidad) => ({
         name: `Unidad ${unidad.split("_")[1]}`,
         selector: (row) => (row[unidad] !== undefined ? row[unidad] : "N/A"),
         sortable: true,
