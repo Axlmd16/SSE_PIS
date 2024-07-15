@@ -17,16 +17,23 @@ const StudentTable = ({ subject, unit, course }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // Verificar si los datos necesarios están presentes
+      if (!subject || !course) {
+        console.error("Datos insuficientes para realizar la llamada");
+        return;
+      }
+
       setLoading(true);
       try {
         let data;
         if (unit) {
-          data = await actions.get_notas_criterio(unit.id, course.cursa_id_min);
+          data = await actions.get_notas_criterio(unit.id, course.cursa_id);
           data = transformDataByCriteria(data);
         } else {
           data = await actions.get_notas_por_curso_estudiantes(
-            course.cursa_id_min,
-            subject.asignatura_id
+            course.paralelo,
+            subject.asignatura_id,
+            course.ciclo_id
           );
           data = transformDataByUnit(data);
         }
@@ -39,8 +46,11 @@ const StudentTable = ({ subject, unit, course }) => {
       }
     };
 
-    fetchData();
-  }, [actions, subject, unit, course.cursa_id_min]);
+    // Verificar si todos los datos están listos antes de llamar a fetchData
+    if (subject && (unit || course.cursa_id)) {
+      fetchData();
+    }
+  }, [actions, subject, unit, course]);
 
   // Transformar los datos para agrupar por estudiante y criterios si hay unidad
   const transformDataByCriteria = (data) => {

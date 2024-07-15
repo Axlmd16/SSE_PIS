@@ -143,28 +143,38 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
       width: "500px",
     },
     ...criteria.map(([criterion, porcentaje]) => ({
-      name: criterion,
+      name: (
+        <div className="flex items-center space-x-1">
+          <span>{criterion}</span>
+          <span className="text-xs text-gray-500">({porcentaje}%)</span>
+        </div>
+      ),
       selector: (row) => (
-        <input
-          type="number"
-          min="0"
-          max={porcentaje}
-          step="0.1"
-          className={`border p-1 ${isEditing ? "bg-gray-200" : "bg-white"}`}
-          value={row.criteria[criterion]?.nota_criterio || ""}
-          onChange={(e) =>
-            handleInputChange(row.id, criterion, parseFloat(e.target.value))
-          }
-          onBlur={(e) =>
-            handleBlur(
-              row.id,
-              criterion,
-              parseFloat(e.target.value),
-              porcentaje
-            )
-          }
-          disabled={!isEditing}
-        />
+        <div className="flex items-center">
+          <input
+            type="number"
+            min="0"
+            max={porcentaje}
+            step="0.1"
+            className={`border rounded p-1 w-20 text-center ${
+              isEditing ? "bg-gray-200" : "bg-white"
+            } 
+                        focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            value={row.criteria[criterion]?.nota_criterio || ""}
+            onChange={(e) =>
+              handleInputChange(row.id, criterion, parseFloat(e.target.value))
+            }
+            onBlur={(e) =>
+              handleBlur(
+                row.id,
+                criterion,
+                parseFloat(e.target.value),
+                porcentaje
+              )
+            }
+            disabled={!isEditing}
+          />
+        </div>
       ),
       reorder: true,
     })),

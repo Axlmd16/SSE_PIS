@@ -51,13 +51,17 @@ const reportActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
-  get_notas_por_curso_estudiantes: async (curso_id, asignatura_id) => {
+  get_notas_por_curso_estudiantes: async (
+    paralelo,
+    asignatura_id,
+    ciclo_id
+  ) => {
     const { token } = getStore();
     const api = getStore().api;
 
     try {
       const response = await api.get(
-        `/notes_by_course_students/${curso_id}/${asignatura_id}`,
+        `/notes_by_course_students/${paralelo}/${asignatura_id}/${ciclo_id}`,
         {
           headers: {
             //Authorization: `Bearer ${token}`,
@@ -101,6 +105,26 @@ const reportActions = ({ getStore, getActions, setStore }) => ({
           //Authorization: `Bearer ${token}`,
         },
       });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error ", error);
+      throw error;
+    }
+  },
+
+  get_cursa_id: async (paralelo, asignatura_id, ciclo_id) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.get(
+        `/cursa_id/${paralelo}/${asignatura_id}/${ciclo_id}`,
+        {
+          headers: {
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Flux: Error ", error);

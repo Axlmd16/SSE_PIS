@@ -1,16 +1,17 @@
 import { BookOpen, Folder, Layers } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CourseSelector from "./searchs/CourseSelector";
 import StudentTable from "./searchs/StudentTable";
 import SubjectSelector from "./searchs/SubjectSelector";
 import UnitSelector from "./searchs/UnitSelector";
 import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 
-const Reportes = () => {
+const Reportes = ({ actions }) => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
   const [subjectResetKey, setSubjectResetKey] = useState(0);
+  const [curso, setCurso] = useState([]);
 
   const handleSelectCourse = (course) => {
     setSelectedCourse(course);
@@ -36,6 +37,25 @@ const Reportes = () => {
       icon: "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z",
     },
   ];
+
+  useEffect(() => {
+    if (selectedCourse && selectedSubject) {
+      const fetchData = async () => {
+        try {
+          const data = await actions.get_cursa_id(
+            selectedCourse.paralelo,
+            selectedSubject.asignatura_id,
+            selectedCourse.ciclo_id
+          );
+          setCurso(data);
+        } catch (error) {
+          console.error("Error al obtener el curso", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [actions, selectedCourse, selectedSubject]);
 
   return (
     <div className="p-6 max-w-full mx-auto font-poppins">
@@ -87,7 +107,7 @@ const Reportes = () => {
               <StudentTable
                 subject={selectedSubject}
                 unit={selectedUnit}
-                course={selectedCourse}
+                course={curso}
               />
             </div>
           </>
