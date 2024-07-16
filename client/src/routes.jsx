@@ -103,7 +103,10 @@ const Rutas = () => {
                 <Route path="/crear-catalogo" element={<CrearCatalogo />} />
                 <Route path="/generos" element={<Generos />} />
                 <Route path="/ciclos" element={<Ciclos />} />
-                <Route path="/criterio-evaluacion" element={<CriterioEvaluacion />} />
+                <Route
+                  path="/criterio-evaluacion"
+                  element={<CriterioEvaluacion />}
+                />
               </Route>
             </Routes>
           </div>
@@ -144,7 +147,10 @@ const Rutas = () => {
                 path="/tabla_calificaciones/:id_asignacion/:asignatura_nombre"
                 element={<TablaCalificaciones />}
               />
-              <Route path="/reportes" element={<Reportes />} />
+              <Route
+                path="/reportes"
+                element={<Reportes actions={actions} />}
+              />
             </Route>
           </Routes>
         </div>
@@ -157,9 +163,15 @@ const Rutas = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/acciones_password" element={<AccionesPassword />} />
             <Route path="/verificar_usuario" element={<VerificarUsuario />} />
-            <Route path="/cambiar_password/:data" element={<CambiarPassword />} />
+            <Route
+              path="/cambiar_password/:data"
+              element={<CambiarPassword />}
+            />
             <Route path="/recuperar_password" element={<RecuperarPassword />} />
-            <Route path="/reset_password/:id_cuenta" element={<ResetPassword />} />
+            <Route
+              path="/reset_password/:id_cuenta"
+              element={<ResetPassword />}
+            />
           </Routes>
         </div>
       )}

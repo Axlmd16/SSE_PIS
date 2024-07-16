@@ -120,30 +120,53 @@ class Util:
         self.__cursor.execute(query, {"curso_id": curso_id})
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
-    def get_notas_por_curso_y_estudiantes(self, id_curso, id_asignatura):
+    def get_notas_por_curso_y_estudiantes(self, paralelo, id_asignatura, ciclo_id):
         query = f"""SELECT
             p.id AS persona_id,
             p.primer_nombre,
-            P.SEGUNDO_NOMBRE,
-            P.dni,
+            p.SEGUNDO_NOMBRE,
+            p.dni,
             p.primer_apellido,
             p.SEGUNDO_APELLIDO,
             e.codigo_estudiante,
             ue.UNIDAD_ID,
             ue.NOTA_UNIDAD,
             u.NOMBRE AS UNIDAD_NOMBRE,
-            U.ASIGNATURA_ID,
+            u.ASIGNATURA_ID,
             u.NRO_UNIDAD
         FROM
             persona p
-        JOIN ESTUDIANTE e ON p.id = e.ID
-        JOIN ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID AND ec.CURSA_ID = :curso_id
-        JOIN UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
-        JOIN UNIDAD u ON ue.UNIDAD_ID = u.ID
+        JOIN
+            ESTUDIANTE e ON p.id = e.ID
+        JOIN
+            ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID
+        JOIN
+            CURSA c ON ec.CURSA_ID = c.ID
+        JOIN
+            UNIDAD_ESTUDIANTE ue ON ec.ID = ue.ESTUDIANTE_CURSA_ID
+        JOIN
+            UNIDAD u ON ue.UNIDAD_ID = u.ID
+        JOIN
+            ASIGNACION a ON c.ASIGNACION_ID = a.ID
+        JOIN
+            CICLO cl ON c.CICLO_ID = cl.ID
+        JOIN
+            PERIODO_ACADEMICO pa ON a.PERIODO_ACADEMICO_ID = pa.ID
         WHERE
-            U.ASIGNATURA_ID = :id_asignatura"""
+            u.ASIGNATURA_ID = :id_asignatura
+            AND cl.ID = :id_ciclo
+            AND c.PARALELO = :paralelo
+            AND pa.ID = :periodo_academico_id"""
+
+        p = 1
         self.__cursor.execute(
-            query, {"curso_id": id_curso, "id_asignatura": id_asignatura}
+            query,
+            {
+                "paralelo": paralelo,
+                "id_asignatura": id_asignatura,
+                "id_ciclo": ciclo_id,
+                "periodo_academico_id": p,
+            },
         )
         return ConnectionDB().fetchall_to_dict(self.__cursor)
 
@@ -152,12 +175,38 @@ class Util:
             CL.CICLO AS ciclo_nombre,
             CL.ID AS ciclo_id,
             C.PARALELO,
-            MIN(C.ID) AS cursa_id_min
+            LISTAGG(C.ID, ', ') WITHIN GROUP (ORDER BY C.ID) AS cursa_ids
         FROM CURSA C
         JOIN CICLO CL ON C.CICLO_ID = CL.ID
-        GROUP BY CL.CICLO, C.PARALELO, CL.ID"""
+        GROUP BY CL.CICLO, CL.ID, C.PARALELO"""
         self.__cursor.execute(query)
         return ConnectionDB().fetchall_to_dict(self.__cursor)
+
+    def get_cursa_id(self, paralelo, ciclo_id, asignatura_id):
+        query = f"""SELECT
+            C.ID AS CURSA_ID,
+            C.PARALELO,
+            CL.CICLO AS CICLO_NOMBRE,
+            CL.ID AS CICLO_ID
+        FROM
+            CURSA C
+        JOIN
+            ASIGNACION A ON C.ASIGNACION_ID = A.ID
+        JOIN
+            CICLO CL ON C.CICLO_ID = CL.ID
+        WHERE
+            A.ASIGNATURA_ID = :asignatura_id
+            AND CL.ID = :ciclo_id
+            AND C.PARALELO = :paralelo"""
+        self.__cursor.execute(
+            query,
+            {
+                "paralelo": paralelo,
+                "ciclo_id": ciclo_id,
+                "asignatura_id": asignatura_id,
+            },
+        )
+        return ConnectionDB().fetchone_to_dict(self.__cursor)
 
     def get_estudiantes_por_asignatura(self, asignatura_id):
         query = f"""SELECT

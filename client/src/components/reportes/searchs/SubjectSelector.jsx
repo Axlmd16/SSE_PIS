@@ -6,8 +6,6 @@ const SubjectSelector = ({ course, onSelectSubject, resetKey }) => {
   const [subjects, setSubjects] = useState([]);
   const { actions } = useContext(Context);
 
-  console.log("curso", course);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
