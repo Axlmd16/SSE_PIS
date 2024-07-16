@@ -55,7 +55,6 @@ import CrearCatalogo from "./pages/Catalogos/Catalogo";
 import Generos from "./pages/Catalogos/Generos";
 import Ciclos from "./pages/Catalogos/Ciclos";
 import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
-import PruebaProyeccion from "./components/pruebas_proyecciones/PruebaProyeccion";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -148,8 +147,10 @@ const Rutas = () => {
                 path="/tabla_calificaciones/:id_asignacion/:asignatura_nombre"
                 element={<TablaCalificaciones />}
               />
-              <Route path="/reportes" element={<Reportes />} />
-              <Route path="/proyecciones" element={<PruebaProyeccion />} />
+              <Route
+                path="/reportes"
+                element={<Reportes actions={actions} />}
+              />
             </Route>
           </Routes>
         </div>
@@ -167,8 +168,10 @@ const Rutas = () => {
               element={<CambiarPassword />}
             />
             <Route path="/recuperar_password" element={<RecuperarPassword />} />
-            <Route path="/reset_password/:id_cuenta" element={<ResetPassword />} />
-            {/* <Route path="/proyecciones" element={<PruebaProyeccion />} /> */}
+            <Route
+              path="/reset_password/:id_cuenta"
+              element={<ResetPassword />}
+            />
           </Routes>
         </div>
       )}

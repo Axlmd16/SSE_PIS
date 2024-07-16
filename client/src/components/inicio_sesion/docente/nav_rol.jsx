@@ -43,7 +43,7 @@ function Nav_Rol() {
     },
     PROYECCIONES: {
       name: "Proyecciones",
-      route: "/proyecciones",
+      route: "/#",
       icon: <TrendingUp size={20} className="mr-2" />,
     },
   };

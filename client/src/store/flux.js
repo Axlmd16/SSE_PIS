@@ -7,7 +7,6 @@ import loginActions from "./loginActions";
 import reportActions from "./reportsActions";
 import passwordActions from "./passwordActions";
 import catalogoActions from "./catalogoActionx";
-import proyeccionesActions from "./proyeccionesActions";
 
 const getState = ({ getStore, getActions, setStore }) => {
   const API_BASE_URL = "http://127.0.0.1:3000";
@@ -105,7 +104,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       ...reportActions({ getStore, getActions, setStore }),
       ...passwordActions({ getStore, getActions, setStore }),
       ...catalogoActions({ getStore, getActions, setStore }),
-      ...proyeccionesActions({ getStore, getActions, setStore }),
     },
   };
 };
