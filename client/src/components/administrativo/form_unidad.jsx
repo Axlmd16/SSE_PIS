@@ -29,6 +29,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
   const onSubmit = async (data) => {
     try {
+      console.log("Data:", data);
       if (update) {
         await actions.update_unit(unit.id, data);
       } else {

@@ -1,15 +1,13 @@
+import { FileText, Home, PlusCircle, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import DetailCourse from "../../../pages/Docente/detail_course";
-import { Link, useParams } from "react-router-dom";
-import Modal_Form from "../../modal_form";
 import Form_Unidad from "../../administrativo/form_unidad";
-import { Users, FileText, PlusCircle } from "lucide-react";
+import Modal_Form from "../../modal_form";
 
 function Sidebar_Docente({ actions, store }) {
   let { curso_id, asignatura_id } = useParams();
-
-  console.log("ID_Curso", curso_id);
-  console.log("ID_Asignatura", asignatura_id);
+  const location = useLocation();
 
   const [units, setUnits] = useState([]);
 
@@ -31,11 +29,14 @@ function Sidebar_Docente({ actions, store }) {
     fetchData();
   }, [actions, curso_id, asignatura_id]);
 
+  const showDetailCourse =
+    location.pathname === `/course/detail/${curso_id}/${asignatura_id}`;
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col p-7 font-poppins">
-        <DetailCourse />
+        {showDetailCourse ? <DetailCourse /> : <Outlet />}
         <label
           htmlFor="my-drawer-2"
           className="btn btn-primary btn-sm drawer-button lg:hidden"
@@ -43,7 +44,7 @@ function Sidebar_Docente({ actions, store }) {
           <span className="text-white">Cerrar</span>
         </label>
       </div>
-      <div className="drawer-side font-poppins ">
+      <div className="drawer-side font-poppins">
         <label
           htmlFor="my-drawer-2"
           aria-label="close sidebar"
@@ -51,7 +52,19 @@ function Sidebar_Docente({ actions, store }) {
         ></label>
         <ul className="menu bg-base-200 text-base-content min-h-full w-64 p-4 space-y-4">
           <li>
-            <Link to="#" className="flex items-center space-x-2 text-gray-700">
+            <Link
+              to={`/course/detail/${curso_id}/${asignatura_id}`}
+              className="flex items-center space-x-2 text-gray-700"
+            >
+              <Home className="w-5 h-5" />
+              <span>Inicio</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="estudiantes"
+              className="flex items-center space-x-2 text-gray-700"
+            >
               <Users className="w-5 h-5" />
               <span>Estudiantes</span>
             </Link>
@@ -65,7 +78,7 @@ function Sidebar_Docente({ actions, store }) {
           {units.map((unit) => (
             <li key={unit.id}>
               <Link
-                to="#"
+                to={`unidad/${unit.id}`}
                 className="flex items-center space-x-2 text-gray-700"
               >
                 <FileText className="w-5 h-5" />

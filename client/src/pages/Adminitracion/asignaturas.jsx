@@ -39,11 +39,6 @@ function Asignaturas() {
           <Plus size={20} />
           Agregar Asignatura
         </button>
-
-        <Link to="/new" className="btn btn-active flex items-center gap-2">
-          <Plus size={20} />
-          Agregar Asignatura 2
-        </Link>
       </div>
 
       <TableSubjects actions={actions} store={store} />

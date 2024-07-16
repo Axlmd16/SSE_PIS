@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import SearchableDropdown from "./SearchableDropdown";
 import { Context } from "../../../store/context";
+import Dropdown from "./dropdown";
 
 const CourseSelector = ({ onSelectCourse }) => {
   const [cursos, setCursos] = useState([]);
@@ -9,22 +9,39 @@ const CourseSelector = ({ onSelectCourse }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await actions.get_all_cursas();
-        setCursos(data);
+        const data = await actions.get_cursos_info();
+
+        // Crear un conjunto para eliminar duplicados
+        const uniqueCursosSet = new Set();
+        const uniqueCursos = data.filter((curso) => {
+          const cursoString = `${curso.ciclo_nombre} - ${curso.paralelo}`;
+          if (uniqueCursosSet.has(cursoString)) {
+            return false;
+          }
+          uniqueCursosSet.add(cursoString);
+          return true;
+        });
+
+        // Agregar propiedad displayName
+        const updatedData = uniqueCursos.map((curso) => ({
+          ...curso,
+          displayName: `${curso.ciclo_nombre} - ${curso.paralelo}`,
+        }));
+
+        setCursos(updatedData);
       } catch (error) {
         console.error("Error al obtener los cursos", error);
       }
     };
 
     fetchData();
-  }, [actions]);
+  }, [actions, setCursos]);
 
   return (
-    <SearchableDropdown
+    <Dropdown
       options={cursos}
-      placeholder="Buscar curso..."
       onSelect={onSelectCourse}
-      displayKey="paralelo"
+      displayKey="displayName" // Usar la nueva propiedad concatenada
     />
   );
 };

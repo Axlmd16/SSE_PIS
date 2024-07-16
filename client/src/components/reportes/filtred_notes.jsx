@@ -5,14 +5,11 @@ function Filtred_notes({
   handleSearch,
   performanceFilter,
   setPerformanceFilter,
-  studentCount,
-  setStudentCount,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const options = [
     { label: "Todos", value: "" }, // Opción para limpiar el filtro
     { label: "Bajo rendimiento", value: "Bajo rendimiento" },
-    { label: "Alto rendimiento", value: "Alto rendimiento" },
   ];
 
   const handleSelect = (option) => {
@@ -60,17 +57,6 @@ function Filtred_notes({
           </ul>
         )}
       </div>
-
-      {/* Sección de entrada de cantidad de estudiantes */}
-      {performanceFilter && (
-        <input
-          type="number"
-          value={studentCount}
-          onChange={(e) => setStudentCount(e.target.value)}
-          placeholder="Cantidad"
-          className="input rounded-lg border border-gray-400 font-poppins w-1/5 h-8 text-sm px-2 py-1"
-        />
-      )}
     </div>
   );
 }

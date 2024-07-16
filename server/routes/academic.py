@@ -78,37 +78,42 @@ def get_estudiantes():
 @academic.route("/estudiantes", methods=["POST"])
 def guardar_estudiante():
     data = request.get_json()
-    primer_nombre = data["primer_nombre"]
-    segundo_nombre = data["segundo_nombre"]
-    primer_apellido = data["primer_apellido"]
-    segundo_apellido = data["segundo_apellido"]
-    telefono = data["telefono"]
-    dni = data["dni"]
-    email = data["email"]
-    fecha_nacimiento = data["fecha_nacimiento"]
-    tipo_identificacion_id = data["tipo_identificacion"]
-    genero_id = data["genero_id"]
-    # ? INfo Estudainte
-    codigo_estudiante = data["codigo_estudiante"]
-    numero_matricula = data["nro_matricula"]
-    if estudiante_control.save(
-        primer_nombre,
-        segundo_nombre,
-        primer_apellido,
-        segundo_apellido,
-        telefono,
-        dni,
-        fecha_nacimiento,
-        email,
-        tipo_identificacion_id,
-        genero_id,
-        codigo_estudiante,
-        numero_matricula,
-    ):
+    required_fields = [
+        "primer_nombre",
+        "segundo_nombre",
+        "primer_apellido",
+        "segundo_apellido",
+        "telefono",
+        "dni",
+        "email",
+        "fecha_nacimiento",
+        "tipo_identificacion",
+        "genero_id",
+        "codigo_estudiante",
+    ]
 
-        return jsonify(message="Persona guardada correctamente"), 201
+    for field in required_fields:
+        if field not in data:
+            return jsonify({"msg": f"Falta el campo {field}"}), 400
+
+    saved = estudiante_control.save(
+        data["primer_nombre"],
+        data["segundo_nombre"],
+        data["primer_apellido"],
+        data["segundo_apellido"],
+        data["telefono"],
+        data["dni"],
+        data["fecha_nacimiento"],
+        data["email"],
+        data["tipo_identificacion"],
+        data["genero_id"],
+        data["codigo_estudiante"],
+    )
+
+    if saved:
+        return jsonify(message="Estudiante guardado correctamente"), 201
     else:
-        return jsonify({"msg": "Error al guardar el Estudiante"}), 500
+        return jsonify({"msg": "Error al guardar el estudiante"}), 201
 
 
 # ? Modificar un estudiante

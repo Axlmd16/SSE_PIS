@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Weight } from "lucide-react";
 import SearchBar from "../inicio_sesion/search_bar";
 
 const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
@@ -8,18 +8,18 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-    const fetchData = useCallback(async () => {
-      setLoading(true);
-      try {
-        const data = await actions.get_all_estudiantes_cursas();
-        // console.log((data));
-        setDocenteAsignaturas(data);
-        setFilteredData(data);
-      } catch (error) {
-        console.error("Error al obtener los estudiantes_cursa:", error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await actions.get_all_estudiantes_cursas();
+      // console.log((data));
+      setDocenteAsignaturas(data);
+      setFilteredData(data);
+    } catch (error) {
+      console.error("Error al obtener los estudiantes_cursa:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [actions]);
 
   useEffect(() => {
@@ -35,8 +35,11 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
         record.primer_apellido.toString().toLowerCase().includes(searchTerm) ||
         record.segundo_apellido.toString().toLowerCase().includes(searchTerm) ||
         record.segundo_apellido.toString().toLowerCase().includes(searchTerm) ||
-        record.codigo_estudiante.toString().toLowerCase().includes(searchTerm) ||
-        record.curso.toString().toLowerCase().includes(searchTerm) 
+        record.codigo_estudiante
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm) ||
+        record.curso.toString().toLowerCase().includes(searchTerm)
     );
     setFilteredData(filtered);
   };
@@ -56,11 +59,14 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
       name: "Nro",
       selector: (row) => filteredData.indexOf(row) + 1,
       sortable: true,
+      Weight: "100px",
     },
     {
-      name: "Estudiantes",
-      selector: (row) => `${row.primer_nombre} ${row.segundo_nombre} ${row.primer_apellido} ${row.segundo_apellido}`,
+      name: "Estudiante",
+      selector: (row) =>
+        `${row.primer_nombre} ${row.segundo_nombre} ${row.primer_apellido} ${row.segundo_apellido} `,
       sortable: true,
+      grow: 2,
     },
     {
       name: "Asignatura",
@@ -68,14 +74,10 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
       sortable: true,
     },
     {
-      name: "Docente Encargado",
-      selector: (row) => `${row.docente_nombre}`,
+      name: "Ciclo",
+      selector: (row) => `${row.ciclo_id}°` + " " + `${row.paralelo}`,
       sortable: true,
-    },
-    {
-      name: "Paralelo",
-      selector: (row) => `${row.paralelo}`,
-      sortable: true,
+      center: "true",
     },
 
     {
@@ -98,6 +100,7 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
           </button>
         </div>
       ),
+      center: "true",
     },
   ];
 

@@ -7,6 +7,7 @@ import asyncio
 import colorama
 import time
 
+
 class EstudianteCursaControl(Data_Access_Object):
     def __init__(self):
         super().__init__(Estudiante_Cursa)
@@ -41,8 +42,11 @@ class EstudianteCursaControl(Data_Access_Object):
         self.__estudiante_cursa = value
 
     def save(self):
-        self._save(self._estudiante_cursa)
-        self._estudiante_cursa = None
+        try:
+            id = self._save_id(self._estudiante_cursa)
+            return id
+        except Exception as e:
+            print(f"Error al guardar la estudiante_cursa: {e}")
 
     def update(self, id):
         try:
@@ -51,7 +55,7 @@ class EstudianteCursaControl(Data_Access_Object):
         except Exception as e:
             print(f"Error actualizando la estudiante_cursa: {e}")
             return False
-        
+
     def list(self):
         return self._list()
 
@@ -63,7 +67,11 @@ class EstudianteCursaControl(Data_Access_Object):
         data_cursa = self._cursa_control.get_cursa_info_completa()
         data_estudiante = self._estudiante_control.list_with_person_details()
 
-        data_cursa_estudiante_ordenada = data_cursa_estudiante.quick_sort_with_attribute(data_cursa_estudiante.to_array, '_id', 1)
+        data_cursa_estudiante_ordenada = (
+            data_cursa_estudiante.quick_sort_with_attribute(
+                data_cursa_estudiante.to_array, "_id", 1
+            )
+        )
 
         for estudiante_cursa in data_cursa_estudiante_ordenada:
             estudiante_id = estudiante_cursa._estudiante_id
@@ -71,30 +79,34 @@ class EstudianteCursaControl(Data_Access_Object):
 
             cursa_info = binary_search(data_cursa, cursa_id)
             estudiante_info = binary_search(data_estudiante, estudiante_id)
-            
+
             if estudiante_info and cursa_info:
                 estudiante_cursa_info = {
-                    'id': estudiante_cursa._id,
+                    "id": estudiante_cursa._id,
                     "estudiante_id": estudiante_id,
-                    'primer_nombre': estudiante_info['primer_nombre'],
-                    'segundo_nombre': estudiante_info['segundo_nombre'],
-                    'primer_apellido': estudiante_info['primer_apellido'],
-                    'segundo_apellido': estudiante_info['segundo_apellido'],
-                    'telefono': estudiante_info['telefono'],
-                    'dni': estudiante_info['dni'],
-                    'fecha_nacimiento': estudiante_info['fecha_nacimiento'],
-                    'email': estudiante_info['email'],
-                    'tipo_identificacion_id': estudiante_info['tipo_identificacion_id'],
-                    'genero_id': estudiante_info['genero_id'],
-                    'nro_matricula': estudiante_info['nro_matricula'],
-                    'codigo_estudiante': estudiante_info['codigo_estudiante'],
-                    'cursa_id': cursa_id,
-                    'paralelo': cursa_info['paralelo'],
-                    'asignacion_id': cursa_info['asignacion_id'],
-                    'asignatura_nombre': cursa_info['asignatura_nombre'],
-                    'docente_nombre': cursa_info['docente_nombre'],
-                    'periodo_academico_fecha_inicio': cursa_info['periodo_academico_fecha_inicio'],
-                    'periodo_academico_fecha_fin': cursa_info['periodo_academico_fecha_fin']
+                    "primer_nombre": estudiante_info["primer_nombre"],
+                    "segundo_nombre": estudiante_info["segundo_nombre"],
+                    "primer_apellido": estudiante_info["primer_apellido"],
+                    "segundo_apellido": estudiante_info["segundo_apellido"],
+                    "telefono": estudiante_info["telefono"],
+                    "dni": estudiante_info["dni"],
+                    "fecha_nacimiento": estudiante_info["fecha_nacimiento"],
+                    "email": estudiante_info["email"],
+                    "tipo_identificacion_id": estudiante_info["tipo_identificacion_id"],
+                    "genero_id": estudiante_info["genero_id"],
+                    "codigo_estudiante": estudiante_info["codigo_estudiante"],
+                    "cursa_id": cursa_id,
+                    "ciclo_id": cursa_info["ciclo_id"],
+                    "paralelo": cursa_info["paralelo"],
+                    "asignacion_id": cursa_info["asignacion_id"],
+                    "asignatura_nombre": cursa_info["asignatura_nombre"],
+                    "docente_nombre": cursa_info["docente_nombre"],
+                    "periodo_academico_fecha_inicio": cursa_info[
+                        "periodo_academico_fecha_inicio"
+                    ],
+                    "periodo_academico_fecha_fin": cursa_info[
+                        "periodo_academico_fecha_fin"
+                    ],
                 }
 
             estudiante_cursa_info_completa.append(estudiante_cursa_info)
