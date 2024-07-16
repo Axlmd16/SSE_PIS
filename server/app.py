@@ -16,6 +16,7 @@ def create_app():
         from routes.reports import reports
         from routes.passwords import password
         from routes.catalogos import catalogos
+        from routes.proyecciones import proyecciones
 
         # app.register_blueprint(reports)
         app.register_blueprint(academic)
@@ -25,5 +26,6 @@ def create_app():
         app.register_blueprint(reports)
         app.register_blueprint(password)
         app.register_blueprint(catalogos)
+        app.register_blueprint(proyecciones)
 
     return app
