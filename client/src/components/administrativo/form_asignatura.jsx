@@ -77,141 +77,126 @@ function Form_Asignatura({ update = false, subject = {} }) {
   return (
     <div className="w-full text-sm">
       <form
-        className="grid grid-cols-2 gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="col-span-2 text-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900">
+        <div className="col-span-1 md:col-span-2 text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">
             {update ? "Actualizar asignatura" : "Agregar nueva asignatura"}
           </h2>
         </div>
         {/* Campo de Malla Académica */}
-        <div className="my-2 flex items-end">
-          <div className="w-full">
-            <label className="text-black text-sm" htmlFor="malla_id">
-              Malla Académica
-            </label>
-            <select
-              className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
-              id="malla_id"
-              {...register("malla_id", {
-                required: "La malla es obligatoria",
-              })}
-            >
-              <option value="">Seleccione una malla académica</option>
-              {meshes.map((mesh) => (
-                <option key={mesh.id} value={mesh.id}>
-                  {mesh.descripcion}
-                </option>
-              ))}
-            </select>
-            {errors.malla_id && (
-              <p className="text-red-500 text-sm">{errors.malla_id.message}</p>
-            )}
-          </div>
-          {/* <button
-            type="button"
-            className="btn-ghost ml-2 mb-1 p-1"
-            onClick={() => console.log("Agregar malla académica")}
+        <div className="my-2 flex flex-col">
+          <label
+            className="text-gray-700 text-sm font-semibold"
+            htmlFor="malla_id"
           >
-            <Plus size={20} />
-          </button> */}
+            Malla Académica
+          </label>
+          <select
+            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="malla_id"
+            {...register("malla_id", { required: "La malla es obligatoria" })}
+          >
+            <option value="">Seleccione una malla académica</option>
+            {meshes.map((mesh) => (
+              <option key={mesh.id} value={mesh.id}>
+                {mesh.descripcion}
+              </option>
+            ))}
+          </select>
+          {errors.malla_id && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.malla_id.message}
+            </p>
+          )}
         </div>
         {/* Campo de Grupos */}
-        <div className="my-2 flex items-end">
-          <div className="w-full">
-            <label className="text-black text-sm" htmlFor="grupo_id">
-              Criterios de Calificación
-            </label>
-            <select
-              className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
-              id="grupo_id"
-              {...register("grupo_id", {
-                required: "El grupo es obligatorio",
-              })}
-            >
-              <option value="">Grupos de calificación</option>
-              {groups.map((group) => (
-                <option key={group.id} value={group.id}>
-                  {group.descripcion}
-                </option>
-              ))}
-            </select>
-            {errors.grupo_id && (
-              <p className="text-red-500 text-sm">{errors.grupo_id.message}</p>
-            )}
-          </div>
-          {/* <button
-            type="button"
-            className="btn-ghost ml-2 mb-1 p-1"
-            onClick={() => console.log("Agregar grupo")}
+        <div className="my-2 flex flex-col">
+          <label
+            className="text-gray-700 text-sm font-semibold"
+            htmlFor="grupo_id"
           >
-            <Plus size={20} />
-          </button> */}
+            Criterios de Calificación
+          </label>
+          <select
+            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="grupo_id"
+            {...register("grupo_id", { required: "El grupo es obligatorio" })}
+          >
+            <option value="">Grupos de calificación</option>
+            {groups.map((group) => (
+              <option key={group.id} value={group.id}>
+                {group.descripcion}
+              </option>
+            ))}
+          </select>
+          {errors.grupo_id && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.grupo_id.message}
+            </p>
+          )}
         </div>
         {/* Campo de Ciclos */}
-        <div className="my-2 flex items-end">
-          <div className="w-full">
-            <label className="text-black text-sm" htmlFor="ciclo_id">
-              Ciclo Académico
-            </label>
-            <select
-              className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
-              id="ciclo_id"
-              {...register("ciclo_id", {
-                required: "El ciclo es obligatorio",
-              })}
-            >
-              {/* TODO: Llenar con los ciclos académicos */}
-              <option value="">Ciclos académicos</option>
-              <option value="1">Primero</option>
-              <option value="2">Segundo</option>
-              <option value="3">Tercero</option>
-              <option value="4">Cuarto</option>
-              <option value="5">Quinto</option>
-              <option value="6">Sexto</option>
-              <option value="7">Séptimo</option>
-              <option value="8">Octavo</option>
-              <option value="9">Noveno</option>
-              <option value="10">Décimo</option>
-            </select>
-            {errors.ciclo_id && (
-              <p className="text-red-500 text-sm">{errors.ciclo_id.message}</p>
-            )}
-          </div>
-          {/* <button
-            type="button"
-            className="btn-ghost ml-2 mb-1 p-1"
-            onClick={() => console.log("Agregar ciclo")}
+        <div className="my-2 flex flex-col">
+          <label
+            className="text-gray-700 text-sm font-semibold"
+            htmlFor="ciclo_id"
           >
-            <Plus size={20} />
-          </button> */}
+            Ciclo Académico
+          </label>
+          <select
+            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="ciclo_id"
+            {...register("ciclo_id", { required: "El ciclo es obligatorio" })}
+          >
+            <option value="">Seleccione...</option>
+            <option value="1">Primero</option>
+            <option value="2">Segundo</option>
+            <option value="3">Tercero</option>
+            <option value="4">Cuarto</option>
+            <option value="5">Quinto</option>
+            <option value="6">Sexto</option>
+            <option value="7">Séptimo</option>
+            <option value="8">Octavo</option>
+            <option value="9">Noveno</option>
+            <option value="10">Décimo</option>
+          </select>
+          {errors.ciclo_id && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.ciclo_id.message}
+            </p>
+          )}
         </div>
         {/* Campo de Nombre */}
-        <div className="my-2">
-          <label className="text-black text-sm" htmlFor="nombre">
+        <div className="my-2 flex flex-col">
+          <label
+            className="text-gray-700 text-sm font-semibold"
+            htmlFor="nombre"
+          >
             Nombre de la asignatura
           </label>
           <input
-            className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
+            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="nombre"
             type="text"
             aria-label="Nombre de la asignatura"
-            {...register("nombre", {
-              required: "El nombre es obligatorio",
-            })}
+            {...register("nombre", { required: "El nombre es obligatorio" })}
           />
           {errors.nombre && (
-            <p className="text-red-500 text-sm">{errors.nombre.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.nombre.message}</p>
           )}
         </div>
         {/* Campo de Horas Totales */}
-        <div className="my-2">
-          <label className="text-black text-sm" htmlFor="total_horas">
+        <div className="my-2 flex flex-col">
+          <label
+            className="text-gray-700 text-sm font-semibold"
+            htmlFor="total_horas"
+          >
             Horas totales
           </label>
           <input
-            className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
+            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="total_horas"
             type="number"
             aria-label="Horas totales"
@@ -220,23 +205,31 @@ function Form_Asignatura({ update = false, subject = {} }) {
             })}
           />
           {errors.total_horas && (
-            <p className="text-red-500 text-sm">{errors.total_horas.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.total_horas.message}
+            </p>
           )}
         </div>
         {/* Campo de Descripción */}
-        <div className="my-2 col-span-2">
-          <label className="text-black text-sm" htmlFor="descripcion">
+        <div className="my-2 flex flex-col col-span-1 md:col-span-2">
+          <label
+            className="text-gray-700 text-sm font-semibold"
+            htmlFor="descripcion"
+          >
             Descripción
           </label>
           <textarea
-            className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
+            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="descripcion"
             aria-label="Descripción"
             {...register("descripcion")}
           />
         </div>
-        <div className="flex justify-end col-span-2 mt-4">
-          <button className="btn btn-active" type="submit">
+        <div className="flex justify-end col-span-1 md:col-span-2 mt-6">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            type="submit"
+          >
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>

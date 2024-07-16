@@ -27,7 +27,7 @@ function Unidad_Curso({ actions, store }) {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center w-full mb-4">
-        <span className="text-2xl font-poppins">
+        <span className="text-2xl font-poppins font-bold">
           Unidad {unidad.nro_unidad}: {unidad.nombre}{" "}
         </span>
       </div>

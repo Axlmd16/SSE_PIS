@@ -1,11 +1,15 @@
-import { React, useEffect, useState, useContext } from "react";
-import DataTable from "react-data-table-component";
-import { Download } from "lucide-react";
-import { Context } from "../../../store/context";
-import SearchBar from "../../inicio_sesion/search_bar";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import html2canvas from "html2canvas";
+import { Download, GraduationCap } from "lucide-react";
+import { React, useContext, useEffect, useRef, useState } from "react";
+import DataTable from "react-data-table-component";
+import { Context } from "../../../store/context";
 import Filtred_notes from "../filtred_notes";
+import StudentChart from "../grafico_estudiantes";
+import Statistics from "../estadisticas_curso";
+import CriteriaStatistics from "../estadisticas_criterios";
+import CriteriaChart from "../grafico_criterios";
 
 const StudentTable = ({ subject, unit, course }) => {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -14,10 +18,11 @@ const StudentTable = ({ subject, unit, course }) => {
   const [performanceFilter, setPerformanceFilter] = useState("");
   const [studentCount, setStudentCount] = useState("");
   const { actions } = useContext(Context);
+  const chartRef = useRef(null);
+  const statsRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Verificar si los datos necesarios están presentes
       if (!subject || !course) {
         console.error("Datos insuficientes para realizar la llamada");
         return;
@@ -46,13 +51,11 @@ const StudentTable = ({ subject, unit, course }) => {
       }
     };
 
-    // Verificar si todos los datos están listos antes de llamar a fetchData
     if (subject && (unit || course.cursa_id)) {
       fetchData();
     }
   }, [actions, subject, unit, course]);
 
-  // Transformar los datos para agrupar por estudiante y criterios si hay unidad
   const transformDataByCriteria = (data) => {
     const estudiantesMap = {};
 
@@ -66,7 +69,6 @@ const StudentTable = ({ subject, unit, course }) => {
       }
       estudiantesMap[item.estudiante_id][`criterio_${item.criterio_id}`] =
         item.nota_criterio;
-      // Almacenar nombre del criterio para las columnas
       estudiantesMap[item.estudiante_id][
         `criterio_nombre_${item.criterio_id}`
       ] = item.criterio_nombre
@@ -78,7 +80,6 @@ const StudentTable = ({ subject, unit, course }) => {
     return Object.values(estudiantesMap);
   };
 
-  // Transformar los datos para agrupar por estudiante y unidades si no hay unidad seleccionada
   const transformDataByUnit = (data) => {
     const estudiantesMap = {};
 
@@ -96,19 +97,22 @@ const StudentTable = ({ subject, unit, course }) => {
     return Object.values(estudiantesMap);
   };
 
-  // Crear columnas dinámicas
   const createColumns = (data) => {
     const baseColumns = [
       {
         name: "Estudiante",
-        selector: (row) => row.nombre,
+        selector: (row) => (
+          <div className="flex">
+            <GraduationCap size={16} className="mr-2 text-green-700" />
+            {row.nombre}
+          </div>
+        ),
         sortable: true,
-        grow: 3,
+        grow: 5,
       },
     ];
 
     if (unit) {
-      // Crear columnas basadas en criterios si hay unidad
       const criterios = new Map();
 
       data.forEach((item) => {
@@ -130,26 +134,24 @@ const StudentTable = ({ subject, unit, course }) => {
         selector: (row) =>
           row[`criterio_${id}`] !== undefined ? row[`criterio_${id}`] : "N/A",
         sortable: true,
-        center: "true",
-        right: "true",
-        with: "100px",
+        center: true,
+        right: true,
+        width: "150px",
         reorder: true,
       }));
 
-      // Añadir columna para la nota de unidad
       const unitColumn = {
         id: "nota_unidad",
         name: "Unidad",
         selector: (row) => row.nota_unidad,
         sortable: true,
-        center: "true",
-        right: "true",
-        with: "100px",
+        center: true,
+        right: true,
+        width: "150px",
       };
 
       return [...baseColumns, ...criteriaColumns, unitColumn];
     } else {
-      // Crear columnas basadas en unidades si no hay unidad seleccionada
       const unidades = new Set();
 
       data.forEach((item) => {
@@ -168,19 +170,33 @@ const StudentTable = ({ subject, unit, course }) => {
         name: `Unidad ${unidad.split("_")[1]}`,
         selector: (row) => (row[unidad] !== undefined ? row[unidad] : "N/A"),
         sortable: true,
-        center: "true",
-        right: "true",
-        with: "100px",
+        center: true,
+        right: true,
+        width: "150px",
         reorder: true,
       }));
 
-      return [...baseColumns, ...unitColumns];
+      const Nota_final = {
+        id: "nota_final",
+        name: "Nota Final",
+        selector: (row) => {
+          const sum = Object.keys(row)
+            .filter((key) => key.startsWith("unidad_"))
+            .reduce((sum, key) => sum + row[key], 0);
+          return (sum / sortedUnidades.length).toFixed(2);
+        },
+        sortable: true,
+        center: true,
+        right: true,
+        width: "150px",
+      };
+
+      return [...baseColumns, ...unitColumns, Nota_final];
     }
   };
 
   const columns = createColumns(estudiantes);
 
-  // Función para filtrar los estudiantes
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     const filtered = estudiantes.filter((record) =>
@@ -189,7 +205,6 @@ const StudentTable = ({ subject, unit, course }) => {
     setFilteredData(filtered);
   };
 
-  // Filtrar datos basado en el rendimiento y la cantidad de estudiantes
   useEffect(() => {
     if (!performanceFilter || !studentCount) {
       setFilteredData(estudiantes);
@@ -221,7 +236,6 @@ const StudentTable = ({ subject, unit, course }) => {
     setFilteredData(sortedData.slice(0, Number(studentCount)));
   }, [performanceFilter, studentCount, estudiantes, unit]);
 
-  // Opciones de paginación
   const paginationComponentOptions = {
     rowsPerPageText: "Filas por página",
     rangeSeparatorText: "de",
@@ -230,7 +244,6 @@ const StudentTable = ({ subject, unit, course }) => {
     selectAllRowsItemToolTip: "Seleccionar todas las filas",
   };
 
-  // Estilos personalizados para la tabla
   const customStyles = {
     headCells: {
       style: {
@@ -241,80 +254,109 @@ const StudentTable = ({ subject, unit, course }) => {
     },
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     const doc = new jsPDF();
     const logoUrl = "/img/unl.png";
 
-    // Agregar logo con dimensiones ajustadas
-    doc.addImage(logoUrl, "PNG", 10, 10, 60, 30); // Ancho de 50 y altura de 30
+    doc.addImage(logoUrl, "PNG", 10, 10, 50, 15);
 
-    // Título del informe
-    doc.setFontSize(16);
+    doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
-    doc.text("Informe de Rendimiento de Estudiantes", 75, 20);
+    doc.text("Reporte de Rendimiento Académico", 80, 15);
 
-    // Información del curso, asignatura, y unidad
-    doc.setFontSize(12);
-    doc.text(`Curso: ${course.paralelo}`, 10, 50);
-    doc.text(`Asignatura: ${subject.nombre}`, 10, 60);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Curso: ${course.paralelo}`, 10, 40);
+    doc.text(`Asignatura: ${subject.nombre}`, 10, 45);
+
     if (unit) {
-      doc.text(
-        `Unidad: ${unit.unidad_nombre
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ")}`,
-        10,
-        70
-      );
+      doc.text(`Unidad: ${unit.nro_unidad}`, 10, 50);
     }
 
-    // Crear tabla con los datos
+    const canvasChart = await html2canvas(chartRef.current);
+    const canvasStats = await html2canvas(statsRef.current);
+    const imgDataChart = canvasChart.toDataURL("image/png");
+    const imgDataStats = canvasStats.toDataURL("image/png");
+
+    doc.addImage(imgDataChart, "PNG", 10, 60, 180, 50);
+    doc.addImage(imgDataStats, "PNG", 10, 120, 180, 50);
+
     doc.autoTable({
-      head: [columns.map((column) => column.name)],
-      body: filteredData.map((row) =>
-        columns.map((column) => column.selector(row))
-      ),
-      startY: 80,
+      startY: 145,
+      columns: columns.map((col) => ({
+        header: col.name,
+        dataKey: col.selector,
+      })),
+      body: filteredData,
+      styles: {
+        fontSize: 12,
+        halign: "center",
+        valign: "middle",
+      },
+      headStyles: {
+        fillColor: "#f3f4f6",
+        textColor: "#000000",
+        lineWidth: 0.1,
+        lineColor: "#000000",
+      },
     });
 
-    // Guardar el archivo
-    doc.save("informe-estudiantes.pdf");
+    doc.save("reporte_rendimiento.pdf");
   };
 
   return (
-    <div className="p-3">
-      <div className="flex mb-4">
-        <Filtred_notes
-          handleSearch={handleSearch}
-          performanceFilter={performanceFilter}
-          setPerformanceFilter={setPerformanceFilter}
-          studentCount={studentCount}
-          setStudentCount={setStudentCount}
-        />
+    <div className="flex flex-col">
+      <div className="flex flex-col lg:flex-row md:items-center lg:justify-between mb-4">
+        <div className="flex space-x-4">
+          <button
+            onClick={exportToPDF}
+            className="btn-md btn btn-info float-end"
+          >
+            <Download className="" />
+            PDF
+          </button>
+          <div className="flex items-center justify-end">
+            <Filtred_notes
+              setPerformanceFilter={setPerformanceFilter}
+              setStudentCount={setStudentCount}
+              handleSearch={handleSearch}
+            />
+          </div>
+        </div>
       </div>
-
       <DataTable
-        title="Notas de Estudiantes"
         columns={columns}
         data={filteredData}
-        pagination
-        highlightOnHover
-        striped
-        responsive
         progressPending={loading}
-        progressComponent={<progress className="progress w-56"></progress>}
-        noDataComponent={<h2>No se encontraron resultados</h2>}
+        pagination
         paginationComponentOptions={paginationComponentOptions}
         customStyles={customStyles}
+        dense
       />
-      <div className="text-right mt-4">
-        <button
-          onClick={exportToPDF}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow-md"
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Exportar a PDF
-        </button>
+      <div>
+        {filteredData && filteredData.length > 0 && (
+          <div>
+            {unit ? (
+              <>
+                <div ref={chartRef}>
+                  <CriteriaChart data={filteredData} />
+                </div>
+                <div ref={statsRef} className="mt-4">
+                  <CriteriaStatistics data={filteredData} unit={unit} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div ref={chartRef}>
+                  <StudentChart data={filteredData} />
+                </div>
+                <div ref={statsRef} className="mt-4">
+                  <Statistics data={filteredData} unit={unit} />
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

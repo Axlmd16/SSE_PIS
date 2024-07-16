@@ -33,7 +33,7 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
     };
 
     fetchData();
-  }, [actions, unidad_id, curso_id]);
+  }, [actions, unidad_id, curso_id, isEditing]);
 
   const groupDataByStudent = (data) => {
     const grouped = data.reduce((acc, curr) => {

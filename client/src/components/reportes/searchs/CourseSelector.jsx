@@ -35,7 +35,7 @@ const CourseSelector = ({ onSelectCourse }) => {
     };
 
     fetchData();
-  }, [actions]);
+  }, [actions, setCursos]);
 
   return (
     <Dropdown

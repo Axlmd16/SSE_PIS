@@ -93,22 +93,52 @@ const Reportes = ({ actions }) => {
 
         {selectedSubject && (
           <>
-            <div className="flex justify-end items-center lg:w-1/5 ml-auto mb-4 mt-6">
-              <span className="mx-3">
-                <strong>Unidad:</strong>
-              </span>
-              <Layers size={28} className="text-gray-700 mr-4" />
-              <UnitSelector
-                subject={selectedSubject}
-                onSelectUnit={setSelectedUnit}
-              />
-            </div>
-            <div className="mt-6">
-              <StudentTable
-                subject={selectedSubject}
-                unit={selectedUnit}
-                course={curso}
-              />
+            <div className="mt-16 p-4">
+              <div className="flex flex-col lg:flex-row lg:justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
+                <div className="flex flex-col lg:flex-row lg:justify-start lg:w-2/3">
+                  <div className="mb-4 p-2 w-full lg:w-auto">
+                    <h2 className="font-bold text-2xl mb-6">
+                      Información del Curso
+                    </h2>
+                    <div className="flex flex-wrap items-center text-sm">
+                      <div className="mr-6 mb-2">
+                        <span className="font-semibold mr-1">Curso:</span>
+                        <span>
+                          {curso.ciclo_nombre} - {curso.paralelo}
+                        </span>
+                      </div>
+                      <div className="mr-6 mb-2 mx-7">
+                        <span className="font-semibold mr-1">Asignatura:</span>
+                        <span>{selectedSubject.nombre}</span>
+                      </div>
+                      <div className="mr-6 mb-2 mx-7">
+                        {selectedUnit && (
+                          <>
+                            <span className="font-semibold mr-1">Unidad:</span>
+                            <span>{selectedUnit.nro_unidad}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center lg:w-1/5 justify-center">
+                  <span className="mx-3 font-bold">Unidad:</span>
+                  <Layers size={28} className="text-gray-700 mr-4" />
+                  <UnitSelector
+                    subject={selectedSubject}
+                    onSelectUnit={setSelectedUnit}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <StudentTable
+                  subject={selectedSubject}
+                  unit={selectedUnit}
+                  course={curso}
+                />
+              </div>
             </div>
           </>
         )}

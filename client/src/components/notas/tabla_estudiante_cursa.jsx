@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Weight } from "lucide-react";
 import SearchBar from "../inicio_sesion/search_bar";
 
 const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
@@ -59,13 +59,14 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
       name: "Nro",
       selector: (row) => filteredData.indexOf(row) + 1,
       sortable: true,
-      width: "100px",
+      Weight: "100px",
     },
     {
-      name: "Estudiantes",
+      name: "Estudiante",
       selector: (row) =>
-        `${row.primer_nombre} ${row.segundo_nombre} ${row.primer_apellido} ${row.segundo_apellido}`,
+        `${row.primer_nombre} ${row.segundo_nombre} ${row.primer_apellido} ${row.segundo_apellido} `,
       sortable: true,
+      grow: 2,
     },
     {
       name: "Asignatura",
@@ -73,14 +74,10 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
       sortable: true,
     },
     {
-      name: "Docente Encargado",
-      selector: (row) => `${row.docente_nombre}`,
-      sortable: true,
-    },
-    {
-      name: "Curso",
+      name: "Ciclo",
       selector: (row) => `${row.ciclo_id}°` + " " + `${row.paralelo}`,
       sortable: true,
+      center: "true",
     },
 
     {
@@ -103,6 +100,7 @@ const TablaEstudianteCursa = ({ actions, store, actualizar }) => {
           </button>
         </div>
       ),
+      center: "true",
     },
   ];
 
