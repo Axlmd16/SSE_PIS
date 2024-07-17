@@ -56,6 +56,7 @@ import Generos from "./pages/Catalogos/Generos";
 import Ciclos from "./pages/Catalogos/Ciclos";
 import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
 import PeriodoAcademico from "./pages/Catalogos/PeriodoAcademico";
+import Proyeccion from "./components/proyeccion/Proyeecion";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -152,6 +153,10 @@ const Rutas = () => {
               <Route
                 path="/reportes"
                 element={<Reportes actions={actions} />}
+              />
+              <Route
+                path="/proyeccion"
+                element={<Proyeccion actions={actions} />}
               />
             </Route>
           </Routes>
