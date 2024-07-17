@@ -122,7 +122,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
             <li
               key={person.id}
               onClick={() => handleSelectPerson(person)}
-              className="py-2 cursor-pointer hover:bg-gray-100"
+              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white rounded-md"
             >
               {person.primer_nombre} {person.segundo_nombre}{" "}
               {person.primer_apellido} {person.segundo_apellido}
@@ -163,7 +163,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
             <li
               key={cursa.id}
               onClick={() => handleSelectCursa(cursa)}
-              className="py-2 cursor-pointer hover:bg-gray-100"
+              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white rounded-md"
             >
               {cursa.ciclo_id}° {cursa.paralelo} - {cursa.asignatura_nombre} -{" "}
               {cursa.docente_nombre}

@@ -51,15 +51,15 @@ def get_asignaturas():
 
 
 # ? OBTENER TODOS LOS PERIODOS ACADEMICOS
-@jwt_required()
-@academic.route("/periodos_academicos", methods=["GET"])
-def get_periodos_academicos():
-    data = periodo_academico_control._to_dict()
-    for periodo in data:
-        periodo["fecha_inicio"] = periodo["fecha_inicio"].strftime("%d/%m/%Y")
-        periodo["fecha_fin"] = periodo["fecha_fin"].strftime("%d/%m/%Y")
+# @jwt_required()
+# @academic.route("/periodos_academicos", methods=["GET"])
+# def get_periodos_academicos():
+#     data = periodo_academico_control._to_dict()
+#     for periodo in data:
+#         periodo["fecha_inicio"] = periodo["fecha_inicio"].strftime("%d/%m/%Y")
+#         periodo["fecha_fin"] = periodo["fecha_fin"].strftime("%d/%m/%Y")
 
-    return jsonify(data), 200
+#     return jsonify(data), 200
 
 
 # * -----------Estudiantes------------

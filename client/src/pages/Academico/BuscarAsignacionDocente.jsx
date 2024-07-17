@@ -56,12 +56,12 @@ const BuscarAsignacionDocente = ({ actions, onDataSelect }) => {
                     onChange={handleSearchDocente}
                 />
 
-                <ul className="divide-y divide-gray-200">
+                <ul className="divide-y divide-gray-200 ">
                     {searchResultsDocente.map(person => (
                         <li
                             key={person.id}
                             onClick={() => handleSelectPerson(person)}
-                            className="py-2 cursor-pointer hover:bg-gray-100"
+                            className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white rounded-md"
                         >
                             {person.docente_nombre} - {person.asignatura_nombre}
                         </li>
