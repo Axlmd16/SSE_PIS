@@ -9,6 +9,8 @@ from controls.tda.list.utilidades import encrypt_password
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import random
+from datetime import datetime, timedelta
 
 from config.config import Config
 
@@ -20,6 +22,7 @@ persona_control = PersonaControl()
 
 app = Flask(__name__)
 
+token_store = {}
 
 #* PARA ENVIAR CORREO DE RECUPERACION
 @password.route("/send-recovery-email", methods=["POST"])
@@ -33,7 +36,11 @@ def send_recovery_email():
     print(email)
     print("\n\n\n\n")
 
-    recovery_link = f"http://localhost:5173/reset_password/{encrypted_id_cuenta}"
+    token = generate_token()
+    token_store[token] = datetime.now() + timedelta(minutes=1)  
+
+    recovery_link = f"http://localhost:5173/reset_password/{token}/{encrypted_id_cuenta}"
+
 
     msg = MIMEMultipart()
     print(Config.CORREO)
@@ -116,7 +123,6 @@ def login():
 
 #* Verificar password
 @password.route("/verificar_password/<id_cuenta>/<password>", methods=["POST"])
-@password.route("/verificar_password/<id_cuenta>/<password>", methods=["POST"])
 def verificar_password(id_cuenta, password):
     try:
         verificado = False
@@ -184,19 +190,42 @@ def verificar_usuario_cambio_password():
 @password.route("/reset_password", methods=["PUT"])
 def reset_password():
     try:
-        print("\n\n\n\n\n\n")
         data = request.json
-        id = data["id_cuenta"]
-        id_int = int(id)
-        lista_cuenta = cuenta_control._list()
-        lista_cuentas_ordenada = lista_cuenta.quick_sort_with_attribute(lista_cuenta.to_array, "_id", 1)
-        user_found = lista_cuenta.busqueda_binaria_atribute(lista_cuentas_ordenada,"_id", id_int)
-        
-        cuenta_control._cuenta._clave = encrypt_password(data["password"])
-        cuenta_control._cuenta._usuario = user_found._usuario
-        cuenta_control._cuenta._estado = int(user_found._estado)        
-        cuenta_control._cuenta._persona_id = int(user_found._persona_id)          
-        if cuenta_control.update(id_int):
-            return jsonify(True), 201
+        token = data["token"]
+        if token in token_store:
+            if token_store[token] > datetime.now():
+                id = data["id_cuenta"]
+                id_int = int(id)
+                print("1")
+                lista_cuenta = cuenta_control._list()
+                print("2")
+                lista_cuentas_ordenada = lista_cuenta.quick_sort_with_attribute(lista_cuenta.to_array, "_id", 1)
+                print("3")
+                user_found = lista_cuenta.busqueda_binaria_atribute(lista_cuentas_ordenada,"_id", id_int)
+                print("4")
+                
+                cuenta_control._cuenta._clave = encrypt_password(data["password"])
+                print("5")
+                cuenta_control._cuenta._usuario = user_found._usuario
+                print("6")
+                cuenta_control._cuenta._estado = int(user_found._estado)        
+                print("7")
+                cuenta_control._cuenta._persona_id = int(user_found._persona_id)          
+                print("8")
+                if cuenta_control.update(id_int):
+                    print("9")
+                    del token_store[token] 
+                    print("10")
+                    return jsonify(True), 201
+        else:
+            print("\n\n\ntoken no encontrado")
+            return jsonify(False), 201
     except Exception as e:
-        return jsonify({"msg": "Bad username or password"}), 401
+        print(f"Error en reset_password: {e}")
+        return jsonify("errpr"), 401
+    
+#* Función para generar un token único
+def generate_token():
+    random_numbers = [str(random.randint(0, 9)) for _ in range(4)]
+    random_string = ''.join(random_numbers)
+    return random_string  

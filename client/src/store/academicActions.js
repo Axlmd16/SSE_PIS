@@ -58,22 +58,22 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
 
   //* -------------PERIODOS ACADEMICOS----------------
 
-  get_all_periodos_academicos: async () => {
-    const { token } = getStore();
-    const api = getStore().api;
+  // get_all_periodos_academicos: async () => {
+  //   const { token } = getStore();
+  //   const api = getStore().api;
 
-    try {
-      const response = await api.get("/periodos_academicos", {
-        headers: {
-          //Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Flux: Error al obtener los periodos academicos", error);
-      throw error;
-    }
-  },
+  //   try {
+  //     const response = await api.get("/periodos_academicos", {
+  //       headers: {
+  //         //Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Flux: Error al obtener los periodos academicos", error);
+  //     throw error;
+  //   }
+  // },
 
   //* ----------------ESTUDIANTES----------------
 

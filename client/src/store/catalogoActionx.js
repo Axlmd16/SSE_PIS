@@ -171,6 +171,63 @@ const catalogoActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
+  //* ------------------Periodos Academicos-----------------
+
+  get_all_periodos_academicos: async () => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.get("/periodos_academicos", {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error al obtener los periodos academicos", error);
+      throw error;
+    }
+  },
+
+  create_peridodo_academico: async (data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.post("/periodos_academicos", data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error creando el criterioAsignaicon", error);
+      throw error;
+    }
+  },
+
+  setSelectPeriodoAcademico: (periodoAcademico) => {
+    setStore({ selectPeriodoAcademico: periodoAcademico });
+  },
+
+  update_periodo_academico: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/periodos_academicos/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el criterioAsignaicon", error);
+      throw error;
+    }
+  },
+
 
 });
 
