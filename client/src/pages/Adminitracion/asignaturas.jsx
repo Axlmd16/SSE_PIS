@@ -5,13 +5,14 @@ import TableSubjects from "../../components/administrativo/tabla_asignaturas";
 import Bread_Crumbs from "../../components/inicio_sesion/bread_crumbs";
 import Modal_Form from "../../components/modal_form";
 import { Context } from "../../store/context";
+import { Link } from "react-router-dom";
 
 function Asignaturas() {
   const { store, actions } = useContext(Context);
   const breadcrumbItems = [
     {
       label: "Home",
-      link: "/home",
+      link: "/home-admin",
       icon: "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z",
     },
     {
@@ -38,11 +39,8 @@ function Asignaturas() {
           <Plus size={20} />
           Agregar Asignatura
         </button>
-        {/* <a href="/new" className="btn btn-active flex items-center gap-2">
-          <Plus size={20} />
-          Agregar Asignatura 2
-        </a> */}
       </div>
+
       <TableSubjects actions={actions} store={store} />
 
       {store.modal && (

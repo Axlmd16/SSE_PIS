@@ -1,0 +1,30 @@
+Requermientos del sistema "Aplicacion web para seguimiento del rendimiento academico de los estudiantes de la Universidad Nacional de Loja"
+
+1.	El sistema debe permitir el registro de usuarios con diferentes roles (Administrador, Miembro de la Comisión, Docente). Cada usuario debe proporcionar información básica como nombres, apellidos, correo institucional y contraseña.
+2.	El sistema debe permitir la creación y gestión de roles de usuario, el cual debe tener un nombre y una descripción del rol.
+3.	El sistema debe contar con 3 principales roles de usuario, administrador, docente y miembro de la comisión.
+4.	El sistema debe permitir la creación y gestión de permisos para cada rol de usuario, el cual debe tener un nombre y una descripción del permiso.
+5.	El sistema debe permitir al administrador gestionar los permisos que tendrá cada rol de usuario.
+6.	El sistema debe permitir a los usuarios iniciar sesión utilizando su correo electrónico y contraseña registrados.
+7.	El sistema debe permitir el registro y gestión de estudiantes, capturando información como nombre completo, número de identificación, fecha de nacimiento, numero de teléfono,  género, email, código de estudiante y nro. de matrícula. 
+8.	El sistema debe permitir el registro y gestión de docentes, capturando información como nombre completo, número de identificación, fecha de nacimiento, numero de teléfono,  género, email, titulo de cuarto nivel, años de experiencia y cod. del cubículo. 
+9.	El sistema debe permitir al administrador, el registro y gestión de carreras, la cual debe contener información como nombre de la carrera, años de duración y título que otorga.
+10.	El sistema debe permitir al administrador, el registo y gestión de mallas académicas, la cual debe contener información sobre la carrera a la que pertenece, la fecha de registro, el estado de la malla academica (activa/inactiva) y una descripción de esta.
+11.	El sistema debe permitir al administrador, la creación y gestión de asignaturas, la cual debe contener información como el nombre, el ciclo al que pertenece, la malla academica a la que forma parte, los criterios de calificación, horas totales y una descripción de esta.
+12.	El sistema debe permir al administrador, la creación y gestión de criterios de calificación, los cuales contendrán información como el nombre y el porcentaje que vale cada uno.
+13.	El sistema debe permitir al administrador, la asignación de docentes a las asiganaturas disponibles en un periodo académico.
+14.	El sistema debe permitir al administrador, la creación de cursos, utilizando la asignación de un docente a un paralelo. 
+15.	El sistema debe permitir al administrador, asignar estudiantes a sus respectivos cursos.
+16.	El sistema debe permitir a los usuarios con rol de docente, guardar las notas de los estduantes periódicamente en base a los criterios de calificación y al nro. de unidades que cuenta la asiganatura. 
+17.	El sistema debe permitir a los usuarios con rol de docente, visualizar sus respectivos cursos a los que están asiganados.
+18.	El sistema debe permitir a los docentes, visualizar la lista de estudiantes de cada curso.
+
+(Por definir)
+19.	El sistema debe permitir a los usuarios con rol de tipo “Comision” visualizar todos los cursos de todos los ciclos del periodo académico actual. 
+20.	El sistema debe permitir a los usuarios con rol de tipo “Comision” visualizar las notas de la lista de estudiantes de cada curso.
+21.	El sistema debe permitir a los usuarios con rol de tipo “Comision” generar reportes de todos los estudiantes de segunda matrícula con notas menores a 7.
+22.	El sistema debe permitir a los usuarios con rol de tipo “Comision” generar reportes de todos los estudiantes de tercera matrícula con notas menores a 7.
+// Agrega mas tipo de reportes que se te ocurran
+23. El sistema debe permitir a los usuarios con rol de tipo “Comision” generar reportes con información sobre el desempempeño académico de los estudiantes por curso.
+24. 23.	El sistema debe poder realizar proyecciones sobre el desempeño académico de los estudiantes basándose en las notas actuales y el promedio de notas de los estudiantes en el periodo académico anterior.
+

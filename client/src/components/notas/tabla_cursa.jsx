@@ -8,18 +8,18 @@ const TablaCursa = ({ actions, store, actualizar }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-    const fetchData = useCallback(async () => {
-      setLoading(true);
-      try {
-        const data = await actions.get_all_cursas();
-        console.log((data));
-        setCursa(data);
-        setFilteredData(data);
-      } catch (error) {
-        console.error("Error al obtener los cursos:", error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await actions.get_all_cursas();
+      // console.log((data));
+      setCursa(data);
+      setFilteredData(data);
+    } catch (error) {
+      console.error("Error al obtener los cursos:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [actions]);
 
   useEffect(() => {
@@ -31,7 +31,13 @@ const TablaCursa = ({ actions, store, actualizar }) => {
     const filtered = Cursa.filter(
       (record) =>
         record.docente_nombre.toLowerCase().includes(searchTerm) ||
-        record.asignatura_nombre.toString().toLowerCase().includes(searchTerm) 
+        record.asignatura_nombre
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm) ||
+        record.ciclo_id.toString().toLowerCase().includes(searchTerm) ||
+        record.paralelo.toString().toLowerCase().includes(searchTerm) ||
+        record.dni.toString().toLowerCase().includes(searchTerm)
     );
     setFilteredData(filtered);
   };
@@ -41,7 +47,7 @@ const TablaCursa = ({ actions, store, actualizar }) => {
   };
 
   const handleUpdate = (row) => {
-    actions.setSelectedEstudiante(row);
+    actions.setSelectedCursa(row);
     actions.handleModal();
   };
 
@@ -52,13 +58,23 @@ const TablaCursa = ({ actions, store, actualizar }) => {
       sortable: true,
     },
     {
+      name: "DNI",
+      selector: (row) => `${row.dni}`,
+      sortable: true,
+    },
+    {
       name: "Docente Encargado",
       selector: (row) => `${row.docente_nombre}`,
       sortable: true,
     },
     {
+      name: "Asignatura",
+      selector: (row) => `${row.asignatura_nombre}`,
+      sortable: true,
+    },
+    {
       name: "Curso",
-      selector: (row) => `${row.asignatura_nombre} ${row.paralelo}`,
+      selector: (row) => `${row.ciclo_id}°` + " - " + `${row.paralelo}`,
       sortable: true,
     },
     {

@@ -1,23 +1,22 @@
 const academicActions = ({ getStore, getActions, setStore }) => ({
-
   //* ------------------Generos-----------------
 
-  get_all_generos: async () => {
-    const { token } = getStore();
-    const api = getStore().api;
+  // get_all_generos: async () => {
+  //   const { token } = getStore();
+  //   const api = getStore().api;
 
-    try {
-      const response = await api.get("/generos", {
-        headers: {
-          //Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Flux: Error obtenido los generos", error);
-      throw error;
-    }
-  },
+  //   try {
+  //     const response = await api.get("/generos", {
+  //       headers: {
+  //         //Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Flux: Error obtenido los generos", error);
+  //     throw error;
+  //   }
+  // },
 
   //* ----------TIPO_IDENTIFICACION--------------
 
@@ -59,22 +58,22 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
 
   //* -------------PERIODOS ACADEMICOS----------------
 
-  get_all_periodos_academicos: async () => {
-    const { token } = getStore();
-    const api = getStore().api;
+  // get_all_periodos_academicos: async () => {
+  //   const { token } = getStore();
+  //   const api = getStore().api;
 
-    try {
-      const response = await api.get("/periodos_academicos", {
-        headers: {
-          //Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Flux: Error al obtener los periodos academicos", error);
-      throw error;
-    }
-  },
+  //   try {
+  //     const response = await api.get("/periodos_academicos", {
+  //       headers: {
+  //         //Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Flux: Error al obtener los periodos academicos", error);
+  //     throw error;
+  //   }
+  // },
 
   //* ----------------ESTUDIANTES----------------
 
@@ -146,8 +145,7 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
         },
       });
       return response.data;
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Flux: Error obtenido los Docentes Asignaturas", error);
       throw error;
     }
@@ -174,23 +172,26 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
     setStore({ selectedDocenteAsignatura: docente_asignatura });
   },
 
-  // update_docente_asignatura: async (id, data) => {
-  //   const { token } = getStore();
-  //   const api = getStore().api;
+  update_docente_asignatura: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
 
-  //   try {
-  //     const response = await api.put(`/docentes/${id}`, data, {
-  //       headers: {
-  //         //Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Flux: Error actualizando el Docente", error);
-  //     throw error;
-  //   }
-  // },
-
+    try {
+      const response = await api.put(
+        `/asignacion_docente_asignatura/${id}`,
+        data,
+        {
+          headers: {
+            //Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el Docente", error);
+      throw error;
+    }
+  },
 
   //* ------------------DOCENTES-----------------
 
@@ -249,10 +250,22 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
+  get_all_cursos_docente: async (docente_id) => {
+    const { token } = getStore();
+    const api = getStore().api;
 
-
+    try {
+      const response = await api.get(`/cursos_docente/${docente_id}`, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error obtenido los cursos del docente", error);
+      throw error;
+    }
+  },
 });
-
-
 
 export default academicActions;

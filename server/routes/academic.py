@@ -8,7 +8,9 @@ from controls.inicio_sesion.persona_control import PersonaControl
 from controls.inicio_sesion.tipo_ide_control import TipoIdeControl
 from controls.admin.asignatura_control import AsignaturaControl
 from controls.academic.periodo_academico_control import PeriodoAcademicoControl
+from asyncio import run
 
+from controls.reportes.util import Util
 
 academic = Blueprint("academic", __name__)
 
@@ -49,15 +51,15 @@ def get_asignaturas():
 
 
 # ? OBTENER TODOS LOS PERIODOS ACADEMICOS
-@jwt_required()
-@academic.route("/periodos_academicos", methods=["GET"])
-def get_periodos_academicos():
-    data = periodo_academico_control._to_dict()
-    for periodo in data:
-        periodo["fecha_inicio"] = periodo["fecha_inicio"].strftime("%d/%m/%Y")
-        periodo["fecha_fin"] = periodo["fecha_fin"].strftime("%d/%m/%Y")
+# @jwt_required()
+# @academic.route("/periodos_academicos", methods=["GET"])
+# def get_periodos_academicos():
+#     data = periodo_academico_control._to_dict()
+#     for periodo in data:
+#         periodo["fecha_inicio"] = periodo["fecha_inicio"].strftime("%d/%m/%Y")
+#         periodo["fecha_fin"] = periodo["fecha_fin"].strftime("%d/%m/%Y")
 
-    return jsonify(data), 200
+#     return jsonify(data), 200
 
 
 # * -----------Estudiantes------------
@@ -76,37 +78,42 @@ def get_estudiantes():
 @academic.route("/estudiantes", methods=["POST"])
 def guardar_estudiante():
     data = request.get_json()
-    primer_nombre = data["primer_nombre"]
-    segundo_nombre = data["segundo_nombre"]
-    primer_apellido = data["primer_apellido"]
-    segundo_apellido = data["segundo_apellido"]
-    telefono = data["telefono"]
-    dni = data["dni"]
-    email = data["email"]
-    fecha_nacimiento = data["fecha_nacimiento"]
-    tipo_identificacion_id = data["tipo_identificacion"]
-    genero_id = data["genero_id"]
-    # ? INfo Estudainte
-    codigo_estudiante = data["codigo_estudiante"]
-    numero_matricula = data["nro_matricula"]
-    if estudiante_control.save(
-        primer_nombre,
-        segundo_nombre,
-        primer_apellido,
-        segundo_apellido,
-        telefono,
-        dni,
-        fecha_nacimiento,
-        email,
-        tipo_identificacion_id,
-        genero_id,
-        codigo_estudiante,
-        numero_matricula,
-    ):
+    required_fields = [
+        "primer_nombre",
+        "segundo_nombre",
+        "primer_apellido",
+        "segundo_apellido",
+        "telefono",
+        "dni",
+        "email",
+        "fecha_nacimiento",
+        "tipo_identificacion",
+        "genero_id",
+        "codigo_estudiante",
+    ]
 
-        return jsonify(message="Persona guardada correctamente"), 201
+    for field in required_fields:
+        if field not in data:
+            return jsonify({"msg": f"Falta el campo {field}"}), 400
+
+    saved = estudiante_control.save(
+        data["primer_nombre"],
+        data["segundo_nombre"],
+        data["primer_apellido"],
+        data["segundo_apellido"],
+        data["telefono"],
+        data["dni"],
+        data["fecha_nacimiento"],
+        data["email"],
+        data["tipo_identificacion"],
+        data["genero_id"],
+        data["codigo_estudiante"],
+    )
+
+    if saved:
+        return jsonify(message="Estudiante guardado correctamente"), 201
     else:
-        return jsonify({"msg": "Error al guardar el Estudiante"}), 500
+        return jsonify({"msg": "Error al guardar el estudiante"}), 201
 
 
 # ? Modificar un estudiante
@@ -223,7 +230,9 @@ def update_docente(id):
 @jwt_required
 @academic.route("/asignacion_docente_asignatura", methods=["GET"])
 def get_asignacion_docente_info_completa():
-    asignacion_info_completa = asignacion_docente_control.get_asignacion_info_completa()
+    asignacion_info_completa = run(
+        asignacion_docente_control.get_asignacion_info_completa()
+    )
     return jsonify(asignacion_info_completa), 200
 
 
@@ -235,7 +244,9 @@ def guardar_docente_asignado():
         data = request.json
         asignacion_docente_control._asignacion._docente_id = data["id_docente"]
         asignacion_docente_control._asignacion._asignatura_id = data["id_asignatura"]
-        asignacion_docente_control._asignacion._periodo_academico_id = data["id_periodo_academico"]
+        asignacion_docente_control._asignacion._periodo_academico_id = data[
+            "id_periodo_academico"
+        ]
         asignacion_docente_control.save()
 
         return jsonify({"message": "Asignación guardada correctamente"}), 201
@@ -243,3 +254,32 @@ def guardar_docente_asignado():
     except Exception as e:
         print(f"Error al guardar el docente: {e}")
         return jsonify({"error": "Error al guardar la asignación"}), 500
+
+
+@jwt_required
+@academic.route("/asignacion_docente_asignatura/<int:id>", methods=["PUT"])
+def update_docente_asignado(id):
+    try:
+        data = request.json
+        # print("\n\n\n\n")
+        # print(data)
+        # print(id)
+        # print("\n\n\n\n")
+        asignacion_docente_control._asignacion._docente_id = data["id_docente"]
+        asignacion_docente_control._asignacion._asignatura_id = data["id_asignatura"]
+        asignacion_docente_control._asignacion._periodo_academico_id = data[
+            "id_periodo_academico"
+        ]
+        asignacion_docente_control.update(id)
+        return jsonify({"message": "Asignación guardada correctamente"}), 201
+
+    except Exception as e:
+        print(f"Error al guardar el docente_asignatura: {e}")
+        return jsonify({"error": "Error al guardar la asignación"}), 500
+
+
+@jwt_required
+@academic.route("/cursos_docente/<int:id>", methods=["GET"])
+def get_cursos_docente(id):
+    data = Util().get_cursos_por_docente(id)
+    return jsonify(data), 200

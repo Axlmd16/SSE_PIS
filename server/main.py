@@ -1,19 +1,28 @@
-from datetime import datetime
-from controls.inicio_sesion.persona_control import PersonaControl
-from controls.inicio_sesion.tipo_ide_control import TipoIdeControl
-from controls.inicio_sesion.genero_control import GeneroControl
-from controls.inicio_sesion.cuenta_control import CuentaControl
-from controls.inicio_sesion.utils_2 import Utils_D
-from controls.inicio_sesion.utils import Util
+from controls.reportes.util import Util
+import time
+
+from controls.admin.asignatura_control import AsignaturaControl
+from controls.cargar_notas.cursaControlDao import CursaControl
+from controls.academic.asignacion_control import AsignacionControl
+from controls.admin.unidad_control import UnidadControl
+from controls.tda.list.linked_list import Linked_List
 
 
-utils = Utils_D()
+cursa_control = CursaControl()
+ac = AsignacionControl()
+asigc = AsignaturaControl()
+uc = UnidadControl()
 
-permisos_user = utils.get_permisos_by_rols_from_user(10)
+cursa = cursa_control._find(3)
+ac = ac._find(1)
+asigc = asigc._find(1)
 
-print(permisos_user.print)
+l1 = []
+lista = uc.list()
 
-print("-------------------------------------")
-permisos_rol2 = Util().get_permisos(14)
 
-print(permisos_rol2)
+for unidad in lista:
+    if unidad._asignatura_id == asigc["id"]:
+        l1.insert(0, unidad)
+
+print(l1)

@@ -18,12 +18,21 @@ class PeriodoAcademicoControl(Data_Access_Object):
         self.__periodo_academico = value
 
     def save(self):
-        self._save(self._periodo_acedemico)
-        self._periodo_acedemico = None
+        try:
+            self._save(self._periodo_acedemico)
+            return True
+        except Exception as e:
+            print(f"Error guardando el periodo academico: {e}")
+            return False
 
-    def update(self, pos):
-        self._merge(self._periodo_acedemico, pos)
-        self._periodo_acedemico = None
+    def update(self, id):
+        try:
+            # print(f"\n\n\nid: {id}")
+            self._merge(id, self._periodo_acedemico)
+            return True
+        except Exception as e:
+            print(f"Error actualizando el periodo academico: {e}")
+            return False
 
     def list(self):
         return self._list()

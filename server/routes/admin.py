@@ -6,6 +6,13 @@ from controls.admin.carrera_control import CarreraControl
 from controls.admin.malla_control import MallaControl
 from controls.admin.asignatura_control import AsignaturaControl
 from controls.admin.grupo_control import GrupoControl
+from controls.admin.unidad_control import UnidadControl
+from controls.reportes.util import Util
+from controls.cargar_notas.unidad_estudiante_control import UnidadEstudianteControl
+from controls.academic.estudiante_control import EstudianteControl
+from controls.admin.criterio_control import CriterioControl
+from controls.cargar_notas.nota_criterio_control import NotaCriterioControl
+from controls.admin.ciclo_control import CicloControl
 
 admin = Blueprint("admin", __name__)
 
@@ -13,6 +20,12 @@ cc = CarreraControl()
 mc = MallaControl()
 ac = AsignaturaControl()
 gc = GrupoControl()
+uc = UnidadControl()
+uec = UnidadEstudianteControl()
+estudiante_control = EstudianteControl()
+crc = CriterioControl()
+ncc = NotaCriterioControl()
+clc = CicloControl()
 
 
 # ----------------------------------------------------------------------------------------
@@ -209,3 +222,115 @@ def update_group(id):
         return jsonify(data), 201
     else:
         return jsonify({"msg": "Error al actualizar el grupo"}), 500
+
+
+# ----------------------------------------------------------------------------------------
+# Unidades
+@jwt_required
+@admin.route("/units/<int:curso_id>", methods=["POST"])
+def create_unit(curso_id):
+    try:
+        data = request.json
+        uc._unidad._nombre = data["nombre"]
+        uc._unidad._nro_unidad = int(data["nro_unidad"])
+        uc._unidad._nro_semanas = int(data["nro_semanas"])
+        uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
+        uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
+        uc._unidad._asignatura_id = int(data["asignatura_id"])
+
+        id_unidad = uc.save()
+        estudiantes_cursas = Util().get_estudiantes_por_asignatura(
+            int(data["asignatura_id"])
+        )
+        criterios = crc._to_dict()
+
+        for estudiante in estudiantes_cursas:
+            uec._unidad_estudiante._unidad_id = int(id_unidad)
+            uec._unidad_estudiante._estudiante_cursa_id = int(
+                estudiante["id_estudiante_cursa"]
+            )
+            id_unidad_estudiante = uec.save()
+
+            for criterio in criterios:
+                ncc._nota_criterio._unidad_estudiante_id = int(id_unidad_estudiante)
+                ncc._nota_criterio._criterio_id = int(criterio["id"])
+                ncc.save()
+
+        return jsonify(data), 201
+
+    except Exception as e:
+        print(f"Exception: {e}")
+        return jsonify({"msg": f"Error procesando la solicitud: {e}"}), 500
+
+
+@jwt_required
+@admin.route("/units", methods=["GET"])
+def get_units():
+    data = uc._to_dict()
+    return jsonify(data), 201
+
+
+@jwt_required
+@admin.route("/units/<int:id>", methods=["GET"])
+def get_unit(id):
+    unit = uc._find(id)
+    print(unit)
+    return jsonify(unit), 201
+
+
+@jwt_required
+@admin.route("/units/<int:id>", methods=["PUT"])
+def update_unit(id):
+    data = request.json
+    uc._unidad._nombre = data["nombre"]
+    uc._unidad._nro_unidad = data["nro_unidad"]
+    uc._unidad._nro_semanas = data["nro_semanas"]
+    uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
+    uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
+    uc._unidad._asignatura_id = data["asignatura_id"]
+
+    if uc.update(id):
+        return jsonify(data), 201
+    else:
+        return jsonify({"msg": "Error al actualizar la unidad"}), 500
+
+
+# ----------------------------------------------------------------------------------------
+# Ciclos
+
+
+@jwt_required
+@admin.route("/cycles", methods=["POST"])
+def create_cycle():
+    data = request.json
+    clc._ciclo._ciclo = data["ciclo"]
+
+    if clc.save():
+        return jsonify(data), 201
+    else:
+        return jsonify({"msg": "Error al guardar el ciclo"}), 500
+
+
+@jwt_required
+@admin.route("/cycles", methods=["GET"])
+def get_cycles():
+    data = clc._to_dict()
+    return jsonify(data), 201
+
+
+@jwt_required
+@admin.route("/cycles/<int:id>", methods=["GET"])
+def get_cycle(id):
+    cycle = clc._find(id)
+    return jsonify(cycle), 201
+
+
+@jwt_required
+@admin.route("/cycles/<int:id>", methods=["PUT"])
+def update_cycle(id):
+    data = request.json
+    clc._ciclo._ciclo = data["ciclo"]
+    if clc.update(id):
+        return jsonify(data), 201
+    else:
+        return jsonify({"msg": "Error al actualizar el ciclo"}), 500

@@ -1,5 +1,4 @@
 const notesActions = ({ getStore, getActions, setStore }) => ({
-  
   //Cursa
   get_all_cursas: async () => {
     const { token } = getStore();
@@ -37,6 +36,23 @@ const notesActions = ({ getStore, getActions, setStore }) => ({
 
   setSelectedCursa: (cursa) => {
     setStore({ selectedCursa: cursa });
+  },
+
+  update_cursa: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/cursa/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el Cursa", error);
+      throw error;
+    }
   },
 
   //ESTUDIANTES-CURSA
@@ -79,8 +95,40 @@ const notesActions = ({ getStore, getActions, setStore }) => ({
     setStore({ selectedEstudianteCursa: estudiante_cursa });
   },
 
+  update_estudiante_cursa: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
 
+    try {
+      const response = await api.put(`/estudiante_cursa/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando el EstudianteCursa", error);
+      throw error;
+    }
+  },
+
+  //NOTAS
+  update_notas_criterio: async (id, data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/notas_criterio/${id}`, data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error actualizando las notas del criterio", error);
+      throw error;
+    }
+  },
 });
-
 
 export default notesActions;

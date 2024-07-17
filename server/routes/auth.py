@@ -10,6 +10,8 @@ from controls.inicio_sesion.permiso_control import PermisoControl
 from controls.inicio_sesion.permiso_rol_control import RolPermisoControl
 from controls.inicio_sesion.rol_persona_control import RolPersonaControl
 
+from controls.tda.list.utilidades import verify_password 
+
 auth = Blueprint("auth", __name__)
 
 
@@ -29,13 +31,12 @@ def login():
     try:
         user_found = cc._list().search_models_binary("usuario", username)
         persona_found = pc._list().search_models_binary("id", user_found._persona_id)
-        print(f"Persona: {persona_found.serializable()}")
     except Exception as e:
         print(e)
         return jsonify({"msg": "Error al buscar el usuario"}), 500
 
-    if user_found._usuario == username and user_found._clave == password:
-
+    if (user_found._usuario == username and user_found._clave == password) or (user_found._usuario == username and verify_password(password, user_found._clave)):
+        
         permisos = Util().get_permisos(user_found._persona_id)
         roles = Util().get_roles(user_found._persona_id)
 

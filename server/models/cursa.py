@@ -3,6 +3,7 @@ class Cursa:
         self.__id = None
         self.__paralelo = " "
         self.__asignacion_id = 0
+        self.__ciclo_id = 0
 
     @property
     def _id(self):
@@ -28,11 +29,20 @@ class Cursa:
     def _asignacion_id(self, value):
         self.__asignacion_id = value
 
+    @property
+    def _ciclo_id(self):
+        return self.__ciclo_id
+
+    @_ciclo_id.setter
+    def _ciclo_id(self, value):
+        self.__ciclo_id = value
+
     def serializable(self):
         return {
             "id": self.__id,
             "paralelo": self.__paralelo,
             "asignacion_id": self.__asignacion_id,
+            "ciclo_id": self.__ciclo_id,
         }
 
     def __str__(self):
@@ -43,4 +53,5 @@ class Cursa:
         cursa._id = data["id"]
         cursa._paralelo = data["paralelo"]
         cursa._asignacion_id = data["asignacion_id"]
+        cursa._ciclo_id = data["ciclo_id"]
         return cursa
