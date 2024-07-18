@@ -185,75 +185,75 @@ function Navigation_Auth() {
   const { actions } = useContext(Context);
 
   return (
-    <Sidebar>
-      <SidebarItem
-        text="Inicio"
-        icon={<LayoutDashboard size={20} />}
-        to="/home-admin"
-      />
-
-      {/* <DropdownMenu text="Académico" icon={<BookOpen size={20} />}> */}
-      <SidebarItem
-        text="Estudiantes"
-        icon={<GraduationCap size={20} />}
-        to="/estudiantes"
-      />
-      <SidebarItem
-        text="Docentes"
-        icon={<GraduationCap size={20} />}
-        to="/docentes"
-      />
-      <SidebarItem
-        text="Asignar Docente"
-        icon={<LucidePencil size={20} />}
-        to="/asignacion-docente"
-      />
-      <SidebarItem text="Cursa" icon={<LucideSchool size={20} />} to="/cursa" />
-      <SidebarItem
-        text="Estudaintes-A-Cursos"
-        icon={<LucideSchool size={20} />}
-        to="/estudiante-cursa"
-      />
-      {/* </DropdownMenu> */}
-
-      {/* <DropdownMenu text="Administrativo" icon={<BookOpen size={20} />}> */}
-      <SidebarItem
-        text="Carreras"
-        icon={<LayoutDashboard size={20} />}
-        to="/careers"
-      />
-      <SidebarItem
-        text="Mallas Académicas"
-        icon={<Library size={20} />}
-        to="/meshes"
-      />
-      <SidebarItem
-        text="Catalogos"
-        icon={<Library size={20} />}
-        to="/crear-catalogo"
-      />
-      <SidebarItem
-        text="Asignaturas"
-        icon={<BookMarked size={20} />}
-        to="/subjects"
-      />
-      {/* </DropdownMenu> */}
-      <SidebarItem
-        text="Usuarios"
-        icon={<PersonStandingIcon size={20} />}
-        to="/users"
-      />
-      <SidebarItem
-        text="Roles de Usuario"
-        icon={<LucideReceiptPoundSterling size={20} />}
-        to={"/roles"}
-      />
-      <SidebarItem
-        click={() => actions.logout()}
-        text="Cerrar Sesión"
-        icon={<LogOut size={20} />}
-        to={"/"}
-      />
-    </Sidebar>
+    <div className="z-50">
+      <Sidebar>
+        <SidebarItem
+          text="Inicio"
+          icon={<LayoutDashboard size={20} />}
+          to="/home-admin"
+        />
+        <SidebarItem
+          text="Estudiantes"
+          icon={<GraduationCap size={20} />}
+          to="/estudiantes"
+        />
+        <SidebarItem
+          text="Docentes"
+          icon={<GraduationCap size={20} />}
+          to="/docentes"
+        />
+        <SidebarItem
+          text="Asignar Docente"
+          icon={<LucidePencil size={20} />}
+          to="/asignacion-docente"
+        />
+        <SidebarItem
+          text="Cursa"
+          icon={<LucideSchool size={20} />}
+          to="/cursa"
+        />
+        <SidebarItem
+          text="Estudaintes-A-Cursos"
+          icon={<LucideSchool size={20} />}
+          to="/estudiante-cursa"
+        />
+        <SidebarItem
+          text="Carreras"
+          icon={<LayoutDashboard size={20} />}
+          to="/careers"
+        />
+        <SidebarItem
+          text="Mallas Académicas"
+          icon={<Library size={20} />}
+          to="/meshes"
+        />
+        <SidebarItem
+          text="Catalogos"
+          icon={<Library size={20} />}
+          to="/crear-catalogo"
+        />
+        <SidebarItem
+          text="Asignaturas"
+          icon={<BookMarked size={20} />}
+          to="/subjects"
+        />
+        <SidebarItem
+          text="Usuarios"
+          icon={<PersonStandingIcon size={20} />}
+          to="/users"
+        />
+        <SidebarItem
+          text="Roles de Usuario"
+          icon={<LucideReceiptPoundSterling size={20} />}
+          to={"/roles"}
+        />
+        <SidebarItem
+          click={() => actions.logout()}
+          text="Cerrar Sesión"
+          icon={<LogOut size={20} />}
+          to={"/"}
+        />
+      </Sidebar>
+    </div>
   );
 }
