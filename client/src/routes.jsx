@@ -55,6 +55,8 @@ import CrearCatalogo from "./pages/Catalogos/Catalogo";
 import Generos from "./pages/Catalogos/Generos";
 import Ciclos from "./pages/Catalogos/Ciclos";
 import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
+import PeriodoAcademico from "./pages/Catalogos/PeriodoAcademico";
+import Proyeccion from "./components/proyeccion/Proyeecion";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -103,6 +105,7 @@ const Rutas = () => {
                 <Route path="/crear-catalogo" element={<CrearCatalogo />} />
                 <Route path="/generos" element={<Generos />} />
                 <Route path="/ciclos" element={<Ciclos />} />
+                <Route path="/periodos_academicos" element={<PeriodoAcademico />} />
                 <Route
                   path="/criterio-evaluacion"
                   element={<CriterioEvaluacion />}
@@ -151,6 +154,10 @@ const Rutas = () => {
                 path="/reportes"
                 element={<Reportes actions={actions} />}
               />
+              <Route
+                path="/proyeccion"
+                element={<Proyeccion actions={actions} />}
+              />
             </Route>
           </Routes>
         </div>
@@ -168,8 +175,12 @@ const Rutas = () => {
               element={<CambiarPassword />}
             />
             <Route path="/recuperar_password" element={<RecuperarPassword />} />
-            <Route
+            {/* <Route
               path="/reset_password/:id_cuenta"
+              element={<ResetPassword />}
+            /> */}
+            <Route
+              path="/reset_password/:token/:id_cuenta"
               element={<ResetPassword />}
             />
           </Routes>

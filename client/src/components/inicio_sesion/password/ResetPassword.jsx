@@ -9,8 +9,6 @@ const MySwal = withReactContent(Swal);
 
 const ResetPassword = () => {
   const secretKey = 'reset_password';
-
-  // const { idCuenta } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,14 +16,10 @@ const ResetPassword = () => {
   const { actions } = useContext(Context);
   const navigate = useNavigate();
 
-  let { id_cuenta } = useParams();
-
-    // console.log(id_cuenta);
+  let { id_cuenta, token } = useParams();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    console.log({id_cuenta});
 
     if (password !== confirmPassword) {
       setErrorMessage("Contraseñas nuevas no coinciden");
@@ -33,22 +27,32 @@ const ResetPassword = () => {
     }
 
     const id = decrypt(id_cuenta, secretKey); 
-    console.log({id});
 
     const data = {
       id_cuenta: id,
       password,
+      token
     }
 
     const response = await actions.reset_password(data)
 
-    console.log(response);
-
     if (response) {
       MySwal.fire({
-        title: 'Success',
-        text: 'Password changed!',
+        title: 'Exitoso',
+        text: 'Contraseña Cambiada Exitosamente!',
         icon: 'success'
+      });
+      const path = `/`;
+      navigate(path);
+    }
+
+    else if (response === false){
+      MySwal.fire({
+        title: 'error',
+        text: 'Error, Tiempo terminado para cambiar contraseña!',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 3000,
       });
       const path = `/`;
       navigate(path);

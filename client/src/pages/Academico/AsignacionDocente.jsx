@@ -52,9 +52,7 @@ const AsignacionDocente = () => {
     };
 
     try {
-      // console.log({ data });
       await actions.create_docente_asignatura(data);
-      // console.log("GUARDADO");
       MySwal.fire({
         icon: "success",
         title: "Registro exitoso",
@@ -69,20 +67,9 @@ const AsignacionDocente = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      // console.log(error);
     }
   };
 
-  //* Para ver los docentes asignados
-  // const verDocentesAsignaturas = async() => {
-
-  //     try {
-  //         const info = await actions.get_all_docentes_asignaturas()
-  //         console.log({info});
-  //     } catch (error) {
-  //         console.log(error);
-  //     }
-  // };
 
   return (
     <div>
@@ -95,16 +82,6 @@ const AsignacionDocente = () => {
         store={store}
         onDataSelect={handleDataSelection}
       />
-      {/*//* Mostrar los datos seleccionados, No borrar */}
-      {/* {selectedPerson && selectedAsignatura && (
-                <div className="p-4 bg-white shadow rounded-lg mt-4">
-                    <h2 className="text-lg font-bold">Persona seleccionada:</h2>
-                    <p className="mt-2">{selectedPerson.primer_nombre} {selectedPerson.primer_apellido}</p>
-                    <p className="mt-2">id Docente={selectedPerson.id}</p>
-                    <h2 className="text-lg font-bold mt-4">Asignatura seleccionada:</h2>
-                    <p className="mt-2">{selectedAsignatura.id}</p>
-                    <p className="mt-2">id Asignatura = {selectedAsignatura.nombre}</p>
-                </div>)} */}
       <div className="text-center">
         <button
           className="mt-6 bg-indigo-600 text-white font-bold"
@@ -112,10 +89,6 @@ const AsignacionDocente = () => {
         >
           <p>Asignar Materia a Docente</p>
         </button>
-        {/* //* Usar este boton para ver la informacion de docentos asignados */}
-        {/* <button className="mt-6 bg-indigo-600 text-white font-bold" onClick={verDocentesAsignaturas}>
-                    <p>Ver info</p>
-                </button> */}
             </div>
             <TablaDocenteAsignatura store={store} actions={actions} actualizar={actualizarTabla}/>
             {store.modal && (

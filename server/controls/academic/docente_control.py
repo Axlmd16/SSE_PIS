@@ -6,6 +6,7 @@ from models.persona import Persona
 from controls.dao.connection import ConnectionDB
 from controls.inicio_sesion.rol_persona_control import RolPersonaControl
 from controls.tda.list.linked_list import Linked_List
+from controls.tda.list.utilidades import encrypt_password
 import colorama
 import asyncio
 import time 
@@ -56,7 +57,7 @@ class DocenteControl(Data_Access_Object):
             self._docente._cubiculo = args[12]
             self._save(self._docente)
             cuenta._cuenta._usuario = f"{primer_nombre}_{primer_apellido}@unl.edu.ec"
-            cuenta._cuenta._clave = f"{dni}"
+            cuenta._cuenta._clave = encrypt_password(dni)
             cuenta._cuenta._estado = 1
             cuenta._cuenta._persona_id = self._docente._id
             cuenta.save()

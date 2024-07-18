@@ -6,7 +6,7 @@ from controls.academic.periodo_academico_control import PeriodoAcademicoControl
 from controls.catalogo.ciclo_control import CicloControl
 from controls.catalogo.criterio_evaluacion_control import CriterioEvaluacionControl
 from asyncio import run
-
+from datetime import datetime
 
 catalogos = Blueprint("catalogos", __name__)
 
@@ -133,7 +133,40 @@ def get_periodos_academicos():
     for periodo in data:
         periodo["fecha_inicio"] = periodo["fecha_inicio"].strftime("%d/%m/%Y")
         periodo["fecha_fin"] = periodo["fecha_fin"].strftime("%d/%m/%Y")
-
+        print(periodo)
     return jsonify(data), 200
 
 
+@jwt_required
+@catalogos.route("/periodos_academicos", methods=["POST"])
+def create_periodo_academico():
+    try:
+        data = request.json
+        print(f"Data: {data}")
+        fecha_inicio_str = data["fecha_inicio"]
+        fecha_fin_str = data["fecha_fin"]
+        fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d").strftime("%d/%m/%Y")
+        fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d").strftime("%d/%m/%Y")
+        periodo_academico_control._periodo_acedemico._fecha_inicio = fecha_inicio
+        periodo_academico_control._periodo_acedemico._fecha_fin = fecha_fin
+        periodo_academico_control.save()
+        return jsonify("msg: Periodo Academico creado correctamente"), 201
+    except Exception as e:
+        return jsonify({"msg": "Error al crear el periodo academico"}), 500
+    
+@jwt_required
+@catalogos.route("/periodos_academicos/<int:id>", methods=["PUT"])
+def update_periodo_academico(id):
+    data = request.json
+    print(f"Data: {data}")
+    print(id)
+    fecha_inicio_str = data["fecha_inicio"]
+    fecha_fin_str = data["fecha_fin"]
+    fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d").strftime("%d/%m/%Y")
+    fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d").strftime("%d/%m/%Y")
+    periodo_academico_control._periodo_acedemico._fecha_inicio = fecha_inicio
+    periodo_academico_control._periodo_acedemico._fecha_fin = fecha_fin
+    if periodo_academico_control.update(id):
+        return jsonify({"msg": "Criterio de evaluacion actualizado correctamente"}), 201
+    else:
+        return jsonify({"msg": "Error al actualizar el criterio de evaluacion"}), 500
