@@ -9,41 +9,46 @@ import {
   YAxis,
   XAxis,
   Bar,
-  BarChart, // Asegúrate de que esta importación esté aquí
+  LabelList, // Importa LabelList
+  BarChart,
 } from "recharts";
 
 const Statistics = ({ data }) => {
-  // Procesar los datos para las estadísticas
+  console.log("DAta", data);
   const totalStudents = data.length;
-  const passedStudents = data.filter((student) =>
-    Object.keys(student)
-      .filter((key) => key.startsWith("unidad_"))
-      .some((key) => student[key] > 7)
-  ).length;
-  const failedStudents = totalStudents - passedStudents;
-  const averageScores = {};
 
-  data.forEach((student) => {
+  const passedStudents = data.filter((student) => {
+    const unidades = Object.keys(student).filter((key) =>
+      key.startsWith("unidad_")
+    );
+    const average =
+      unidades.reduce((sum, key) => sum + student[key], 0) / unidades.length;
+    return average >= 7;
+  }).length;
+
+  const failedStudents = totalStudents - passedStudents;
+
+  const averageScores = data.reduce((acc, student) => {
     Object.keys(student)
       .filter((key) => key.startsWith("unidad_"))
       .forEach((key) => {
-        if (!averageScores[key]) {
-          averageScores[key] = [];
-        }
-        averageScores[key].push(student[key]);
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(student[key]);
       });
-  });
+    return acc;
+  }, {});
 
   const averageScoreData = Object.keys(averageScores).map((key) => ({
     name: `Unidad ${key.split("_")[1]}`,
-    average:
+    average: +(
       averageScores[key].reduce((sum, score) => sum + score, 0) /
-      averageScores[key].length,
+      averageScores[key].length
+    ).toFixed(2),
   }));
 
   const pieData = [
-    { name: "Estudiantes Aprobados", value: passedStudents },
-    { name: "Estudiantes Reprobados", value: failedStudents },
+    { name: "Rendimiento Normal", value: passedStudents },
+    { name: "Bajo Rendimiento", value: failedStudents },
   ];
 
   const COLORS = ["#00C49F", "#FF8042"];
@@ -61,7 +66,14 @@ const Statistics = ({ data }) => {
               <XAxis dataKey="name" stroke="#4B5563" />
               <YAxis stroke="#4B5563" />
               <Tooltip wrapperClassName="border bg-gray-100" />
-              <Bar dataKey="average" fill="#8884d8" name="Promedio" />
+              <Bar
+                dataKey="average"
+                fill="#8884d8"
+                name="Promedio"
+                barSize={80}
+              >
+                <LabelList dataKey="average" position="top" />{" "}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -100,8 +112,8 @@ const Statistics = ({ data }) => {
         <h3 className="text-lg font-semibold mb-2">Resumen del Curso</h3>
         <ul className="list-disc pl-5">
           <li>Total de Estudiantes: {totalStudents}</li>
-          <li>Estudiantes Aprobados: {passedStudents}</li>
-          <li>Estudiantes Reprobados: {failedStudents}</li>
+          <li>Estudiantes con bajo rendimiento: {failedStudents}</li>
+          <li>Estudiantes con rendimiento normal: {passedStudents}</li>
           <li>
             Promedio General del Curso:{" "}
             {(

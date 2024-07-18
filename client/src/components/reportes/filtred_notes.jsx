@@ -8,8 +8,10 @@ function Filtred_notes({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const options = [
-    { label: "Todos", value: "" }, // Opción para limpiar el filtro
+    { label: "Todos", value: "" },
     { label: "Bajo rendimiento", value: "Bajo rendimiento" },
+    { label: "Segunda matricula", value: "Segunda matricula" },
+    { label: "Tercera matricula", value: "Tercera matricula" },
   ];
 
   const handleSelect = (option) => {
@@ -18,8 +20,7 @@ function Filtred_notes({
   };
 
   return (
-    <div className="flex justify-between items-center my-2  w-full">
-      {/* Sección de búsqueda */}
+    <div className="flex justify-between items-center my-2 w-full">
       <div className="flex items-center">
         <Search className="mr-2 text-gray-600" size={20} />
         <input
@@ -29,8 +30,6 @@ function Filtred_notes({
           placeholder="Buscar"
         />
       </div>
-
-      {/* Sección de filtro de rendimiento */}
       <div className="relative ml-4">
         <div
           className="flex items-center bg-white rounded-lg shadow-sm border border-gray-300 p-2 cursor-pointer"

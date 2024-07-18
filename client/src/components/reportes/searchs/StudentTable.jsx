@@ -14,9 +14,10 @@ import CriteriaChart from "../grafico_criterios";
 const StudentTable = ({ subject, unit, course }) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [dataEstudiante, setDataEstudiante] = useState([]);
   const [loading, setLoading] = useState(true);
   const [performanceFilter, setPerformanceFilter] = useState("");
-  const [studentCount, setStudentCount] = useState("");
   const { actions } = useContext(Context);
   const chartRef = useRef(null);
   const statsRef = useRef(null);
@@ -65,6 +66,7 @@ const StudentTable = ({ subject, unit, course }) => {
           estudiante_id: item.estudiante_id,
           nombre: `${item.primer_nombre} ${item.segundo_nombre} ${item.primer_apellido} ${item.segundo_apellido}`,
           nota_unidad: item.nota_unidad,
+          nro_de_matricula: item.nro_de_matricula,
         };
       }
       estudiantesMap[item.estudiante_id][`criterio_${item.criterio_id}`] =
@@ -88,6 +90,7 @@ const StudentTable = ({ subject, unit, course }) => {
         estudiantesMap[item.persona_id] = {
           persona_id: item.persona_id,
           nombre: `${item.primer_nombre} ${item.segundo_nombre} ${item.primer_apellido} ${item.segundo_apellido}`,
+          nro_de_matricula: item.nro_de_matricula,
         };
       }
       estudiantesMap[item.persona_id][`unidad_${item.nro_unidad}`] =
@@ -99,6 +102,12 @@ const StudentTable = ({ subject, unit, course }) => {
 
   const createColumns = (data) => {
     const baseColumns = [
+      {
+        name: "Nro",
+        selector: (row) => {
+          return data.indexOf(row) + 1;
+        },
+      },
       {
         name: "Estudiante",
         selector: (row) => (
@@ -134,8 +143,8 @@ const StudentTable = ({ subject, unit, course }) => {
         selector: (row) =>
           row[`criterio_${id}`] !== undefined ? row[`criterio_${id}`] : "N/A",
         sortable: true,
-        center: true,
-        right: true,
+        center: "true",
+        right: "true",
         width: "150px",
         reorder: true,
       }));
@@ -145,8 +154,8 @@ const StudentTable = ({ subject, unit, course }) => {
         name: "Unidad",
         selector: (row) => row.nota_unidad,
         sortable: true,
-        center: true,
-        right: true,
+        center: "true",
+        right: "true",
         width: "150px",
       };
 
@@ -170,8 +179,8 @@ const StudentTable = ({ subject, unit, course }) => {
         name: `Unidad ${unidad.split("_")[1]}`,
         selector: (row) => (row[unidad] !== undefined ? row[unidad] : "N/A"),
         sortable: true,
-        center: true,
-        right: true,
+        center: "true",
+        right: "true",
         width: "150px",
         reorder: true,
       }));
@@ -186,8 +195,8 @@ const StudentTable = ({ subject, unit, course }) => {
           return (sum / sortedUnidades.length).toFixed(2);
         },
         sortable: true,
-        center: true,
-        right: true,
+        center: "true",
+        right: "true",
         width: "150px",
       };
 
@@ -206,35 +215,38 @@ const StudentTable = ({ subject, unit, course }) => {
   };
 
   useEffect(() => {
-    if (!performanceFilter || !studentCount) {
-      setFilteredData(estudiantes);
-      return;
-    }
-
-    let sortedData;
-    if (unit) {
-      sortedData = [...estudiantes].sort((a, b) =>
-        performanceFilter === "Bajo rendimiento"
-          ? a.nota_unidad - b.nota_unidad
-          : b.nota_unidad - a.nota_unidad
+    let filtered;
+    console.log("performanceFilter", performanceFilter);
+    console.log("estudiantes", estudiantes);
+    if (performanceFilter === "Bajo rendimiento") {
+      if (unit) {
+        filtered = estudiantes.filter((record) => record.nota_unidad < 7);
+      } else {
+        filtered = estudiantes.filter((record) => {
+          const sum = Object.keys(record)
+            .filter((key) => key.startsWith("unidad_"))
+            .reduce((sum, key) => sum + record[key], 0);
+          const avg =
+            sum /
+            Object.keys(record).filter((key) => key.startsWith("unidad_"))
+              .length;
+          return avg < 7;
+        });
+      }
+    } else if (performanceFilter === "Segunda matricula") {
+      filtered = estudiantes.filter(
+        (record) => record.nro_de_matricula === "SEGUNDA"
+      );
+    } else if (performanceFilter === "Tercera matricula") {
+      filtered = estudiantes.filter(
+        (record) => record.nro_de_matricula === "TERCERA"
       );
     } else {
-      sortedData = [...estudiantes].sort((a, b) => {
-        const aSum = Object.keys(a)
-          .filter((key) => key.startsWith("unidad_"))
-          .reduce((sum, key) => sum + a[key], 0);
-        const bSum = Object.keys(b)
-          .filter((key) => key.startsWith("unidad_"))
-          .reduce((sum, key) => sum + b[key], 0);
-
-        return performanceFilter === "Bajo rendimiento"
-          ? aSum - bSum
-          : bSum - aSum;
-      });
+      filtered = estudiantes;
     }
-
-    setFilteredData(sortedData.slice(0, Number(studentCount)));
-  }, [performanceFilter, studentCount, estudiantes, unit]);
+    console.log("filtered", filtered);
+    setFilteredData(filtered);
+  }, [performanceFilter, estudiantes, unit]);
 
   const paginationComponentOptions = {
     rowsPerPageText: "Filas por página",
@@ -275,33 +287,31 @@ const StudentTable = ({ subject, unit, course }) => {
 
     const canvasChart = await html2canvas(chartRef.current);
     const canvasStats = await html2canvas(statsRef.current);
-    const imgDataChart = canvasChart.toDataURL("image/png");
-    const imgDataStats = canvasStats.toDataURL("image/png");
 
-    doc.addImage(imgDataChart, "PNG", 10, 60, 180, 50);
-    doc.addImage(imgDataStats, "PNG", 10, 120, 180, 50);
+    const imgChart = canvasChart.toDataURL("image/png");
+    const imgStats = canvasStats.toDataURL("image/png");
+
+    doc.addImage(imgChart, "PNG", 10, 55, 190, 60);
+    doc.addPage();
+    doc.addImage(imgStats, "PNG", 10, 10, 190, 60);
 
     doc.autoTable({
-      startY: 145,
-      columns: columns.map((col) => ({
-        header: col.name,
-        dataKey: col.selector,
-      })),
-      body: filteredData,
-      styles: {
-        fontSize: 12,
-        halign: "center",
-        valign: "middle",
-      },
-      headStyles: {
-        fillColor: "#f3f4f6",
-        textColor: "#000000",
-        lineWidth: 0.1,
-        lineColor: "#000000",
-      },
+      startY: 80,
+      head: columns.map((col) => col.name),
+      body: filteredData.map((row) => columns.map((col) => row[col.selector])),
     });
 
-    doc.save("reporte_rendimiento.pdf");
+    doc.save("reporte_rendimiento_academico.pdf");
+  };
+
+  const handleRowClick = (rowData) => {
+    if (dataEstudiante.length > 0 && dataEstudiante[0] === rowData) {
+      setDataEstudiante([]);
+      setIsCollapsed(true);
+    } else {
+      setDataEstudiante([rowData]);
+      setIsCollapsed(false);
+    }
   };
 
   return (
@@ -317,9 +327,9 @@ const StudentTable = ({ subject, unit, course }) => {
           </button>
           <div className="flex items-center justify-end">
             <Filtred_notes
-              setPerformanceFilter={setPerformanceFilter}
-              setStudentCount={setStudentCount}
               handleSearch={handleSearch}
+              performanceFilter={performanceFilter}
+              setPerformanceFilter={setPerformanceFilter}
             />
           </div>
         </div>
@@ -331,24 +341,60 @@ const StudentTable = ({ subject, unit, course }) => {
         pagination
         paginationComponentOptions={paginationComponentOptions}
         customStyles={customStyles}
-        dense
+        // dense
+        onRowClicked={handleRowClick}
+        highlightOnHover
+        pointerOnHover
       />
       <div>
         {filteredData && filteredData.length > 0 && (
           <div>
             {unit ? (
               <>
-                <div ref={chartRef}>
-                  <CriteriaChart data={filteredData} />
+                <div
+                  className={`collapse bg-base-200 ${
+                    !isCollapsed ? "active" : ""
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={!isCollapsed}
+                    onChange={() => setIsCollapsed(!isCollapsed)}
+                  />
+                  <div className="collapse-title text-xl font-medium"></div>
+                  <div className="collapse-content">
+                    <div ref={chartRef}>
+                      {dataEstudiante && dataEstudiante.length > 0 && (
+                        <CriteriaChart data={dataEstudiante} />
+                      )}
+                    </div>
+                  </div>
                 </div>
+
                 <div ref={statsRef} className="mt-4">
                   <CriteriaStatistics data={filteredData} unit={unit} />
                 </div>
               </>
             ) : (
               <>
-                <div ref={chartRef}>
-                  <StudentChart data={filteredData} />
+                <div
+                  className={`collapse bg-base-200 ${
+                    !isCollapsed ? "active" : ""
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={!isCollapsed}
+                    onChange={() => setIsCollapsed(!isCollapsed)}
+                  />
+                  <div className="collapse-title text-xl font-medium"></div>
+                  <div className="collapse-content">
+                    <div ref={chartRef}>
+                      {dataEstudiante && dataEstudiante.length > 0 && (
+                        <StudentChart data={dataEstudiante} />
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div ref={statsRef} className="mt-4">
                   <Statistics data={filteredData} unit={unit} />
