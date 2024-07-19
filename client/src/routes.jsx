@@ -57,6 +57,8 @@ import Ciclos from "./pages/Catalogos/Ciclos";
 import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
 import PeriodoAcademico from "./pages/Catalogos/PeriodoAcademico";
 import Proyeccion from "./components/proyeccion/Proyeecion";
+import PerfilUsuario from "./components/inicio_sesion/password/PerfilUsuario";
+import VerificarUsuarioDocente from "./components/inicio_sesion/password/VerificarUsuarioDocente";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -158,6 +160,12 @@ const Rutas = () => {
                 path="/proyeccion"
                 element={<Proyeccion actions={actions} />}
               />
+              <Route path="/perfil_docente" element={<PerfilUsuario />} />
+              <Route path="/verificar_usuario_docente" element={<VerificarUsuarioDocente />} />
+              <Route
+                path="/cambiar_password/:data"
+                element={<CambiarPassword />}
+              />
             </Route>
           </Routes>
         </div>
@@ -166,6 +174,7 @@ const Rutas = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={<Landing />} />
+
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/acciones_password" element={<AccionesPassword />} />
@@ -175,10 +184,6 @@ const Rutas = () => {
               element={<CambiarPassword />}
             />
             <Route path="/recuperar_password" element={<RecuperarPassword />} />
-            {/* <Route
-              path="/reset_password/:id_cuenta"
-              element={<ResetPassword />}
-            /> */}
             <Route
               path="/reset_password/:token/:id_cuenta"
               element={<ResetPassword />}

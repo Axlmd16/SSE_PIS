@@ -22,6 +22,20 @@ ppc = PermisoControl()
 rpc = RolPermisoControl()
 prc = RolPersonaControl()
 
+# ? Obtener el correo del docente
+@auth.route("/obtener_correo_docente", methods=["POST"])
+def obtener_correo_docente():
+    try:
+        data = request.get_json()
+        # print(data)
+        id_docente = int(data)
+        docente_encontrado = cc._list().search_models_binary("persona_id", id_docente)
+        correo_docente = docente_encontrado._usuario
+        # print(correo_docente)
+        return jsonify(correo_docente), 200
+    except Exception as e:
+        print(f"Error al obtener el correo del docente: {e}"), 404
+
 
 @auth.route("/login", methods=["POST"])
 def login():

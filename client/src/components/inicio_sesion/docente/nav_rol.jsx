@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 import { Context } from "../../../store/context";
 import { Menu, LogOut, FileText, BookOpen, TrendingUp } from "lucide-react";
 
@@ -55,14 +55,24 @@ function Nav_Rol() {
     })
     .filter(Boolean);
 
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuAbierto(!menuAbierto);
+  };
+
+  const closeMenu = () => {
+    setMenuAbierto(false);
+  };
+
   return (
     <div className="navbar bg-white text-gray-800 shadow-md w-full px-4 py-2 flex items-center justify-between">
       <div className="navbar-start flex items-center">
-        <Menu className="mr-2 text-gray-800" size={24} />
-        <NavLink to="/home" className="text-xl font-semibold">
+        <NavLink to="/home" className="text-xl font-semibold ml-5">
           UNL
         </NavLink>
       </div>
+
       <div className="navbar-center hidden lg:flex">
         <ul className="flex space-x-4">
           {permisosDisponibles.map((permiso, index) => (
@@ -70,8 +80,7 @@ function Nav_Rol() {
               <NavLink
                 to={permiso.route}
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2 rounded-md text-gray-800 hover:text-gray-600 hover:bg-gray-100 ${
-                    isActive ? "bg-blue-700 text-white" : ""
+                  `flex items-center px-3 py-2 rounded-md text-gray-800 hover:text-gray-600 hover:bg-gray-100 ${isActive ? "bg-blue-700 text-white" : ""
                   }`
                 }
               >
@@ -82,14 +91,46 @@ function Nav_Rol() {
           ))}
         </ul>
       </div>
-      <div className="navbar-end">
-        <button
-          className="flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-md"
-          onClick={handleLogout}
-        >
-          <LogOut className="mr-1" size={20} />
-          Cerrar Sesión
-        </button>
+
+      <div className="navbar-end flex items-center">
+        <div className="relative">
+          <button
+            onClick={toggleMenu}
+            className="text-gray-400 focus:text-gray-900 focus:outline-none"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+
+          <div
+            className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 transition-all duration-600 ease-in-out transform ${menuAbierto ? "opacity-100 scale-100 z-50" : "opacity-0 scale-95 z-50"
+              }`}
+            style={{ display: menuAbierto ? "block" : "none" }}
+          >
+            <Link
+              to="/perfil_docente"
+              className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+              onClick={closeMenu}
+            >
+              Mi Perfil
+            </Link>
+            <Link
+              to="/verificar_usuario_docente"
+              className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+              onClick={closeMenu}
+            >
+              Cambiar Contraseña
+            </Link>
+            <button
+              className="text-gray-800 w-full text-center block px-4 py-2 bg-white text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+              onClick={() => {
+                closeMenu();
+                handleLogout();
+              }}
+            >
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
