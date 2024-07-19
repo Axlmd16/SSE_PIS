@@ -59,6 +59,7 @@ import PeriodoAcademico from "./pages/Catalogos/PeriodoAcademico";
 import Proyeccion from "./components/proyeccion/Proyeecion";
 import PerfilUsuario from "./components/inicio_sesion/password/PerfilUsuario";
 import VerificarUsuarioDocente from "./components/inicio_sesion/password/VerificarUsuarioDocente";
+import Autores from "./pages/Autores";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -188,6 +189,7 @@ const Rutas = () => {
               path="/reset_password/:token/:id_cuenta"
               element={<ResetPassword />}
             />
+            <Route path="/autores" element={<Autores />} />
           </Routes>
         </div>
       )}

@@ -45,6 +45,41 @@ export const Landing = () => (
         </p>
       </div>
     </div>
+    <footer className="bg-white text-black py-6 w-full m-10 rounded-lg">
+      <div className="max-w-4xl mx-auto text-center">
+        <ul className="flex justify-center space-x-6">
+          <li>
+            <Link
+              to="/autores"
+              className="hover:text-purple-700 font-bold transition-colors duration-300"
+            >
+              Autores
+            </Link>
+          </li>
+          <li>
+            <a
+              href="https://github.com/Axlmd16/SSE_PIS"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-purple-700 font-bold transition-colors duration-300"
+            >
+              Git
+            </a>
+          </li>
+          <li>
+            <Link
+              to="/"
+              className="hover:text-purple-700 font-bold transition-colors duration-300"
+            >
+              Documentación
+            </Link>
+          </li>
+        </ul>
+        <p className="mt-4 text-gray-400 text-sm">
+          &copy; {new Date().getFullYear()} UNL - GRUPO PIS Nro 1. Todos los derechos reservados.
+        </p>
+      </div>
+    </footer>
   </div>
 );
 
