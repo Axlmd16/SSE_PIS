@@ -133,13 +133,16 @@ class Util:
             ue.NOTA_UNIDAD,
             u.NOMBRE AS UNIDAD_NOMBRE,
             u.ASIGNATURA_ID,
-            u.NRO_UNIDAD
+            u.NRO_UNIDAD,
+            m.NRO_DE_MATRICULA
         FROM
             persona p
         JOIN
             ESTUDIANTE e ON p.id = e.ID
         JOIN
             ESTUDIANTE_CURSA ec ON e.ID = ec.ESTUDIANTE_ID
+        JOIN
+            MATRICULA m ON ec.ID = m.ESTUDIANTE_CURSA_ID
         JOIN
             CURSA c ON ec.CURSA_ID = c.ID
         JOIN

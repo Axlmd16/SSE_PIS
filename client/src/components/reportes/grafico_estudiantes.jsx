@@ -1,56 +1,55 @@
 import React from "react";
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ReferenceLine,
+  CartesianGrid,
+  Cell,
+  LabelList, // Importa LabelList
 } from "recharts";
 
 const StudentChart = ({ data }) => {
-  // Procesar los datos para el gráfico
-  const chartData = data.map((student) => {
-    const unidades = Object.keys(student).filter((key) =>
-      key.startsWith("unidad_")
-    );
+  if (!data || data.length === 0) {
+    return null; // Retorna null si no hay datos
+  }
 
-    const dataObject = {
-      nombre: student.nombre,
-    };
+  const student = data[0]; // Usa el primer (y único) elemento del array
+  const chartData = [
+    { unidad: "Unidad 1", nota: student.unidad_1 },
+    { unidad: "Unidad 2", nota: student.unidad_2 },
+    { unidad: "Unidad 3", nota: student.unidad_3 },
+  ];
 
-    unidades.forEach((unidad) => {
-      const unidadNumber = unidad.split("_")[1];
-      dataObject[`unidad_${unidadNumber}`] = student[unidad];
-    });
-
-    return dataObject;
-  });
+  // Función para determinar el color de la barra
+  const getBarColor = (nota) => (nota >= 7 ? "#00C49F" : "#FF8042");
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg">
       <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={chartData}>
-          <XAxis dataKey="nombre" stroke="#4B5563" tick={false} />
-          <YAxis stroke="#4B5563" />
+        <BarChart
+          data={chartData}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="unidad" stroke="#4B5563" />
+          <YAxis stroke="#4B5563" domain={[0, 10]} />
           <Tooltip wrapperClassName="border bg-gray-100" />
-          <Legend wrapperStyle={{ paddingBottom: "20px" }} />
-          <ReferenceLine y={7} stroke="red" strokeDasharray="3 3" />
-          {Object.keys(chartData[0])
-            .filter((key) => key !== "nombre")
-            .map((key) => (
-              <Line
-                key={key}
-                type="monotone"
-                dataKey={key}
-                stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
-                name={`Unidad ${key.split("_")[1]}`}
-              />
+          <Bar dataKey="nota" barSize={30}>
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={getBarColor(entry.nota)} />
             ))}
-        </LineChart>
+            <LabelList dataKey="nota" position="top" />{" "}
+            {/* Añade los valores de las notas */}
+          </Bar>
+        </BarChart>
       </ResponsiveContainer>
+      <div className="text-center mt-4 font-medium">
+        Estudiante: {student.nombre}
+      </div>
     </div>
   );
 };
