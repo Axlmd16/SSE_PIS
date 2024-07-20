@@ -8,7 +8,7 @@ function BreadCrumbs({ items }) {
         {items.map((item, index) => (
           <li key={index}>
             {item.link ? (
-              <Link to={item.link} className="inline-flex gap-2 items-center">
+              <Link to={item.link} className="inline-flex gap-2 items-center dark:text-white">
                 {item.icon && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

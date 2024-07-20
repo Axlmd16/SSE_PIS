@@ -116,21 +116,21 @@ const Proyeccion = ({ actions }) => {
   }, [actions, selectedCourse, selectedSubject]);
 
   return (
-    <div className="p-6 max-w-full mx-auto font-poppins">
+    <div className="p-6 max-w-full flex-grow mx-auto font-poppins bg-gradient-to-br from-white via-white to-white dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-gray-950 min-h-screen flex flex-col">
       <header className="text-center mb-6">
         <Bread_Crumbs items={breadcrumbItems} />
-        <h1 className="text-3xl font-semibold text-gray-700">
+        <h1 className="text-3xl font-semibold text-gray-700 dark:text-blue-400">
           Informe de Rendimiento de Estudiantes
         </h1>
       </header>
 
-      <div className="p-6 rounded-lg shadow-md border border-gray-300 bg-white">
+      <div className="p-6 rounded-lg shadow-md border border-gray-300 bg-white dark:bg-gray-800 dark:text-white dark:border-none flex-grow">
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="flex items-center lg:w-1/5">
             <span className="mx-3">
               <strong>Curso:</strong>
             </span>
-            <Folder size={28} className="text-gray-700 mr-4" />
+            <Folder size={28} className="text-gray-700 mr-4 dark:text-green-700" />
             <CourseSelector onSelectCourse={handleSelectCourse} />
           </div>
 
@@ -139,7 +139,7 @@ const Proyeccion = ({ actions }) => {
               <span className="mx-3">
                 <strong>Asignatura:</strong>
               </span>
-              <BookOpen size={28} className="text-gray-700 mr-4" />
+              <BookOpen size={28} className="text-gray-700 mr-4 dark:text-green-700" />
               <SubjectSelector
                 course={selectedCourse}
                 onSelectSubject={handleSelectSubject}
@@ -155,7 +155,7 @@ const Proyeccion = ({ actions }) => {
               <div className="flex flex-col lg:flex-row lg:justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
                 <div className="flex flex-col lg:flex-row lg:justify-start lg:w-2/3">
                   <div className="mb-4 p-2 w-full lg:w-auto">
-                    <h2 className="font-bold text-2xl mb-6">
+                    <h2 className="font-bold text-2xl mb-6 dark:text-blue-400">
                       Información del Curso
                     </h2>
                     <div className="flex flex-wrap items-center text-sm">
@@ -182,14 +182,14 @@ const Proyeccion = ({ actions }) => {
                 </div>
                 <div className="flex items-center lg:w-1/5 justify-center">
                   <span className="mx-3 font-bold">Unidad:</span>
-                  <Layers size={28} className="text-gray-700 mr-4" />
+                  <Layers size={28} className="text-gray-700 mr-4 dark:text-green-700" />
                   <UnitSelector
                     subject={selectedSubject}
                     onSelectUnit={setSelectedUnit}
                   />
                 </div>
               </div>
-              <div className="mt-6 text-center bg-gray-400 p-6 rounded-lg shadow-sm">
+              <div className="mt-6 text-center bg-gray-400 p-6 rounded-lg shadow-sm dark:bg-gray-900">
                 {isLoading ? (
                   <p className="text-white font-bold text-2xl">Cargando...</p>
                 ) : (

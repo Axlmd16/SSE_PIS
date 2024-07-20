@@ -362,7 +362,7 @@ const StudentTable = ({ subject, unit, course }) => {
                     onChange={() => setIsCollapsed(!isCollapsed)}
                   />
                   <div className="collapse-title text-xl font-medium"></div>
-                  <div className="collapse-content">
+                  <div className="collapse-content ">
                     <div ref={chartRef}>
                       {dataEstudiante && dataEstudiante.length > 0 && (
                         <CriteriaChart data={dataEstudiante} />
