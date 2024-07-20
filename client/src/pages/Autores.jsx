@@ -35,38 +35,38 @@ const Tarjeta = ({ imageSrc, name, module, gitLink, email }) => {
 const Autores = () => {
   const autores = [
     {
-      imageSrc: "",
+      imageSrc: "../../public/img/SEBAS.jpg",
       name: "Leonardo Sebastian Arevalo Armijos",
       module: "Módulo Encargado: Proyecciones",
-      gitLink: "https://github.com/",
-      email: "juan.c.alverca@unl.edu.ec"
+      gitLink: "https://github.com/aSebasISG",
+      email: "leonardo.arevalo@unl.edu.ec"
     },
     {
       imageSrc: "",
       name: "Juan Carlos Alverca Beltran",
       module: "Módulo Encargado: Administrativo",
-      gitLink: "https://github.com/",
-      email: "leonardo.arevalo@unl.edu.ec"
+      gitLink: "https://github.com/jAlverca",
+      email: "juan.c.alverca@unl.edu.ec"
     },
     {
       imageSrc: "",
       name: "Jostin Santiago Jimenez Ulloa",
       module: "Módulo Encargado: Autenticación e Informes",
-      gitLink: "https://github.com/",
+      gitLink: "https://github.com/Axlmd16",
       email: "jostin.jimenez@unl.edu.ec"
     },
     {
-      imageSrc: "",
+      imageSrc: "../../public/img/ANDRES.jpg",
       name: "Andres Francisco Tapia Marquez",
       module: "Módulo Encargado: Carga de Notas",
-      gitLink: "https://github.com/",
+      gitLink: "https://github.com/AndresTap2004",
       email: "andres.f.tapia@unl.edu.ec"
     },
     {
-      imageSrc: "../../public/img/JATM.png",
+      imageSrc: "../../public/img/JATM.jpg",
       name: "Jhostin Alexander Tapia Marquez",
       module: "Módulo Encargado: Academico",
-      gitLink: "https://github.com/",
+      gitLink: "https://github.com/JhostinJATM",
       email: "jhostin.tapia@unl.edu.ec"
     },
   ];
@@ -75,7 +75,7 @@ const Autores = () => {
     <div className="min-h-screen bg-gray-100 py-8 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 text-center mb-8 dark:text-blue-400">
-          AUTORES - PORYECTO INTEGRADOR DE SABERS
+          AUTORES - PROYECTO INTEGRADOR DE SABERES
         </h1>
         <div className="flex flex-wrap justify-center gap-6">
           {autores.map((autor, index) => (
