@@ -1,5 +1,6 @@
 from controls.dao.data_access_object import Data_Access_Object
 from models.matricula import Matricula
+import random
 
 
 class MatriculaControl(Data_Access_Object):
@@ -34,3 +35,6 @@ class MatriculaControl(Data_Access_Object):
 
     def list(self):
         return self._list()
+
+    def generate_cod_matricula(self) -> str:
+        return "".join(random.choices("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=10))

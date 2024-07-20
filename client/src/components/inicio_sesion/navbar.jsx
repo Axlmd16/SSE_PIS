@@ -1,33 +1,51 @@
-import { ChevronFirst, ChevronLast, Menu, Sun, Moon } from "lucide-react";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  LogOut,
+  Menu,
+  Moon,
+  Sun,
+} from "lucide-react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const SidebarContext = createContext();
 
-export default function Sidebar({ children }) {
+export default function Sidebar({ children, actions }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <aside className="h-screen bg-gray-800 text-white">
-      <nav className="h-full flex flex-col border-r border-gray-700 shadow-md">
+    <aside
+      className="h-screen text-white rounded-lg border-none"
+      style={{ backgroundColor: "#151924" }}
+    >
+      <nav className="h-full flex flex-col drop-shadow-lg">
         <div className="p-4 pb-2 flex justify-between items-center">
-          {/* <img
+          <img
             src="/img/unl.png"
             className={`overflow-hidden transition-all ${
               expanded ? "w-auto" : "w-0"
             }`}
             alt="unl-logo"
-          /> */}
+          />
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white"
           >
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
+            {expanded ? <ChevronsLeft /> : <ChevronsRight />}
           </button>
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3 space-y-2">{children}</ul>
+          <ul className="flex-1 px-3 space-y-3 my-auto">{children}</ul>
+          <div className="mt-auto px-3 mb-4">
+            <SidebarItem
+              text="Cerrar Sesión"
+              icon={<LogOut size={20} />}
+              to="/"
+              click={() => actions.logout()}
+            />
+          </div>
         </SidebarContext.Provider>
       </nav>
     </aside>
@@ -41,11 +59,11 @@ export function SidebarItem({ icon, text, active, alert, to, click }) {
       onClick={() => {
         click && click();
       }}
-      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
-        active ? "bg-gray-700 text-white" : "hover:bg-gray-700 text-gray-400"
-      }`}
+      className={`relative flex items-center py-2 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
+        active ? "bg-aux text-white" : "hover:bg-gray-700 text-gray-400"
+      } ${alert ? "mt-4" : "mt-2"}`}
     >
-      <Link className="flex items-center text-gray-400" to={to}>
+      <Link className="flex items-center w-full text-gray-300" to={to}>
         <span className="mr-2">{icon}</span>
         <span
           className={`overflow-hidden transition-all ${
@@ -62,13 +80,7 @@ export function SidebarItem({ icon, text, active, alert, to, click }) {
           />
         )}
         {!expanded && (
-          <div
-            className={`
-          absolute left-full rounded-md px-2 py-1 ml-6
-          bg-gray-600 text-white text-sm
-          invisible opacity-0 -translate-x-3 transition-all
-          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
-          >
+          <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-gray-600 text-white text-sm invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0">
             {text}
           </div>
         )}
@@ -90,14 +102,14 @@ export function Navbar() {
   };
 
   const handleChangeTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   useEffect(() => {
-    if (theme === 'dark') {
-      document.querySelector('html').classList.add('dark');
+    if (theme === "dark") {
+      document.querySelector("html").classList.add("dark");
     } else {
-      document.querySelector('html').classList.remove('dark');
+      document.querySelector("html").classList.remove("dark");
     }
   }, [theme]);
 
@@ -113,7 +125,11 @@ export function Navbar() {
           onClick={handleChangeTheme}
           className="text-gray-400 dark:text-gray-200 focus:text-gray-900 dark:focus:text-gray-100 focus:outline-none ml-6 bg-transparent border-none p-0"
         >
-          {theme === 'dark' ? <Sun className="h-8 w-8" /> : <Moon className="h-8 w-8" />}
+          {theme === "dark" ? (
+            <Sun className="h-8 w-8" />
+          ) : (
+            <Moon className="h-8 w-8" />
+          )}
         </button>
       </div>
       <div className="relative">
