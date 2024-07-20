@@ -42,7 +42,7 @@ const Autores = () => {
       email: "leonardo.arevalo@unl.edu.ec"
     },
     {
-      imageSrc: "",
+      imageSrc: "../../public/img/Juan.jpg",
       name: "Juan Carlos Alverca Beltran",
       module: "Módulo Encargado: Administrativo",
       gitLink: "https://github.com/jAlverca",
@@ -74,7 +74,7 @@ const Autores = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-8 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 text-center mb-8 dark:text-blue-400">
+        <h1 className="text-3xl font-bold text-gray-900 text-center mb-8 dark:text-green-600">
           AUTORES - PROYECTO INTEGRADOR DE SABERES
         </h1>
         <div className="flex flex-wrap justify-center gap-6">

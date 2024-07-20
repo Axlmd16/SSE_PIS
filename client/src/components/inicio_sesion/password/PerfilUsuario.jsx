@@ -30,9 +30,9 @@ const PerfilUsuario = () => {
     }, [actions, id_docente]);
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6 dark:bg-gray-800">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 to-purple-400 dark:bg-gradient-to-r dark:from-gray-900 dark:to-gray-700">
             <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-3xl dark:bg-gray-900">
-                <h1 className="text-3xl font-extrabold mb-6 text-gray-900 border-b-2 border-gray-200 pb-3 text-center dark:text-green-700">Perfil del Usuario</h1>
+                <h1 className=" text-black text-3xl font-extrabold mb-6 border-b-2 border-gray-200 pb-3 text-center dark:text-green-600">Perfil del Usuario</h1>
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
@@ -41,7 +41,7 @@ const PerfilUsuario = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
                         <div className="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-300">
                             <div className="mb-6">
-                                <label className="block text-gray-700 font-bold dark:text-purple-400">Nombre</label>
+                                <label className="block text-gray-700 font-bold dark:text-purple-400">Nombres</label>
                                 <span className="block text-gray-800 text-lg dark:text-white">{infoDocente.primer_nombre} {infoDocente.segundo_nombre}</span>
                             </div>
                             <div className="mb-6">
