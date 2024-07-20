@@ -296,6 +296,34 @@ const StudentTable = ({ subject, unit, course }) => {
     doc.save("informe-estudiantes.pdf");
   };
 
+  console.log(filteredData);
+
+  const conditionalRowStyles = [
+    {
+      when: (row) => {
+        // Inicializa un arreglo para almacenar las notas existentes
+        const notas = [];
+        // Verifica y agrega las notas existentes al arreglo
+        if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
+        if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
+        if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
+        if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
+        if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
+        // Calcula el promedio basado en las notas existentes
+        const promedio =
+          notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
+        // Retorna true si el promedio es menor que 7
+        return promedio < 7;
+      },
+      style: {
+        backgroundColor: "#FF9594",
+        color: "white",
+        "&:hover": {
+          cursor: "pointer",
+        },
+      },
+    },
+  ];
   return (
     <div className="flex flex-col">
       <div className="flex flex-col lg:flex-row md:items-center lg:justify-between mb-4">
@@ -324,12 +352,12 @@ const StudentTable = ({ subject, unit, course }) => {
         paginationComponentOptions={paginationComponentOptions}
         customStyles={customStyles}
         dense
-        highlightOnHover
         expandableRows
         expandableRowsComponent={({ data }) => (
           <ExpandedComponent data={data} unit={unit} />
         )}
         expandOnRowClicked
+        conditionalRowStyles={conditionalRowStyles}
       />
       <div>
         {filteredData && filteredData.length > 0 && (

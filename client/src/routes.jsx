@@ -1,28 +1,42 @@
 import {
   BookMarked,
-  Calendar,
   GraduationCap,
   LayoutDashboard,
   Library,
-  LogOut,
   LucidePencil,
-  LucideReceiptPoundSterling,
   LucideSchool,
-  NotebookTabs,
   PersonStandingIcon,
-  RefreshCcw,
+  SlidersVertical,
+  UsersRound,
 } from "lucide-react";
 import React, { useContext } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
+import N_asignatura from "./components/administrativo/n_asignatura";
 import About from "./components/inicio_sesion/about";
-import Home_Docente from "./components/inicio_sesion/docente/home_docente";
+import CursosDocente from "./components/inicio_sesion/docente/cursos_docente";
+import Estudiantes_Curso from "./components/inicio_sesion/docente/estudiantes_curso";
 import Nav_Rol from "./components/inicio_sesion/docente/nav_rol";
+import Sidebar_Docente from "./components/inicio_sesion/docente/sidebar_docente";
+import TablaCalificaciones from "./components/inicio_sesion/docente/TablaCalificaciones";
+import Unidad_Curso from "./components/inicio_sesion/docente/unidad_curso";
 import Login from "./components/inicio_sesion/login";
 import Sidebar, {
   Navbar,
   SidebarItem,
 } from "./components/inicio_sesion/navbar";
+import AccionesPassword from "./components/inicio_sesion/password/Acciones_Password";
+import CambiarPassword from "./components/inicio_sesion/password/CambiarPassword";
+import RecuperarPassword from "./components/inicio_sesion/password/RecuperarPassword";
+import ResetPassword from "./components/inicio_sesion/password/ResetPassword";
+import VerificarUsuario from "./components/inicio_sesion/password/VerificarUsuario";
+import Proyeccion from "./components/proyeccion/Proyeecion";
+import Reportes from "./components/reportes/Reportes";
 import AsignacionDocente from "./pages/Academico/AsignacionDocente";
 import Docentes from "./pages/Academico/Docentes";
 import Estudiantes from "./pages/Academico/Estudiantes";
@@ -31,32 +45,18 @@ import Carreras from "./pages/Adminitracion/carreras";
 import Mallas from "./pages/Adminitracion/mallas";
 import Permisos from "./pages/Adminitracion/permisos";
 import Roles from "./pages/Adminitracion/roles";
+import Roles_Usuarios from "./pages/Adminitracion/roles_usuarios";
+import CrearCatalogo from "./pages/Catalogos/Catalogo";
+import Ciclos from "./pages/Catalogos/Ciclos";
+import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
+import Generos from "./pages/Catalogos/Generos";
+import PeriodoAcademico from "./pages/Catalogos/PeriodoAcademico";
+import Landing from "./pages/landing";
 import Cursa from "./pages/Notas/Cursa";
 import EstudianteCursa from "./pages/Notas/Estudiantes_Cursa";
 import { Home_Principal } from "./pages/Principal/Home_Principal";
 import User from "./pages/User/user";
-import Landing from "./pages/landing";
 import { Context } from "./store/context";
-import Roles_Usuarios from "./pages/Adminitracion/roles_usuarios";
-import CursosDocente from "./components/inicio_sesion/docente/cursos_docente";
-import TablaCalificaciones from "./components/inicio_sesion/docente/TablaCalificaciones";
-import Reportes from "./components/reportes/Reportes";
-import N_asignatura from "./components/administrativo/n_asignatura";
-import DetailCourse from "./pages/Docente/detail_course";
-import Sidebar_Docente from "./components/inicio_sesion/docente/sidebar_docente";
-import Estudiantes_Curso from "./components/inicio_sesion/docente/estudiantes_curso";
-import Unidad_Curso from "./components/inicio_sesion/docente/unidad_curso";
-import AccionesPassword from "./components/inicio_sesion/password/Acciones_Password";
-import VerificarUsuario from "./components/inicio_sesion/password/VerificarUsuario";
-import CambiarPassword from "./components/inicio_sesion/password/CambiarPassword";
-import RecuperarPassword from "./components/inicio_sesion/password/RecuperarPassword";
-import ResetPassword from "./components/inicio_sesion/password/ResetPassword";
-import CrearCatalogo from "./pages/Catalogos/Catalogo";
-import Generos from "./pages/Catalogos/Generos";
-import Ciclos from "./pages/Catalogos/Ciclos";
-import CriterioEvaluacion from "./pages/Catalogos/CriterioEvaluacion";
-import PeriodoAcademico from "./pages/Catalogos/PeriodoAcademico";
-import Proyeccion from "./components/proyeccion/Proyeecion";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -105,7 +105,10 @@ const Rutas = () => {
                 <Route path="/crear-catalogo" element={<CrearCatalogo />} />
                 <Route path="/generos" element={<Generos />} />
                 <Route path="/ciclos" element={<Ciclos />} />
-                <Route path="/periodos_academicos" element={<PeriodoAcademico />} />
+                <Route
+                  path="/periodos_academicos"
+                  element={<PeriodoAcademico />}
+                />
                 <Route
                   path="/criterio-evaluacion"
                   element={<CriterioEvaluacion />}
@@ -194,75 +197,85 @@ export default Rutas;
 
 function Navigation_Auth() {
   const { actions } = useContext(Context);
+  const location = useLocation();
 
   return (
-    <div className="z-50">
-      <Sidebar>
+    <div className="z-50 font-poppins shadow-lg">
+      <Sidebar actions={actions}>
         <SidebarItem
           text="Inicio"
           icon={<LayoutDashboard size={20} />}
           to="/home-admin"
+          active={location.pathname === "/home-admin"}
         />
         <SidebarItem
           text="Estudiantes"
           icon={<GraduationCap size={20} />}
           to="/estudiantes"
+          active={location.pathname === "/estudiantes"}
         />
         <SidebarItem
           text="Docentes"
-          icon={<GraduationCap size={20} />}
+          icon={<UsersRound size={20} />}
           to="/docentes"
+          active={location.pathname === "/docentes"}
         />
+        {/* <hr /> */}
         <SidebarItem
           text="Asignar Docente"
           icon={<LucidePencil size={20} />}
           to="/asignacion-docente"
+          active={location.pathname === "/asignacion-docente"}
         />
         <SidebarItem
           text="Cursa"
           icon={<LucideSchool size={20} />}
           to="/cursa"
+          active={location.pathname === "/cursa"}
         />
         <SidebarItem
-          text="Estudaintes-A-Cursos"
+          text="Estudiantes-A-Cursos"
           icon={<LucideSchool size={20} />}
           to="/estudiante-cursa"
+          active={location.pathname === "/estudiante-cursa"}
         />
+        {/* <hr /> */}
         <SidebarItem
           text="Carreras"
           icon={<LayoutDashboard size={20} />}
           to="/careers"
+          active={location.pathname === "/careers"}
         />
         <SidebarItem
           text="Mallas Académicas"
           icon={<Library size={20} />}
           to="/meshes"
-        />
-        <SidebarItem
-          text="Catalogos"
-          icon={<Library size={20} />}
-          to="/crear-catalogo"
+          active={location.pathname === "/meshes"}
         />
         <SidebarItem
           text="Asignaturas"
           icon={<BookMarked size={20} />}
           to="/subjects"
+          active={location.pathname === "/subjects"}
         />
+        {/* <hr /> */}
         <SidebarItem
           text="Usuarios"
           icon={<PersonStandingIcon size={20} />}
           to="/users"
+          active={location.pathname === "/users"}
         />
         <SidebarItem
           text="Roles de Usuario"
-          icon={<LucideReceiptPoundSterling size={20} />}
-          to={"/roles"}
+          icon={<SlidersVertical size={20} />}
+          to="/roles"
+          active={location.pathname === "/roles"}
         />
         <SidebarItem
-          click={() => actions.logout()}
-          text="Cerrar Sesión"
-          icon={<LogOut size={20} />}
-          to={"/"}
+          text="Catálogos"
+          icon={<Library size={20} />}
+          to="/crear-catalogo"
+          active={location.pathname === "/crear-catalogo"}
         />
       </Sidebar>
     </div>
