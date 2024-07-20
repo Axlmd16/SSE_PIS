@@ -58,6 +58,10 @@ import { Home_Principal } from "./pages/Principal/Home_Principal";
 import User from "./pages/User/user";
 import { Context } from "./store/context";
 
+import PerfilUsuario from "./components/inicio_sesion/password/PerfilUsuario";
+import VerificarUsuarioDocente from "./components/inicio_sesion/password/VerificarUsuarioDocente";
+import Autores from "./pages/Autores";
+
 const Rutas = () => {
   const { store, actions } = useContext(Context);
   const token = store.token;
@@ -162,7 +166,10 @@ const Rutas = () => {
                 element={<Proyeccion actions={actions} />}
               />
               <Route path="/perfil_docente" element={<PerfilUsuario />} />
-              <Route path="/verificar_usuario_docente" element={<VerificarUsuarioDocente />} />
+              <Route
+                path="/verificar_usuario_docente"
+                element={<VerificarUsuarioDocente />}
+              />
               <Route
                 path="/cambiar_password/:data"
                 element={<CambiarPassword />}

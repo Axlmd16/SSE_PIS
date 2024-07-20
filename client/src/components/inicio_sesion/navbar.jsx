@@ -1,5 +1,12 @@
-import { ChevronsLeft, ChevronsRight, LogOut, Menu } from "lucide-react";
-import { createContext, useContext, useState } from "react";
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  LogOut,
+  Menu,
+  Moon,
+  Sun,
+} from "lucide-react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const SidebarContext = createContext();
@@ -95,14 +102,14 @@ export function Navbar() {
   };
 
   const handleChangeTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   useEffect(() => {
-    if (theme === 'dark') {
-      document.querySelector('html').classList.add('dark');
+    if (theme === "dark") {
+      document.querySelector("html").classList.add("dark");
     } else {
-      document.querySelector('html').classList.remove('dark');
+      document.querySelector("html").classList.remove("dark");
     }
   }, [theme]);
 
@@ -118,7 +125,11 @@ export function Navbar() {
           onClick={handleChangeTheme}
           className="text-gray-400 dark:text-gray-200 focus:text-gray-900 dark:focus:text-gray-100 focus:outline-none ml-6 bg-transparent border-none p-0"
         >
-          {theme === 'dark' ? <Sun className="h-8 w-8" /> : <Moon className="h-8 w-8" />}
+          {theme === "dark" ? (
+            <Sun className="h-8 w-8" />
+          ) : (
+            <Moon className="h-8 w-8" />
+          )}
         </button>
       </div>
       <div className="relative">
