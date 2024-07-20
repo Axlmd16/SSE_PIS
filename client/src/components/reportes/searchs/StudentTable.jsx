@@ -288,28 +288,31 @@ const StudentTable = ({ subject, unit, course }) => {
     }
 
     // Agregar más detalles
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 150, 50);
-    doc.text(`Generado por: Universidad Nacional de Loja`, 150, 60);
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 110, 50);
+    doc.text(`Generado por: Universidad Nacional de Loja`, 110, 60);
 
     // Crear tabla con los datos
+    doc.setFontSize(10);
+    // Pkner otro tipo de fuente para la tabla sin afectar el resto del documento
+
+    doc.setFont("fira", "normal");
     doc.autoTable({
       head: [columns.map((column) => column.name)],
       body: filteredData.map((row) =>
         columns.map((column) => column.selector(row))
       ),
       startY: 80,
-      theme: "grid", // O 'striped' para un estilo diferente
       styles: {
         font: "times",
         fontSize: 10,
         halign: "center",
       },
       headStyles: {
-        fillColor: [41, 128, 185],
+        fillColor: [44, 62, 80],
         textColor: [255, 255, 255],
       },
       bodyStyles: {
-        fillColor: [241, 196, 15, 0.2],
+        fillColor: [255, 255, 255],
       },
       alternateRowStyles: {
         fillColor: [255, 255, 255],
@@ -339,15 +342,26 @@ const StudentTable = ({ subject, unit, course }) => {
   const conditionalRowStyles = [
     {
       when: (row) => {
-        const notas = [];
-        if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
-        if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
-        if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
-        if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
-        if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
-        const promedio =
-          notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
-        return promedio < 7;
+        if (unit) {
+          const criteriaKeys = Object.keys(row).filter(
+            (key) => key.startsWith("criterio_") && !key.includes("nombre")
+          );
+          const sumCriteria = criteriaKeys.reduce(
+            (acc, key) => acc + (row[key] !== undefined ? row[key] : 0),
+            0
+          );
+          return sumCriteria < 7;
+        } else {
+          const notas = [];
+          if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
+          if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
+          if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
+          if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
+          if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
+          const promedio =
+            notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
+          return promedio < 7;
+        }
       },
       style: {
         backgroundColor: "#FF9594",
