@@ -55,11 +55,11 @@ const CambiarPassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-black mb-4 text-center">Perfil de usuario</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg dark:bg-gray-800">
+        <h1 className="text-3xl font-bold text-black mb-4 text-center dark:text-blue-400">Perfil de usuario</h1>
         <div className="text-center mb-6">
-          <h2 className="text-1xl font-bold mb-3">Datos Personales:</h2>
+          <h2 className="text-1xl font-bold mb-3 dark:text-blue-300">Datos Personales:</h2>
           <div className="mb-2">
             <input
               id="nombre"
@@ -82,7 +82,7 @@ const CambiarPassword = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <h2 className="text-1xl font-bold text-center">Ingrese su nueva contraseña:</h2>
+            <h2 className="text-1xl font-bold text-center dark:text-blue-300">Ingrese su nueva contraseña:</h2>
           </div>
           <div>
             <input
@@ -120,7 +120,7 @@ const CambiarPassword = () => {
           {errorMessage && <div className="text-red-500 text-sm mb-4">{errorMessage}</div>}
           <button
             type="submit"
-            className="w-full bg-gray-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition-colors duration-300"
+            className="w-full bg-gray-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition-colors duration-300 dark:bg-blue-700 dark:hover:bg-blue-800"
           >
             Cambiar contraseña
           </button>

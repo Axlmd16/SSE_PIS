@@ -35,18 +35,18 @@ const Dropdown = ({ options, label, onSelect, displayKey, resetKey }) => {
         {label}
       </label>
       <div
-        className="flex items-center border border-gray-300 rounded-md focus-within:ring focus-within:ring-blue-500 p-2 bg-white cursor-pointer shadow-sm transition duration-200 ease-in-out"
+        className="flex items-center border border-gray-300 rounded-md focus-within:ring focus-within:ring-blue-500 p-2 bg-white cursor-pointer shadow-sm transition duration-200 ease-in-out dark:bg-gray-600 dark:border-none"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-sm flex-1 truncate pr-2 text-gray-500">
+        <span className="text-sm flex-1 truncate pr-2 text-gray-500 dark:text-white dark:font-bold ">
           {selectedOption ? selectedOption[displayKey] : "Seleccione"}
         </span>
-        <ChevronDown className="text-gray-500 w-5 h-5" />
+        <ChevronDown className="text-gray-500 w-5 h-5 dark:text-gray-800"  />
       </div>
       {isOpen && (
-        <ul className="absolute z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto text-sm transition duration-200 ease-in-out">
+        <ul className="absolute z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto text-sm transition duration-200 ease-in-out dark:bg-gray-700 dark:hover:bg-gray-800">
           <li
-            className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+            className={`px-4 py-2 cursor-pointer  hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-800 ${
               selectedOption === null ? "bg-gray-100" : ""
             }`}
             onMouseDown={() => handleSelect(null)}
@@ -56,7 +56,7 @@ const Dropdown = ({ options, label, onSelect, displayKey, resetKey }) => {
           {options.map((option, index) => (
             <li
               key={index}
-              className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+              className={`px-4 py-2 cursor-pointer hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-800 ${
                 option === selectedOption ? "bg-gray-100" : ""
               }`}
               onMouseDown={() => handleSelect(option)}

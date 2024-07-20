@@ -8,8 +8,10 @@ function Filtred_notes({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const options = [
-    { label: "Todos", value: "" }, // Opción para limpiar el filtro
+    { label: "Todos", value: "" },
     { label: "Bajo rendimiento", value: "Bajo rendimiento" },
+    { label: "Segunda matricula", value: "Segunda matricula" },
+    { label: "Tercera matricula", value: "Tercera matricula" },
   ];
 
   const handleSelect = (option) => {
@@ -18,35 +20,32 @@ function Filtred_notes({
   };
 
   return (
-    <div className="flex justify-between items-center my-2  w-full">
-      {/* Sección de búsqueda */}
+    <div className="flex justify-between items-center my-2 w-full">
       <div className="flex items-center">
-        <Search className="mr-2 text-gray-600" size={20} />
+        <Search className="mr-2 text-gray-600 dark:text-white" size={20} />
         <input
-          className="input rounded-lg border border-gray-400 font-poppins w-auto h-8 text-sm px-2 py-1"
+          className="input rounded-lg border border-gray-400 font-poppins w-auto h-8 text-sm px-2 py-1 dark:text-black"
           type="text"
           onChange={handleSearch}
           placeholder="Buscar"
         />
       </div>
-
-      {/* Sección de filtro de rendimiento */}
       <div className="relative ml-4">
         <div
-          className="flex items-center bg-white rounded-lg shadow-sm border border-gray-300 p-2 cursor-pointer"
+          className="flex items-center bg-white rounded-lg shadow-sm border border-gray-300 p-2 cursor-pointer dark:bg-gray-700 dark:border-none"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <span className="text-sm text-gray-500 truncate">
+          <span className="text-sm text-gray-500 truncate dark:text-white dark:font-bold">
             {performanceFilter || "Tipo de reporte"}
           </span>
           <ChevronDown className="text-gray-500 w-4 h-4 ml-2" />
         </div>
         {isOpen && (
-          <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10 text-sm">
+          <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-10 text-sm dark:bg-gray-700 dark:hover:bg-gray-800 dark:border-none">
             {options.map((option, index) => (
               <li
                 key={index}
-                className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                className={`px-4 py-2 cursor-pointer hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-800  ${
                   option.value === performanceFilter ? "bg-gray-100" : ""
                 }`}
                 onMouseDown={() => handleSelect(option)}
