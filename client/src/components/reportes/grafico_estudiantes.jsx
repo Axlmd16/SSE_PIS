@@ -9,15 +9,15 @@ import {
   ResponsiveContainer,
   CartesianGrid,
   Cell,
-  LabelList, // Importa LabelList
+  LabelList,
 } from "recharts";
 
 const StudentChart = ({ data }) => {
   if (!data || data.length === 0) {
-    return null; // Retorna null si no hay datos
+    return null;
   }
 
-  const student = data[0]; // Usa el primer (y único) elemento del array
+  const student = data[0];
   const chartData = [
     { unidad: "Unidad 1", nota: student.unidad_1 },
     { unidad: "Unidad 2", nota: student.unidad_2 },
@@ -29,7 +29,7 @@ const StudentChart = ({ data }) => {
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg">
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="70%" height={250} className="mx-auto">
         <BarChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}

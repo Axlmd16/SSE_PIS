@@ -113,21 +113,6 @@ const EstudianteCursa = () => {
                 </p>
               )}
             </div>
-            <div className="mt-4 w-1/5">
-              <input
-                type="text"
-                placeholder="Codigo de Matricula"
-                {...register("codigo_matricula", {
-                  required: "Este campo es requerido",
-                })}
-                className="block w-full ml-3 leading-tight text-gray-700 border rounded shadow  focus:outline-none focus:shadow-outline h-9 mx-4 p-3"
-              />
-              {errors.codigo_matricula && (
-                <p className="mt-2 text-sm text-red-600">
-                  {errors.codigo_matricula.message}
-                </p>
-              )}
-            </div>
           </div>
 
           <div className="text-center">

@@ -1,24 +1,25 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import html2canvas from "html2canvas";
-import { Download, GraduationCap } from "lucide-react";
+import { Download, MailPlus } from "lucide-react";
 import { React, useContext, useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { Context } from "../../../store/context";
-import Filtred_notes from "../filtred_notes";
-import StudentChart from "../grafico_estudiantes";
-import Statistics from "../estadisticas_curso";
 import CriteriaStatistics from "../estadisticas_criterios";
+import Statistics from "../estadisticas_curso";
+import Filtred_notes from "../filtred_notes";
 import CriteriaChart from "../grafico_criterios";
+import StudentChart from "../grafico_estudiantes";
+
+const MySwal = withReactContent(Swal);
 
 const StudentTable = ({ subject, unit, course }) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [dataEstudiante, setDataEstudiante] = useState([]);
   const [loading, setLoading] = useState(true);
   const [performanceFilter, setPerformanceFilter] = useState("");
-  const { actions } = useContext(Context);
+  const { actions, store } = useContext(Context);
   const chartRef = useRef(null);
   const statsRef = useRef(null);
 
@@ -110,12 +111,7 @@ const StudentTable = ({ subject, unit, course }) => {
       },
       {
         name: "Estudiante",
-        selector: (row) => (
-          <div className="flex">
-            <GraduationCap size={16} className="mr-2 text-green-700" />
-            {row.nombre}
-          </div>
-        ),
+        selector: (row) => (row.nombre ? row.nombre : "N/A"),
         sortable: true,
         grow: 5,
       },
@@ -216,8 +212,6 @@ const StudentTable = ({ subject, unit, course }) => {
 
   useEffect(() => {
     let filtered;
-    console.log("performanceFilter", performanceFilter);
-    console.log("estudiantes", estudiantes);
     if (performanceFilter === "Bajo rendimiento") {
       if (unit) {
         filtered = estudiantes.filter((record) => record.nota_unidad < 7);
@@ -244,7 +238,6 @@ const StudentTable = ({ subject, unit, course }) => {
     } else {
       filtered = estudiantes;
     }
-    console.log("filtered", filtered);
     setFilteredData(filtered);
   }, [performanceFilter, estudiantes, unit]);
 
@@ -266,51 +259,132 @@ const StudentTable = ({ subject, unit, course }) => {
     },
   };
 
-  const exportToPDF = async () => {
+  const exportToPDF = () => {
     const doc = new jsPDF();
     const logoUrl = "/img/unl.png";
 
-    doc.addImage(logoUrl, "PNG", 10, 10, 50, 15);
+    // Agregar logo con dimensiones ajustadas
+    doc.addImage(logoUrl, "PNG", 10, 10, 60, 30);
 
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bold");
-    doc.text("Reporte de Rendimiento Académico", 80, 15);
+    // Título del informe
+    doc.setFont("times", "bold");
+    doc.setFontSize(16);
+    doc.text("Informe de Rendimiento de Estudiantes", 75, 20);
 
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Curso: ${course.paralelo}`, 10, 40);
-    doc.text(`Asignatura: ${subject.nombre}`, 10, 45);
-
+    // Información del curso, asignatura, y unidad
+    doc.setFont("times", "normal");
+    doc.setFontSize(12);
+    doc.text(`Curso: ${course.ciclo_nombre} - ${course.paralelo}`, 10, 50);
+    doc.text(`Asignatura: ${subject.nombre}`, 10, 60);
     if (unit) {
-      doc.text(`Unidad: ${unit.nro_unidad}`, 10, 50);
+      doc.text(
+        `Unidad: ${unit.unidad_nombre
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")}`,
+        10,
+        70
+      );
     }
 
-    const canvasChart = await html2canvas(chartRef.current);
-    const canvasStats = await html2canvas(statsRef.current);
+    // Agregar más detalles
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 150, 50);
+    doc.text(`Generado por: Universidad Nacional de Loja`, 150, 60);
 
-    const imgChart = canvasChart.toDataURL("image/png");
-    const imgStats = canvasStats.toDataURL("image/png");
-
-    doc.addImage(imgChart, "PNG", 10, 55, 190, 60);
-    doc.addPage();
-    doc.addImage(imgStats, "PNG", 10, 10, 190, 60);
-
+    // Crear tabla con los datos
     doc.autoTable({
+      head: [columns.map((column) => column.name)],
+      body: filteredData.map((row) =>
+        columns.map((column) => column.selector(row))
+      ),
       startY: 80,
-      head: columns.map((col) => col.name),
-      body: filteredData.map((row) => columns.map((col) => row[col.selector])),
+      theme: "grid", // O 'striped' para un estilo diferente
+      styles: {
+        font: "times",
+        fontSize: 10,
+        halign: "center",
+      },
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: [255, 255, 255],
+      },
+      bodyStyles: {
+        fillColor: [241, 196, 15, 0.2],
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255],
+      },
     });
 
-    doc.save("reporte_rendimiento_academico.pdf");
+    // Agregar pie de página
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(
+        `Página ${i} de ${pageCount}`,
+        doc.internal.pageSize.getWidth() - 20,
+        doc.internal.pageSize.getHeight() - 10
+      );
+      doc.text(
+        "© 2023 Universidad de Ejemplo. Todos los derechos reservados.",
+        10,
+        doc.internal.pageSize.getHeight() - 10
+      );
+    }
+
+    // Guardar el archivo
+    doc.save("informe-estudiantes.pdf");
   };
 
-  const handleRowClick = (rowData) => {
-    if (dataEstudiante.length > 0 && dataEstudiante[0] === rowData) {
-      setDataEstudiante([]);
-      setIsCollapsed(true);
-    } else {
-      setDataEstudiante([rowData]);
-      setIsCollapsed(false);
+  const conditionalRowStyles = [
+    {
+      when: (row) => {
+        const notas = [];
+        if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
+        if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
+        if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
+        if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
+        if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
+        const promedio =
+          notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
+        return promedio < 7;
+      },
+      style: {
+        backgroundColor: "#FF9594",
+        color: "white",
+        "&:hover": {
+          cursor: "pointer",
+        },
+      },
+    },
+  ];
+
+  const handleExport = async () => {
+    MySwal.fire({
+      title: "¿Qué te gustaría hacer?",
+      showDenyButton: true,
+      icon: "question",
+      showCancelButton: false,
+      confirmButtonText: "Descargar",
+      denyButtonText: "Compartir",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        exportToPDF();
+      } else if (result.isDenied) {
+        shareReport();
+      }
+    });
+  };
+
+  const shareReport = async () => {
+    const { value: email } = await MySwal.fire({
+      title: "Compartir informe",
+      input: "email",
+      inputLabel: "Email",
+      inputPlaceholder: "Email del destinatario",
+    });
+    if (email) {
+      Swal.fire(`Informe enviado a ${email}`);
     }
   };
 
@@ -319,7 +393,7 @@ const StudentTable = ({ subject, unit, course }) => {
       <div className="flex flex-col lg:flex-row md:items-center lg:justify-between mb-4">
         <div className="flex space-x-4">
           <button
-            onClick={exportToPDF}
+            onClick={handleExport}
             className="btn-md btn btn-info float-end"
           >
             <Download className="" />
@@ -341,61 +415,25 @@ const StudentTable = ({ subject, unit, course }) => {
         pagination
         paginationComponentOptions={paginationComponentOptions}
         customStyles={customStyles}
-        // dense
-        onRowClicked={handleRowClick}
-        highlightOnHover
-        pointerOnHover
+        dense
+        expandableRows
+        expandableRowsComponent={({ data }) => (
+          <ExpandedComponent data={data} unit={unit} />
+        )}
+        expandOnRowClicked
+        conditionalRowStyles={conditionalRowStyles}
       />
       <div>
         {filteredData && filteredData.length > 0 && (
           <div>
             {unit ? (
               <>
-                <div
-                  className={`collapse bg-base-200 ${
-                    !isCollapsed ? "active" : ""
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={!isCollapsed}
-                    onChange={() => setIsCollapsed(!isCollapsed)}
-                  />
-                  <div className="collapse-title text-xl font-medium"></div>
-                  <div className="collapse-content ">
-                    <div ref={chartRef}>
-                      {dataEstudiante && dataEstudiante.length > 0 && (
-                        <CriteriaChart data={dataEstudiante} />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
                 <div ref={statsRef} className="mt-4">
                   <CriteriaStatistics data={filteredData} unit={unit} />
                 </div>
               </>
             ) : (
               <>
-                <div
-                  className={`collapse bg-base-200 ${
-                    !isCollapsed ? "active" : ""
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={!isCollapsed}
-                    onChange={() => setIsCollapsed(!isCollapsed)}
-                  />
-                  <div className="collapse-title text-xl font-medium"></div>
-                  <div className="collapse-content">
-                    <div ref={chartRef}>
-                      {dataEstudiante && dataEstudiante.length > 0 && (
-                        <StudentChart data={dataEstudiante} />
-                      )}
-                    </div>
-                  </div>
-                </div>
                 <div ref={statsRef} className="mt-4">
                   <Statistics data={filteredData} unit={unit} />
                 </div>
@@ -409,3 +447,26 @@ const StudentTable = ({ subject, unit, course }) => {
 };
 
 export default StudentTable;
+
+const ExpandedComponent = ({ data, unit }) => {
+  const chartRef = useRef();
+
+  return (
+    <div className="flex justify-center items-center">
+      <div className="w-full max-w-screen-lg">
+        <div className="p-4 bg-white shadow-md rounded-lg">
+          {data &&
+            (unit ? (
+              <div ref={chartRef} className="">
+                <CriteriaChart data={[data]} />
+              </div>
+            ) : (
+              <div ref={chartRef}>
+                <StudentChart data={[data]} />
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+};

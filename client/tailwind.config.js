@@ -9,6 +9,9 @@ export default {
       fontSize: {
         xxs: " .9rem",
       },
+      colors: {
+        aux: "#172339",
+      },
     },
   },
   "darkMode": "class",

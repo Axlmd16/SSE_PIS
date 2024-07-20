@@ -34,7 +34,10 @@ class Util:
         U.NOMBRE AS UNIDAD_NOMBRE,
         U.ASIGNATURA_ID,
         A.NOMBRE AS ASIGNATURA_NOMBRE,
-        U.NRO_UNIDAD
+        U.NRO_UNIDAD,
+        U.FECHA_INICIO,
+        U.FECHA_FIN,
+        U.NRO_SEMANAS
     FROM
         ASIGNATURA A
         JOIN UNIDAD U ON A.ID = U.ASIGNATURA_ID

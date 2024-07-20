@@ -14,7 +14,6 @@ import {
 } from "recharts";
 
 const Statistics = ({ data }) => {
-  console.log("DAta", data);
   const totalStudents = data.length;
 
   const passedStudents = data.filter((student) => {

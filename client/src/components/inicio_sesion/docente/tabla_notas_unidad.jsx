@@ -122,6 +122,8 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
         icon: "warning",
         title: "Valor máximo excedido",
         text: `El valor no puede ser mayor que ${max}.`,
+        showConfirmButton: false,
+        timer: 1500,
       });
     }
   };
