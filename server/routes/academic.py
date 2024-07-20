@@ -135,12 +135,12 @@ def update_estudiante(id):
         ]
         persona_control._persona._genero_id = data["genero_id"]
         if persona_control.update(id):
-            estudiante_control._estudiante._nro_matricula = data["nro_matricula"]
             estudiante_control._estudiante._codigo_estudiante = data[
                 "codigo_estudiante"
             ]
             if estudiante_control.update(id):
                 return jsonify(data), 201
+
     except Exception as e:
         print(f"Error al actualizar el Estudiante: {e}")
 
@@ -163,7 +163,7 @@ def obtener_docente():
     # Buscar el docente con el ID especificado
     docente_encontrado = None
     for docente in docentes:
-        if docente['id'] == id_docente:
+        if docente["id"] == id_docente:
             docente_encontrado = docente
             break
 

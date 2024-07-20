@@ -131,6 +131,24 @@ const reportActions = ({ getStore, getActions, setStore }) => ({
       throw error;
     }
   },
+
+  // ------------------------------------------------------------
+  // Emails
+  sendPdfToBackend: async (formData) => {
+    const token = getStore().token;
+    const api = getStore().api;
+
+    try {
+      const response = await api.post("/send_email", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error sending PDF to backend:", error);
+    }
+  },
 });
 
 export default reportActions;
