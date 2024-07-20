@@ -41,10 +41,12 @@ const CursosDocente = () => {
   };
 
   return (
+    <div className="h-screen bg-gradient-to-br from-white via-white to-white dark:bg-gradient-to-bg dark:from-gray-800 dark:via-gray-900 dark:to-gray-950">
+
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Cursos del Docente</h2>
+      <h2 className="text-2xl font-bold mb-4 dark:text-blue-400">Cursos del Docente</h2>
       {loading ? (
-        <p>Cargando...</p>
+        <p className="dark:text-blue-400">Cargando...</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {cursos.map((curso) => (
@@ -58,11 +60,11 @@ const CursosDocente = () => {
                   className="w-full object-cover"
                   style={{ height: "200px" }}
                 />
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">
+                <div className="p-4 dark:bg-green-900">
+                  <h3 className="text-lg font-bold text-gray-800 mb-2 text-center dark:text-gray-300">
                     {curso.asignatura_nombre} - {curso.curso_paralelo}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
                     Periodo académico: <br />
                     {formatearFecha(
                       curso.periodo_academico_fecha_inicio
@@ -74,6 +76,7 @@ const CursosDocente = () => {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 };

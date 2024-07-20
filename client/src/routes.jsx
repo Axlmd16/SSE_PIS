@@ -161,6 +161,12 @@ const Rutas = () => {
                 path="/proyeccion"
                 element={<Proyeccion actions={actions} />}
               />
+              <Route path="/perfil_docente" element={<PerfilUsuario />} />
+              <Route path="/verificar_usuario_docente" element={<VerificarUsuarioDocente />} />
+              <Route
+                path="/cambiar_password/:data"
+                element={<CambiarPassword />}
+              />
             </Route>
           </Routes>
         </div>
@@ -169,6 +175,7 @@ const Rutas = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={<Landing />} />
+
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/acciones_password" element={<AccionesPassword />} />
@@ -178,14 +185,11 @@ const Rutas = () => {
               element={<CambiarPassword />}
             />
             <Route path="/recuperar_password" element={<RecuperarPassword />} />
-            {/* <Route
-              path="/reset_password/:id_cuenta"
-              element={<ResetPassword />}
-            /> */}
             <Route
               path="/reset_password/:token/:id_cuenta"
               element={<ResetPassword />}
             />
+            <Route path="/autores" element={<Autores />} />
           </Routes>
         </div>
       )}

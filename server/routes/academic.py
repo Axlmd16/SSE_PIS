@@ -148,6 +148,36 @@ def update_estudiante(id):
 # *--------------DOCENTES----------------
 
 
+# ? Obtener un docente
+@jwt_required
+@academic.route("/obtener_docente", methods=["POST"])
+def obtener_docente():
+    data = request.get_json()
+    # print(data)
+    id_docente = int(data)
+    # print("ID a buscar: ", id_docente)
+
+    # Obtener la lista de docentes
+    docentes = docente_control._list_docente()
+
+    # Buscar el docente con el ID especificado
+    docente_encontrado = None
+    for docente in docentes:
+        if docente['id'] == id_docente:
+            docente_encontrado = docente
+            break
+
+    # Comprobar si se encontró el docente
+    if docente_encontrado:
+        # print("\n\n\n\nDocente Encontrado")
+        # print(docente_encontrado)
+        # print("\n\n\n\n")
+        return jsonify(docente_encontrado), 200
+    else:
+        print("Docente no encontrado")
+        return jsonify({"error": "Docente no encontrado"}), 401
+
+
 # ? Listar todos los docentes
 @jwt_required
 @academic.route("/docentes", methods=["GET"])

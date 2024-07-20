@@ -215,7 +215,7 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
       cell: (row) => (
         <button
           onClick={() => handleButtonClick(row)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded dark:bg-green-700 dark:hover:bg-green-800 dark:border-none"
         >
           Ver Info
         </button>
@@ -265,7 +265,7 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
       <div className="mt-4 flex justify-center">
         <button
           onClick={handleSelectAllStudents}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 dark:bg-green-700 dark:hover:bg-green-800 dark:border-none"
         >
           Seleccionar Todos los Estudiantes
         </button>

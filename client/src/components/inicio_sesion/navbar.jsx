@@ -44,7 +44,6 @@ export default function Sidebar({ children, actions }) {
     </aside>
   );
 }
-
 export function SidebarItem({ icon, text, active, alert, to, click }) {
   const { expanded } = useContext(SidebarContext);
 
@@ -85,6 +84,7 @@ export function SidebarItem({ icon, text, active, alert, to, click }) {
 
 export function Navbar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [theme, setTheme] = useState("light");
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
@@ -94,6 +94,18 @@ export function Navbar() {
     setMenuAbierto(false);
   };
 
+  const handleChangeTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.querySelector('html').classList.add('dark');
+    } else {
+      document.querySelector('html').classList.remove('dark');
+    }
+  }, [theme]);
+
   return (
     <nav className="flex items-center justify-between bg-gray-800 p-4">
       <div>
@@ -102,17 +114,23 @@ export function Navbar() {
             UNL
           </span>
         </Link>
+        <button
+          onClick={handleChangeTheme}
+          className="text-gray-400 dark:text-gray-200 focus:text-gray-900 dark:focus:text-gray-100 focus:outline-none ml-6 bg-transparent border-none p-0"
+        >
+          {theme === 'dark' ? <Sun className="h-8 w-8" /> : <Moon className="h-8 w-8" />}
+        </button>
       </div>
       <div className="relative">
         <button
           onClick={toggleMenu}
-          className="text-gray-400 focus:text-gray-900 focus:outline-none"
+          className="text-gray-400 focus:text-gray-900 focus:outline-none dark:bg-gray-800 dark:text-white dark:border-none"
         >
           <Menu className="h-6 w-6" />
         </button>
 
         <div
-          className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 transition-all duration-600 ease-in-out transform ${
+          className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 transition-all duration-600 ease-in-out transform dark:bg-green-900  ${
             menuAbierto
               ? "opacity-100 scale-100 z-50"
               : "opacity-0 scale-95 z-50"
@@ -121,21 +139,21 @@ export function Navbar() {
         >
           <Link
             to="/login"
-            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md dark:text-white dark:hover:bg-green-950"
             onClick={closeMenu}
           >
             Inicio Sesion
           </Link>
           <Link
             to="/acciones_password"
-            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md dark:text-white dark:hover:bg-green-950"
             onClick={closeMenu}
           >
             Acciones - Contraseña
           </Link>
           <Link
             to="/"
-            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md"
+            className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md dark:text-white dark:hover:bg-green-950"
             onClick={closeMenu}
           >
             Contactanos

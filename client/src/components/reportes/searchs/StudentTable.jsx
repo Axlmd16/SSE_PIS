@@ -14,6 +14,8 @@ import StudentChart from "../grafico_estudiantes";
 const StudentTable = ({ subject, unit, course }) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [dataEstudiante, setDataEstudiante] = useState([]);
   const [loading, setLoading] = useState(true);
   const [performanceFilter, setPerformanceFilter] = useState("");
   const { actions } = useContext(Context);
