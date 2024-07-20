@@ -337,9 +337,9 @@ const StudentTable = ({ subject, unit, course }) => {
 
     // Guardar el archivo
     doc.save("informe-estudiantes.pdf");
-  };
-
-  const conditionalRowStyles = [
+    };
+  
+    const conditionalRowStyles = [
     {
       when: (row) => {
         if (unit) {
