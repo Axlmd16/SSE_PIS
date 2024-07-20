@@ -1,9 +1,10 @@
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { Download, GraduationCap } from "lucide-react";
+import { Download, MailPlus } from "lucide-react";
 import { React, useContext, useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { Context } from "../../../store/context";
 import CriteriaStatistics from "../estadisticas_criterios";
 import Statistics from "../estadisticas_curso";
@@ -11,14 +12,14 @@ import Filtred_notes from "../filtred_notes";
 import CriteriaChart from "../grafico_criterios";
 import StudentChart from "../grafico_estudiantes";
 
+const MySwal = withReactContent(Swal);
+
 const StudentTable = ({ subject, unit, course }) => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [dataEstudiante, setDataEstudiante] = useState([]);
   const [loading, setLoading] = useState(true);
   const [performanceFilter, setPerformanceFilter] = useState("");
-  const { actions } = useContext(Context);
+  const { actions, store } = useContext(Context);
   const chartRef = useRef(null);
   const statsRef = useRef(null);
 
@@ -263,16 +264,17 @@ const StudentTable = ({ subject, unit, course }) => {
     const logoUrl = "/img/unl.png";
 
     // Agregar logo con dimensiones ajustadas
-    doc.addImage(logoUrl, "PNG", 10, 10, 60, 30); // Ancho de 50 y altura de 30
+    doc.addImage(logoUrl, "PNG", 10, 10, 60, 30);
 
     // Título del informe
+    doc.setFont("times", "bold");
     doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
     doc.text("Informe de Rendimiento de Estudiantes", 75, 20);
 
     // Información del curso, asignatura, y unidad
+    doc.setFont("times", "normal");
     doc.setFontSize(12);
-    doc.text(`Curso: ${course.paralelo}`, 10, 50);
+    doc.text(`Curso: ${course.ciclo_nombre} - ${course.paralelo}`, 10, 50);
     doc.text(`Asignatura: ${subject.nombre}`, 10, 60);
     if (unit) {
       doc.text(
@@ -285,6 +287,10 @@ const StudentTable = ({ subject, unit, course }) => {
       );
     }
 
+    // Agregar más detalles
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 150, 50);
+    doc.text(`Generado por: Universidad Nacional de Loja`, 150, 60);
+
     // Crear tabla con los datos
     doc.autoTable({
       head: [columns.map((column) => column.name)],
@@ -292,29 +298,55 @@ const StudentTable = ({ subject, unit, course }) => {
         columns.map((column) => column.selector(row))
       ),
       startY: 80,
+      theme: "grid", // O 'striped' para un estilo diferente
+      styles: {
+        font: "times",
+        fontSize: 10,
+        halign: "center",
+      },
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: [255, 255, 255],
+      },
+      bodyStyles: {
+        fillColor: [241, 196, 15, 0.2],
+      },
+      alternateRowStyles: {
+        fillColor: [255, 255, 255],
+      },
     });
+
+    // Agregar pie de página
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(
+        `Página ${i} de ${pageCount}`,
+        doc.internal.pageSize.getWidth() - 20,
+        doc.internal.pageSize.getHeight() - 10
+      );
+      doc.text(
+        "© 2023 Universidad de Ejemplo. Todos los derechos reservados.",
+        10,
+        doc.internal.pageSize.getHeight() - 10
+      );
+    }
 
     // Guardar el archivo
     doc.save("informe-estudiantes.pdf");
   };
 
-  console.log(filteredData);
-
   const conditionalRowStyles = [
     {
       when: (row) => {
-        // Inicializa un arreglo para almacenar las notas existentes
         const notas = [];
-        // Verifica y agrega las notas existentes al arreglo
         if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
         if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
         if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
         if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
         if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
-        // Calcula el promedio basado en las notas existentes
         const promedio =
           notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
-        // Retorna true si el promedio es menor que 7
         return promedio < 7;
       },
       style: {
@@ -326,12 +358,42 @@ const StudentTable = ({ subject, unit, course }) => {
       },
     },
   ];
+
+  const handleExport = async () => {
+    MySwal.fire({
+      title: "¿Qué te gustaría hacer?",
+      showDenyButton: true,
+      icon: "question",
+      showCancelButton: false,
+      confirmButtonText: "Descargar",
+      denyButtonText: "Compartir",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        exportToPDF();
+      } else if (result.isDenied) {
+        shareReport();
+      }
+    });
+  };
+
+  const shareReport = async () => {
+    const { value: email } = await MySwal.fire({
+      title: "Compartir informe",
+      input: "email",
+      inputLabel: "Email",
+      inputPlaceholder: "Email del destinatario",
+    });
+    if (email) {
+      Swal.fire(`Informe enviado a ${email}`);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col lg:flex-row md:items-center lg:justify-between mb-4">
         <div className="flex space-x-4">
           <button
-            onClick={exportToPDF}
+            onClick={handleExport}
             className="btn-md btn btn-info float-end"
           >
             <Download className="" />
