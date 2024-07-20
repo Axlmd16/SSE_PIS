@@ -29,16 +29,16 @@ function VerificarUsuario() {
   };
 
   return (
-    <div className="w-full h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold mb-6 text-black text-center">
+    <div className="w-full h-screen bg-gray-100 flex items-center justify-center dark:bg-gray-900">
+      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+        <h1 className="text-2xl font-bold mb-6 text-black text-center dark:text-blue-300">
           VERIFICAR USUARIO
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="mb-4">
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-blue-300"
             >
               Usuario
             </label>
@@ -63,7 +63,7 @@ function VerificarUsuario() {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-blue-300"
             >
               Contraseña
             </label>
@@ -91,7 +91,7 @@ function VerificarUsuario() {
           <div>
             <button
               type="submit"
-              className="w-full bg-gray-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition-colors duration-300"
+              className="w-full bg-gray-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition-colors duration-300 dark:bg-blue-700 dark:hover:bg-blue-800"
             >
               Iniciar Sesión
             </button>

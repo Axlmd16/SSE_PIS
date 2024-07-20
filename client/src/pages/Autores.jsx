@@ -1,6 +1,6 @@
 const Tarjeta = ({ imageSrc, name, module, gitLink, email }) => {
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-xs mx-auto text-white transition-transform duration-300 transform hover:scale-105">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-xs mx-auto text-white transition-transform duration-300 transform hover:scale-105 dark:bg-gray-750">
       <div className="flex flex-col items-center">
         <div
           className={`w-24 h-24 rounded-full overflow-hidden ${!imageSrc ? "bg-gray-200" : ""}`}
@@ -13,7 +13,7 @@ const Tarjeta = ({ imageSrc, name, module, gitLink, email }) => {
             </div>
           )}
         </div>
-        <h2 className="text-xl font-bold mt-4 text-center">{name}</h2>
+        <h2 className="text-xl font-bold mt-4 text-center dark:text-blue-400">{name}</h2>
         <p className="text-gray-400 mt-2 text-center">{module}</p>
         {email && (
           <p className="text-gray-700 mt-2">
@@ -72,9 +72,9 @@ const Autores = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-gray-100 py-8 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 text-center mb-8 ">
+        <h1 className="text-3xl font-bold text-gray-900 text-center mb-8 dark:text-blue-400">
           AUTORES - PORYECTO INTEGRADOR DE SABERS
         </h1>
         <div className="flex flex-wrap justify-center gap-6">

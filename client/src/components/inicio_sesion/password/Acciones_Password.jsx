@@ -36,7 +36,7 @@ const AccionPassword = ({ to, IconComponent, titulo, descripcion }) => {
 
 const AccionesPassword = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-white dark:bg-gray-900">
       <div className="w-1/2 flex flex-col justify-center items-center space-y-4">
         <div className="w-3/4">
           <AccionPassword

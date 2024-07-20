@@ -61,13 +61,13 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-black mb-4 text-center">Reset Password</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg dark:bg-gray-800">
+        <h1 className="text-3xl font-bold text-black mb-4 text-center dark:text-blue-300">Reset Password</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-blue-300">
               New Password:
             </label>
             <input
@@ -80,7 +80,7 @@ const ResetPassword = () => {
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-blue-300">
               Confirm Password:
             </label>
             <input
@@ -95,7 +95,7 @@ const ResetPassword = () => {
           {errorMessage && <div className="text-red-500 text-sm mb-4">{errorMessage}</div>}
           <button
             type="submit"
-            className="w-full bg-gray-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition-colors duration-300"
+            className="w-full bg-gray-800 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 transition-colors duration-300 dark:bg-blue-700 dark:hover:bg-blue-800"
           >
             Reset Password
           </button>
