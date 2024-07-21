@@ -195,7 +195,12 @@ const TableRolsUser = ({ actions, store, id }) => {
         selectableRows
         progressPending={loading}
         progressComponent={<h2>Cargando...</h2>}
-        noDataComponent={<h2>No se encontraron resultados</h2>}
+        noDataComponent={
+          <>
+            <CircleHelp size={24} className="mx-2" />
+            <h2>No se encontraron resultados</h2>
+          </>
+        }
         paginationComponentOptions={paginationComponentOptions}
         customStyles={customStyles}
       />

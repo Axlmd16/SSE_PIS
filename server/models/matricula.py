@@ -1,5 +1,15 @@
 class Matricula:
+    """
+    Representa la matrícula de un estudiante, incluyendo detalles como el código de matrícula,
+    número de matrícula y la fecha de matriculación.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self) -> None:
+        """
+        Inicializa una nueva instancia de la clase Matricula.
+        """
         self.__id = None
         self.__estudiante_cursa_id = 0
         self.__codigo_matricula = ""
@@ -47,6 +57,11 @@ class Matricula:
         self.__fecha_matricula = value
 
     def serializable(self) -> dict:
+        """
+        Convierte la instancia de Matricula en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Matricula.
+        """
         return {
             "id": self.__id,
             "estudiante_cursa_id": self.__estudiante_cursa_id,
@@ -55,7 +70,14 @@ class Matricula:
             "fecha_matricula": self.__fecha_matricula,
         }
 
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Matricula a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la instancia de Matricula.
+        :returns: Una instancia de Matricula.
+        """
         matricula = Matricula()
         matricula._id = data["id"]
         matricula._estudiante_cursa_id = data["estudiante_cursa_id"]

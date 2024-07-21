@@ -2,6 +2,7 @@ from controls.dao.data_access_object import Data_Access_Object
 from models.cuenta import Cuenta
 import colorama
 
+
 class CuentaControl(Data_Access_Object):
     def __init__(self):
         super().__init__(Cuenta)
@@ -27,7 +28,6 @@ class CuentaControl(Data_Access_Object):
 
     def update(self, id):
         try:
-            print(colorama.Fore.RED + f"\n\nId: {id}" + colorama.Fore.RESET)
             self._merge(id, self._cuenta)
             return True
         except Exception as e:

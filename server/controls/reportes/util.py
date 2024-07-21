@@ -109,7 +109,8 @@ class Util:
             p.SEGUNDO_APELLIDO,
             P.dni,
             e.codigo_estudiante,
-            p.EMAIL
+            p.EMAIL,
+            m.NRO_DE_MATRICULA
         FROM
             ESTUDIANTE_CURSA ec
         JOIN
@@ -118,6 +119,8 @@ class Util:
             ESTUDIANTE E ON ec.ESTUDIANTE_ID = E.ID
         JOIN
             PERSONA P ON E.ID = P.ID
+        JOIN
+            MATRICULA M ON ec.ID = M.ESTUDIANTE_CURSA_ID
         WHERE
             c.ID = :curso_id"""
         self.__cursor.execute(query, {"curso_id": curso_id})

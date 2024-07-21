@@ -32,7 +32,7 @@ function Roles_Usuarios() {
   ];
 
   return (
-    <div>
+    <div className="p-10">
       <Bread_Crumbs items={breadcrumbItems} />
       <div className="mt-10 font-poppins">
         <h1 className="text-3xl my-5">Administración de Roles de Usuario</h1>
