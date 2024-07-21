@@ -1,4 +1,4 @@
-import { BookOpen, Folder, Layers } from "lucide-react";
+import { BookOpen, Folder, Layers, BarChart2, Info } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import CourseSelector from "./searchs/CourseSelector";
 import StudentTable from "./searchs/StudentTable";
@@ -68,7 +68,7 @@ const Reportes = ({ actions }) => {
 
       <div className="p-6 rounded-lg shadow-md border border-gray-300 bg-white dark:bg-gray-800 dark:text-white dark:border-none flex-grow">
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
-          <div className="flex items-center lg:w-1/5">
+          <div className="flex items-center lg:w-1/3">
             <span className="mx-3">
               <strong>Curso:</strong>
             </span>
@@ -80,7 +80,7 @@ const Reportes = ({ actions }) => {
           </div>
 
           {selectedCourse && (
-            <div className="flex items-center ml-auto w-1/3">
+            <div className="flex items-center lg:w-1/3">
               <span className="mx-3">
                 <strong>Asignatura:</strong>
               </span>
@@ -92,6 +92,22 @@ const Reportes = ({ actions }) => {
                 course={selectedCourse}
                 onSelectSubject={handleSelectSubject}
                 resetKey={subjectResetKey}
+              />
+            </div>
+          )}
+
+          {selectedSubject && (
+            <div className="flex items-center lg:w-1/3">
+              <span className="mx-3">
+                <strong>Unidad:</strong>
+              </span>
+              <Layers
+                size={28}
+                className="text-gray-700 mr-4 dark:text-green-700"
+              />
+              <UnitSelector
+                subject={selectedSubject}
+                onSelectUnit={setSelectedUnit}
               />
             </div>
           )}
@@ -128,20 +144,9 @@ const Reportes = ({ actions }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center lg:w-1/5 justify-center">
-                  <span className="mx-3 font-bold">Unidad:</span>
-                  <Layers
-                    size={28}
-                    className="text-gray-700 mr-4 dark:text-green-700"
-                  />
-                  <UnitSelector
-                    subject={selectedSubject}
-                    onSelectUnit={setSelectedUnit}
-                  />
-                </div>
               </div>
-
-              <div className="mt-6">
+              <hr className="mb-10 border-gray-300 dark:border-gray-700" />
+              <div className="my-6">
                 <StudentTable
                   subject={selectedSubject}
                   unit={selectedUnit}

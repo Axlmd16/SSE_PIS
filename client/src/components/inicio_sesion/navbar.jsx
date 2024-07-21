@@ -117,7 +117,7 @@ export function Navbar() {
     <nav className="flex items-center justify-between bg-gray-800 p-4">
       <div>
         <Link to="/" className="text-2xl font-bold tracking-wider ml-2">
-          <span className="text-blue-400 hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-400 hover:text-transparent hover:bg-clip-text">
+          <span className="text-blue-400 hover:bg-gradient-to-r hover:from-blue-400 hover:via-purple-500 hover:to-purple-400 hover:text-transparent hover:bg-clip-text dark:text-green-600 dark:hover:bg-gradient-to-r dark:hover:from-green-600 dark:hover:via-blue-500 dark:hover:to-blue-400 dark:hover:text-transparent ">
             UNL
           </span>
         </Link>

@@ -2,24 +2,26 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pywhatkit
-import time  
+import time
+
 
 class Notificaciones:
-    
-    def __init__(self, correo_destinatario, numero_destinatario) -> None:
-        
+
+    def __init__(self, correo_destinatario, numero_destinatario, mensaje):
+
         self.correo_destinatario = correo_destinatario
         self.numero_destinatario = numero_destinatario
+        self.mensaje = mensaje
 
     def enviar_notificacion(self):
-        email_del_remitente = "leoare0412@gmail.com"  
+        email_del_remitente = "leoare0412@gmail.com"
         contrasena = "ylzb qpga bfrz bzbt"
 
         email_del_destinatario = self.correo_destinatario
         asunto_correo = "Envio de Test"
 
         numero_whatsapp = self.numero_destinatario
-        mensaje = "Hola prueba de test python!"
+        mensaje = self.mensaje
 
         mensaje_email = MIMEMultipart()
         mensaje_email["From"] = email_del_remitente
@@ -34,7 +36,9 @@ class Notificaciones:
         conexion_smtp.login(email_del_remitente, contrasena)
 
         texto_del_mensaje_email = mensaje_email.as_string()
-        conexion_smtp.sendmail(email_del_remitente, email_del_destinatario, texto_del_mensaje_email)
+        conexion_smtp.sendmail(
+            email_del_remitente, email_del_destinatario, texto_del_mensaje_email
+        )
 
         conexion_smtp.quit()
         print("Correo enviado correctamente a", email_del_destinatario)
@@ -42,8 +46,7 @@ class Notificaciones:
 
         pywhatkit.sendwhatmsg_instantly(numero_whatsapp, mensaje)
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     noticiaciones = Notificaciones("alexjtap2002@gmail.com", "593967967643")
     noticiaciones.enviar_notificacion()
-    
-    

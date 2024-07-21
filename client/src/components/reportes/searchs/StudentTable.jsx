@@ -11,6 +11,7 @@ import Statistics from "../estadisticas_curso";
 import Filtred_notes from "../filtred_notes";
 import CriteriaChart from "../grafico_criterios";
 import StudentChart from "../grafico_estudiantes";
+import exportToPDF from "../export_pdf";
 
 const MySwal = withReactContent(Swal);
 
@@ -259,95 +260,109 @@ const StudentTable = ({ subject, unit, course }) => {
     },
   };
 
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    const logoUrl = "/img/unl.png";
+  // const exportToPDF = () => {
+  //   const doc = new jsPDF();
+  //   const logoUrl = "/img/unl.png";
 
-    // Agregar logo con dimensiones ajustadas
-    doc.addImage(logoUrl, "PNG", 10, 10, 60, 30);
+  //   // Agregar logo con dimensiones ajustadas
+  //   doc.addImage(logoUrl, "PNG", 10, 10, 60, 30);
 
-    // Título del informe
-    doc.setFont("times", "bold");
-    doc.setFontSize(16);
-    doc.text("Informe de Rendimiento de Estudiantes", 75, 20);
+  //   // Título del informe
+  //   doc.setFont("times", "bold");
+  //   doc.setFontSize(16);
+  //   doc.text("Informe de Rendimiento de Estudiantes", 75, 20);
 
-    // Información del curso, asignatura, y unidad
-    doc.setFont("times", "normal");
-    doc.setFontSize(12);
-    doc.text(`Curso: ${course.ciclo_nombre} - ${course.paralelo}`, 10, 50);
-    doc.text(`Asignatura: ${subject.nombre}`, 10, 60);
-    if (unit) {
-      doc.text(
-        `Unidad: ${unit.unidad_nombre
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ")}`,
-        10,
-        70
-      );
-    }
+  //   // Información del curso, asignatura, y unidad
+  //   doc.setFont("times", "normal");
+  //   doc.setFontSize(12);
+  //   doc.text(`Curso: ${course.ciclo_nombre} - ${course.paralelo}`, 10, 50);
+  //   doc.text(`Asignatura: ${subject.nombre}`, 10, 60);
+  //   if (unit) {
+  //     doc.text(
+  //       `Unidad: ${unit.unidad_nombre
+  //         .split(" ")
+  //         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  //         .join(" ")}`,
+  //       10,
+  //       70
+  //     );
+  //   }
 
-    // Agregar más detalles
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 150, 50);
-    doc.text(`Generado por: Universidad Nacional de Loja`, 150, 60);
+  //   // Agregar más detalles
+  //   doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 110, 50);
+  //   doc.text(`Generado por: Universidad Nacional de Loja`, 110, 60);
 
-    // Crear tabla con los datos
-    doc.autoTable({
-      head: [columns.map((column) => column.name)],
-      body: filteredData.map((row) =>
-        columns.map((column) => column.selector(row))
-      ),
-      startY: 80,
-      theme: "grid", // O 'striped' para un estilo diferente
-      styles: {
-        font: "times",
-        fontSize: 10,
-        halign: "center",
-      },
-      headStyles: {
-        fillColor: [41, 128, 185],
-        textColor: [255, 255, 255],
-      },
-      bodyStyles: {
-        fillColor: [241, 196, 15, 0.2],
-      },
-      alternateRowStyles: {
-        fillColor: [255, 255, 255],
-      },
-    });
+  //   // Crear tabla con los datos
+  //   doc.setFontSize(10);
+  //   // Pkner otro tipo de fuente para la tabla sin afectar el resto del documento
 
-    // Agregar pie de página
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.text(
-        `Página ${i} de ${pageCount}`,
-        doc.internal.pageSize.getWidth() - 20,
-        doc.internal.pageSize.getHeight() - 10
-      );
-      doc.text(
-        "© 2023 Universidad de Ejemplo. Todos los derechos reservados.",
-        10,
-        doc.internal.pageSize.getHeight() - 10
-      );
-    }
+  //   doc.setFont("fira", "normal");
+  //   doc.autoTable({
+  //     head: [columns.map((column) => column.name)],
+  //     body: filteredData.map((row) =>
+  //       columns.map((column) => column.selector(row))
+  //     ),
+  //     startY: 80,
+  //     styles: {
+  //       font: "times",
+  //       fontSize: 10,
+  //       halign: "center",
+  //     },
+  //     headStyles: {
+  //       fillColor: [44, 62, 80],
+  //       textColor: [255, 255, 255],
+  //     },
+  //     bodyStyles: {
+  //       fillColor: [255, 255, 255],
+  //     },
+  //     alternateRowStyles: {
+  //       fillColor: [255, 255, 255],
+  //     },
+  //   });
 
-    // Guardar el archivo
-    doc.save("informe-estudiantes.pdf");
-  };
+  //   // Agregar pie de página
+  //   const pageCount = doc.internal.getNumberOfPages();
+  //   for (let i = 1; i <= pageCount; i++) {
+  //     doc.setPage(i);
+  //     doc.text(
+  //       `Página ${i} de ${pageCount}`,
+  //       doc.internal.pageSize.getWidth() - 20,
+  //       doc.internal.pageSize.getHeight() - 10
+  //     );
+  //     doc.text(
+  //       "© 2023 Universidad de Ejemplo. Todos los derechos reservados.",
+  //       10,
+  //       doc.internal.pageSize.getHeight() - 10
+  //     );
+  //   }
+
+  //   // Guardar el archivo
+  //   doc.save("informe-estudiantes.pdf");
+  // };
 
   const conditionalRowStyles = [
     {
       when: (row) => {
-        const notas = [];
-        if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
-        if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
-        if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
-        if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
-        if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
-        const promedio =
-          notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
-        return promedio < 7;
+        if (unit) {
+          const criteriaKeys = Object.keys(row).filter(
+            (key) => key.startsWith("criterio_") && !key.includes("nombre")
+          );
+          const sumCriteria = criteriaKeys.reduce(
+            (acc, key) => acc + (row[key] !== undefined ? row[key] : 0),
+            0
+          );
+          return sumCriteria < 7;
+        } else {
+          const notas = [];
+          if (row.unidad_1 !== undefined) notas.push(row.unidad_1);
+          if (row.unidad_2 !== undefined) notas.push(row.unidad_2);
+          if (row.unidad_3 !== undefined) notas.push(row.unidad_3);
+          if (row.unidad_4 !== undefined) notas.push(row.unidad_4);
+          if (row.unidad_5 !== undefined) notas.push(row.unidad_5);
+          const promedio =
+            notas.reduce((acc, curr) => acc + curr, 0) / notas.length;
+          return promedio < 7;
+        }
       },
       style: {
         backgroundColor: "#FF9594",
@@ -369,9 +384,18 @@ const StudentTable = ({ subject, unit, course }) => {
       denyButtonText: "Compartir",
     }).then((result) => {
       if (result.isConfirmed) {
-        exportToPDF();
+        exportToPDF(
+          course,
+          subject,
+          unit,
+          columns,
+          filteredData,
+          "download",
+          null,
+          actions
+        );
       } else if (result.isDenied) {
-        shareReport();
+        shareReport(course, subject, unit, columns, filteredData);
       }
     });
   };
@@ -384,6 +408,16 @@ const StudentTable = ({ subject, unit, course }) => {
       inputPlaceholder: "Email del destinatario",
     });
     if (email) {
+      exportToPDF(
+        course,
+        subject,
+        unit,
+        columns,
+        filteredData,
+        "share",
+        email,
+        actions
+      );
       Swal.fire(`Informe enviado a ${email}`);
     }
   };
@@ -397,7 +431,6 @@ const StudentTable = ({ subject, unit, course }) => {
             className="btn-md btn btn-info float-end"
           >
             <Download className="" />
-            PDF
           </button>
           <div className="flex items-center justify-end">
             <Filtred_notes
@@ -422,6 +455,7 @@ const StudentTable = ({ subject, unit, course }) => {
         )}
         expandOnRowClicked
         conditionalRowStyles={conditionalRowStyles}
+        theme="solarized"
       />
       <div>
         {filteredData && filteredData.length > 0 && (
