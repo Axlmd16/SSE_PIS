@@ -193,16 +193,22 @@ def actualizar_estudiante_cursa(id):
     """
     try:
         data = request.json
-        print("\n\n\n")
-        print(id)
-        print(data)
-        print("\n\n\n")
+
+        # Actualizar estudiante en cursa
         estudiante_cursa_control._estudiante_cursa._estudiante_id = data[
             "id_estudiante"
         ]
         estudiante_cursa_control._estudiante_cursa._cursa_id = data["id_cursa"]
         estudiante_cursa_control.update(id)
-        return jsonify({"msg": "Cursa guardada correctamente"}), 201
+
+        # Actualizar matrícula
+        mc._matricula._estudiante_cursa_id = id
+        mc._matricula._codigo_matricula = mc.generate_cod_matricula()
+        mc._matricula._nro_de_matricula = data["nro_de_matricula"]
+        mc._matricula._fecha_matricula = datetime.datetime.now()
+        mc.update(id)
+
+        return jsonify({"msg": "Estudiante cursa actualizado correctamente"}), 201
     except Exception as e:
         return jsonify({"msg": "Error al guardar el Cursa"}), 500
 
