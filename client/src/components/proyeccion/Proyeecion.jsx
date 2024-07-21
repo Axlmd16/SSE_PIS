@@ -1,4 +1,4 @@
-import { BookOpen, Folder, Layers } from "lucide-react";
+import { BookOpen, Folder, Layers, Download, Share2 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import Bread_Crumbs from "../inicio_sesion/bread_crumbs";
 import CourseSelector from "../reportes/searchs/CourseSelector";
@@ -7,6 +7,7 @@ import UnitSelector from "../reportes/searchs/UnitSelector";
 import TablaEstudianteProyeccion from "./TablaEstudianteProyeccion";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import exportToPDFProyeccion from "./exportToPDFProyeccion";
 
 const MySwal = withReactContent(Swal);
 
@@ -24,7 +25,7 @@ const Proyeccion = ({ actions }) => {
   //* PARA UNIDAD 2, PROYECCION UNIDAD 3
   const handleDataSelection = async (data) => {
     setInfoEstudiante(data);
-    console.log({ data });
+    // console.log({ data });
     setImage(null);
     setIsLoading(true);
     if ((infoEstudiante !== null)) {
@@ -35,15 +36,15 @@ const Proyeccion = ({ actions }) => {
       } catch (error) {
         console.error("Error al cargar la imagen", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
-    } 
+    }
   };
 
   //* PARA PROYECCION POR CRITERIO DE EVALUACION
   const handleDataSelectionCriterioEvaluacion = async (data) => {
     setInfoEstudiante(data);
-    console.log({ data });
+    // console.log({ data });
     setImage(null);
     setIsLoading(true);
     if (infoEstudiante !== null) {
@@ -53,7 +54,7 @@ const Proyeccion = ({ actions }) => {
       } catch (error) {
         console.error("Error al cargar la imagen", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
   };
@@ -61,7 +62,7 @@ const Proyeccion = ({ actions }) => {
   //* PARA UNIDAD 3, PROYECCION SUPLETORIO
   const handleDataSelectionSupletorio = async (data) => {
     setInfoEstudiante(data);
-    console.log({ data });
+    // console.log({ data });
     setImage(null);
     setIsLoading(true);
     const nota_promedio = data.unidad_3 + data.unidad_2 + data.unidad_1
@@ -74,14 +75,14 @@ const Proyeccion = ({ actions }) => {
       } catch (error) {
         console.error("Error al cargar la imagen", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
-    } 
+    }
   };
 
   //*PARA PROYECCION DE TODOS LOS ESTUDIANTES PARA NOTA DE UNIDAD 3
   const handleSelectAllStudents = async (data) => {
-    console.log({ data });
+    // console.log({ data });
     setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
@@ -92,59 +93,79 @@ const Proyeccion = ({ actions }) => {
       } catch (error) {
         console.error("Error al cargar la imagen", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
   };
 
+
   //*PARA HACER LA PROYECCION DE TODOS LOS ESTUDIANTES POR CRITERIO DE EVALUACION(DEPENDE DE UNIDAD)
   const handleSelectAllStudentsCriterios = async (data) => {
-    console.log({ data });
-    setInfoTodosEstudiantes(data); 
+    // console.log({ data });
+    setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
-    if (infoTodosEstudiantes !== null)  {
-      try{
+    if (infoTodosEstudiantes !== null) {
+      try {
         const imageUrl = await actions.estudiantes_proyecciones_parametros(data);
         setImage(imageUrl);
       } catch (error) {
         console.error("Error al cargar la imagen", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
   };
 
   //*PARA LA PROYECCION DE TODOS LOS ESTUDIANTES (NOTA FINAL)
-  const handleSelectAllStudentsFinalSupletorio = async (data) => { 
-    console.log({ data });
+  const handleSelectAllStudentsFinalSupletorio = async (data) => {
+    // console.log({ data });
     setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
-    if (infoTodosEstudiantes !== null)  {
-      try{
+    if (infoTodosEstudiantes !== null) {
+      try {
         const imageUrl = await actions.proyeccion_all_estudiantes_final_supletorio(data);
         setImage(imageUrl);
       } catch (error) {
         console.error("Error al cargar la imagen", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
   };
 
-  
+  //*PARA PROYECCION DE TODOS LOS ESTUDIANTES QUE ESTAN EN SUPLETORIO
+  const handleSelectAllStudentseEnSupletorio = async (data) => {
+    // console.log({ data });
+    setInfoTodosEstudiantes(data);
+    setImage(null);
+    setIsLoading(true);
+    if (infoTodosEstudiantes !== null) {
+      try {
+        const imageUrl = await actions.proyecciones_estudiantes_supletorio(data);
+        setImage(imageUrl);
+      } catch (error) {
+        console.error("Error al cargar la imagen", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+
+
   //*LLAMAR A LAS FUNCIONES DE PROYECCION
   const llamado_a_las_proyecciones = async (data) => {
-    if ("unidad_3" in data){
+    if ("unidad_3" in data) {
       await handleDataSelectionSupletorio(data)
-    }else if("unidad_2" in data){
+    } else if ("unidad_2" in data) {
       await handleDataSelection(data)
-    }else if("criterio_nombre_1" in data){
+    } else if ("criterio_nombre_1" in data) {
       await handleDataSelectionCriterioEvaluacion(data)
-    }else if("unidad_1" in data){
+    } else if ("unidad_1" in data) {
       setImage(null)
-        MySwal.fire({
+      MySwal.fire({
         icon: "info",
         title: "Informacion Insufeciente para Proyeccion",
         showConfirmButton: false,
@@ -155,21 +176,55 @@ const Proyeccion = ({ actions }) => {
 
   //*LLAMAR A LAS FUNCIONES DE PROYECCIONES DE TODOS LOS ESTUDIANTES
   const llamador_a_las_proyecciones_todos_estudiantes = async (data) => {
-    if ("unidad_3" in data[0]){
-      await handleSelectAllStudentsFinalSupletorio(data)
-    }else if("unidad_2" in data[0]){
-      await handleSelectAllStudents(data)
-    }else if("criterio_nombre_1" in data[0]){
-      await handleSelectAllStudentsCriterios(data)
-    }else if("unidad_1" in data[0]){
-      setImage(null)
-        MySwal.fire({
+    if ("unidad_3" in data[0]) {
+      // Mostrar ventana emergente con opciones
+      const result = await MySwal.fire({
+        title: 'Selecciona una opción',
+        text: '¿Qué quieres hacer?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Notas finales',
+        cancelButtonText: 'Ver estudiantes supletorios',
+      });
+
+      if (result.isConfirmed) {
+        // Opción "Notas finales" seleccionada
+        await handleSelectAllStudentsFinalSupletorio(data);
+      } else if (result.isDismissed) {
+        // Opción "Ver estudiantes supletorios" seleccionada
+        await handleSelectAllStudentseEnSupletorio(data);
+      }
+    } else if ("unidad_2" in data[0]) {
+      await handleSelectAllStudents(data);
+    } else if ("criterio_nombre_1" in data[0]) {
+      await handleSelectAllStudentsCriterios(data);
+    } else if ("unidad_1" in data[0]) {
+      setImage(null);
+      MySwal.fire({
         icon: "info",
-        title: "Informacion Insufeciente para Proyeccion",
+        title: "Información Insuficiente para Proyección",
         showConfirmButton: false,
         timer: 2000,
       });
     }
+  };
+
+  const handleDownloadPDF = () => {
+    exportToPDFProyeccion(image, selectedCourse, selectedSubject, selectedUnit, "download", null, actions);
+  };
+
+  const handleSharePDF = async () => {
+    // Solicitar email al usuario
+    const { value: email } = await MySwal.fire({
+      title: 'Enviar Proyeccion',
+      input: 'email',
+      inputLabel: 'Ingrese el gmail',
+      inputPlaceholder: 'Gmail',
+    });
+      if (email) {
+        exportToPDFProyeccion(image, selectedCourse, selectedSubject, selectedUnit, "share", email, actions);
+        Swal.fire(`Informe enviado a ${email}`);
+      }
   };
 
   const handleSelectCourse = (course) => {
@@ -295,16 +350,36 @@ const Proyeccion = ({ actions }) => {
                   <p className="text-white font-bold text-2xl">Cargando...</p>
                 ) : (
                   image && (
-                    <div className="">
-                      <h3 className="text-lg font-bold mb-4 text-white">
-                        PROYECCION:
-                      </h3>
-                      <img
-                        src={image}
-                        alt="Proyección de Nota"
-                        className="rounded-lg shadow-lg mx-auto"
-                      />
+                    <div>
+
+                      <div className="">
+                        <h3 className="text-lg font-bold mb-4 text-white">
+                          PROYECCION:
+                        </h3>
+                        <img
+                          src={image}
+                          alt="Proyección de Nota"
+                          className="rounded-lg shadow-lg mx-auto"
+                        />
+                      </div>
+                      <div className="mt-6 flex justify-center space-x-4">
+                        <button
+                          onClick={handleDownloadPDF}
+                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                        >
+                          <Download size={16} className="inline mr-2" />
+                          Descargar PDF
+                        </button>
+                        <button
+                          onClick={handleSharePDF}
+                          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                        >
+                          <Share2 size={16} className="inline mr-2" />
+                          Compartir PDF
+                        </button>
+                      </div>
                     </div>
+
                   )
                 )}
               </div>

@@ -21,8 +21,19 @@ const CambiarPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Función para validar la contraseña
+  const isPasswordValid = (password) => {
+    return password.length >= 8;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!isPasswordValid(newPassword)) {
+      setErrorMessage("La nueva contraseña debe tener al menos 8 caracteres");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setErrorMessage("Las contraseñas nuevas no coinciden");
       return;

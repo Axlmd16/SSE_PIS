@@ -18,23 +18,33 @@ const ResetPassword = () => {
 
   let { id_cuenta, token } = useParams();
 
+  // Función para validar la contraseña
+  const isPasswordValid = (password) => {
+    return password.length >= 8;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (password !== confirmPassword) {
-      setErrorMessage("Contraseñas nuevas no coinciden");
-      return
+    if (!isPasswordValid(password)) {
+      setErrorMessage("La contraseña debe tener al menos 8 caracteres");
+      return;
     }
 
-    const id = decrypt(id_cuenta, secretKey); 
+    if (password !== confirmPassword) {
+      setErrorMessage("Las contraseñas nuevas no coinciden");
+      return;
+    }
+
+    const id = decrypt(id_cuenta, secretKey);
 
     const data = {
       id_cuenta: id,
       password,
       token
-    }
+    };
 
-    const response = await actions.reset_password(data)
+    const response = await actions.reset_password(data);
 
     if (response) {
       MySwal.fire({
@@ -42,25 +52,20 @@ const ResetPassword = () => {
         text: 'Contraseña Cambiada Exitosamente!',
         icon: 'success'
       });
-      const path = `/`;
-      navigate(path);
-    }
-
-    else if (response === false){
+      navigate(`/`);
+    } else if (response === false) {
       MySwal.fire({
-        title: 'error',
+        title: 'Error',
         text: 'Error, Tiempo terminado para cambiar contraseña!',
         icon: 'error',
         showConfirmButton: false,
         timer: 3000,
       });
-      const path = `/`;
-      navigate(path);
+      navigate(`/`);
     }
-
   };
 
-   return (
+  return (
     <div className="w-full h-screen bg-cover bg-center flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-400 dark:bg-gradient-to-r dark:from-gray-900 dark:to-gray-700">
       <div className="bg-black bg-opacity-50 rounded-lg shadow-lg max-w-5xl w-full flex">
         <div className="w-1/2">
@@ -128,6 +133,6 @@ const ResetPassword = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ResetPassword;

@@ -16,6 +16,22 @@ const proyeccionesActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
+  proyecciones_estudiantes_supletorio: async (data) => {
+    const api = getStore().api;
+
+    try {
+      const response = await api.post(`/proyeccion_estudiantes_supletorio`, data, {
+        responseType: 'blob' 
+      });
+
+      const imageUrl = URL.createObjectURL(response.data);
+      return imageUrl;
+    } catch (error) {
+      console.error("Flux: Error al proyeccion_estudiantes_supletorio", error);
+      throw error;
+    }
+  },
+
   proyeccion_all_estudiantes_final_supletorio: async (data) => {
     const api = getStore().api;
 
