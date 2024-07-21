@@ -33,9 +33,8 @@ function DetailCourse() {
               Información Adicional
             </h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              Aquí puedes agregar más detalles sobre el curso, incluyendo
-              información sobre el profesor, objetivos del curso, y otros
-              aspectos relevantes.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Voluptatum eligendi est quidem quis rem.
             </p>
           </div>
         </div>
