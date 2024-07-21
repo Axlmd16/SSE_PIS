@@ -2,7 +2,16 @@ from datetime import date
 
 
 class Persona:
+    """
+    Representa a una persona con sus datos personales básicos.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
+        """
+        Inicializa una nueva instancia de la clase Persona con valores predeterminados.
+        """
         self.__id = None
         self.__primer_nombre = " "
         self.__segundo_nombre = " "
@@ -103,11 +112,20 @@ class Persona:
     def _genero_id(self, value):
         self.__genero_id = value
 
-    def __str__(self):
-        # return self._primer_nombre + " " + self._primer_apellido
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en cadena de la instancia de Persona.
+
+        :returns: Una cadena que representa la instancia de Persona.
+        """
         return f"{self._id} --> {self._primer_nombre} {self._primer_apellido}\n"
 
     def serializable(self) -> dict:
+        """
+        Convierte la instancia de Persona en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Persona.
+        """
         return {
             "id": self.__id,
             "primer_nombre": self.__primer_nombre,
@@ -124,6 +142,12 @@ class Persona:
 
     @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Persona a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la instancia de Persona.
+        :returns: Una instancia de Persona.
+        """
         persona = Persona()
         persona._id = data["id"]
         persona._primer_nombre = data["primer_nombre"]

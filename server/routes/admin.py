@@ -172,7 +172,7 @@ def update_subject(id):
     ac._asignatura._nombre = data["nombre"]
     ac._asignatura._descripcion = data["descripcion"]
     ac._asignatura._malla_id = data["malla_id"]
-    ac._asignatura._grupo_id = data["grupo_id"]
+    ac._asignatura._grupo_id = gc.list()[0]._id
     ac._asignatura._ciclo_id = data["ciclo_id"]
     ac._asignatura._total_horas = data["total_horas"]
     if ac.update(id):

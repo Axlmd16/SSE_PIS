@@ -4,16 +4,15 @@ from controls.inicio_sesion.cuenta_control import CuentaControl
 from controls.inicio_sesion.rol_control import RolControl
 from controls.inicio_sesion.persona_control import PersonaControl
 
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required
 from controls.inicio_sesion.utils import Util
 from controls.inicio_sesion.permiso_control import PermisoControl
 from controls.inicio_sesion.permiso_rol_control import RolPermisoControl
 from controls.inicio_sesion.rol_persona_control import RolPersonaControl
 
-from controls.tda.list.utilidades import verify_password 
+from controls.tda.list.utilidades import verify_password
 
 auth = Blueprint("auth", __name__)
-
 
 rc = RolControl()
 cc = CuentaControl()
@@ -22,16 +21,21 @@ ppc = PermisoControl()
 rpc = RolPermisoControl()
 prc = RolPersonaControl()
 
-# ? Obtener el correo del docente
+
 @auth.route("/obtener_correo_docente", methods=["POST"])
 def obtener_correo_docente():
+    """
+    Obtiene el correo electrónico de un docente basado en su ID.
+
+    :param id_docente: ID del docente cuyo correo se desea obtener.
+    :returns: Correo electrónico del docente en formato JSON.
+    :raises Exception: Si ocurre un error al obtener el correo del docente.
+    """
     try:
         data = request.get_json()
-        # print(data)
         id_docente = int(data)
         docente_encontrado = cc._list().search_models_binary("persona_id", id_docente)
         correo_docente = docente_encontrado._usuario
-        # print(correo_docente)
         return jsonify(correo_docente), 200
     except Exception as e:
         print(f"Error al obtener el correo del docente: {e}"), 404
@@ -39,6 +43,14 @@ def obtener_correo_docente():
 
 @auth.route("/login", methods=["POST"])
 def login():
+    """
+    Autentica a un usuario y genera un token de acceso.
+
+    :param usuario: Nombre de usuario.
+    :param clave: Contraseña del usuario.
+    :returns: Token de acceso JWT en formato JSON.
+    :raises Exception: Si ocurre un error al buscar el usuario o la contraseña no coincide.
+    """
     username = request.json.get("usuario", None)
     password = request.json.get("clave", None)
 
@@ -49,8 +61,10 @@ def login():
         print(e)
         return jsonify({"msg": "Error al buscar el usuario"}), 500
 
-    if (user_found._usuario == username and user_found._clave == password) or (user_found._usuario == username and verify_password(password, user_found._clave)):
-        
+    if (user_found._usuario == username and user_found._clave == password) or (
+        user_found._usuario == username and verify_password(password, user_found._clave)
+    ):
+
         permisos = Util().get_permisos(user_found._persona_id)
         roles = Util().get_roles(user_found._persona_id)
 
@@ -68,9 +82,14 @@ def login():
     return jsonify({"msg": "Bad username or password"}), 401
 
 
-# CRUD para roles
 @auth.route("/roles", methods=["POST"])
 def create_rol():
+    """
+    Crea un nuevo rol.
+
+    :returns: Datos del rol creado en formato JSON.
+    :raises Exception: Si ocurre un error al guardar el rol.
+    """
     data = request.json
     rc._rol._nombre = data["nombre"]
     rc._rol._descripcion = data["descripcion"]
@@ -80,9 +99,15 @@ def create_rol():
         return jsonify({"msg": "Error al guardar el rol"}), 500
 
 
+@jwt_required
 @auth.route("/roles", methods=["GET"])
-# @jwt_required
 def get_rols():
+    """
+    Obtiene todos los roles.
+
+    :returns: Datos de los roles en formato JSON.
+    :raises Exception: Si ocurre un error al obtener los roles.
+    """
     data = rc._to_dict()
     return jsonify(data), 201
 

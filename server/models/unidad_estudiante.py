@@ -1,5 +1,14 @@
 class Unidad_Estudiante:
+    """
+    Representa la relación entre una unidad académica y un estudiante, incluyendo la nota obtenida.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self) -> None:
+        """
+        Inicializa una nueva instancia de la clase Unidad_Estudiante con valores predeterminados.
+        """
         self.__id = None
         self.__unidad_id = 0
         self.__estudiante_cursa_id = 0
@@ -38,9 +47,19 @@ class Unidad_Estudiante:
         self.__nota_unidad = value
 
     def __str__(self) -> str:
+        """
+        Devuelve una representación en cadena de la instancia de Unidad_Estudiante.
+
+        :returns: Una cadena que representa la instancia de Unidad_Estudiante.
+        """
         return f"Unidad: {self.__unidad_id} Estudiante_Cursa: {self.__estudiante_cursa_id} Nota: {self.__nota_unidad}"
 
-    def serializable(self):
+    def serializable(self) -> dict:
+        """
+        Convierte la instancia de Unidad_Estudiante en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Unidad_Estudiante.
+        """
         return {
             "id": self.__id,
             "unidad_id": self.__unidad_id,
@@ -48,7 +67,14 @@ class Unidad_Estudiante:
             "nota_unidad": self.__nota_unidad,
         }
 
-    def deserializable(data: dict):
+    @staticmethod
+    def deserializable(data: dict) -> "Unidad_Estudiante":
+        """
+        Crea una instancia de Unidad_Estudiante a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la instancia de Unidad_Estudiante.
+        :returns: Una instancia de Unidad_Estudiante.
+        """
         unidad_estudiante = Unidad_Estudiante()
         unidad_estudiante._id = data["id"]
         unidad_estudiante._unidad_id = data["unidad_id"]
