@@ -9,7 +9,17 @@ import time
 import asyncio
 
 class AsignacionControl(Data_Access_Object):
+    """
+    Controlador para gestionar las asignaciones de docentes a asignaturas y periodos académicos.
+    
+    Hereda de Data_Access_Object para realizar operaciones de base de datos.
+    """
     def __init__(self):
+        """
+        Inicializa una nueva instancia de AsignacionControl.
+        
+        Inicializa los controladores necesarios para gestionar docentes, periodos académicos y asignaturas.
+        """
         super().__init__(Asignacion)
         self.__asignacion = None
         self.__docente_control = DocenteControl()
@@ -18,19 +28,32 @@ class AsignacionControl(Data_Access_Object):
 
     @property
     def _asignacion(self):
+        """
+        Obtiene la asignacion actual. Si no hay un docente actual, se crea uno nuevo.
+        """
         if self.__asignacion is None:
             self.__asignacion = Asignacion()
         return self.__asignacion
 
     @_asignacion.setter
     def _asignacion(self, value):
+        """
+        Guarda la asignación actual en la base de datos y resetea la asignación actual a None.
+        """
         self.__asignacion = value
-
-    def save(self):
         self._save(self._asignacion)
         self._asignacion = None
 
     def update(self, id):
+        """
+        Actualiza la asignación con el ID proporcionado.
+        
+        Args:
+            id (int): El ID de la asignación a actualizar.
+        
+        Returns:
+            bool: True si la actualización fue exitosa, False en caso contrario.
+        """
         try:
             self._merge(id, self._asignacion)
             return True
@@ -39,9 +62,21 @@ class AsignacionControl(Data_Access_Object):
             return False
 
     def list(self):
+        """
+        Lista todas las asignaciones.
+        
+        Returns:
+            list: Lista de todas las asignaciones.
+        """
         return self._list()
     
     async def get_asignacion_info_completa(self) -> list:
+        """
+        Obtiene la información completa de todas las asignaciones de forma asíncrona.
+        
+        Returns:
+            list: Lista con la información completa de todas las asignaciones.
+        """
         try:
             return await self.lista_asignacion_info_completa()
         except Exception as e:
@@ -49,18 +84,15 @@ class AsignacionControl(Data_Access_Object):
             return []
     
     async def lista_asignacion_info_completa(self):
+        """
+        Crea una lista con la información de todas las asignaciones.
+        
+        Returns:
+            list: Lista con la información completa de todas las asignaciones o vacía si no hay asignaciones.
+        """
         try:
             inicio = time.time()
             asignacion_info_completa = []
-
-            #* Cargar los datos en listas
-            # tasks = [
-            #     asyncio.to_thread(self._list()),
-            #     asyncio.to_thread(self.__docente_control.list_with_person_details()),
-            #     asyncio.to_thread(self.__periodo_academico_control._list()),
-            #     asyncio.to_thread(self.__asignatura_control._list())
-            # ]
-            # data_asignacion_docente, data_docentes, data_periodos_academicos, data_asignaturas = await asyncio.gather(*tasks)
 
             data_asignacion_docente = self._list()
             data_docentes = self.__docente_control.list_with_person_details()

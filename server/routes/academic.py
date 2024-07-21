@@ -30,6 +30,12 @@ tipo_identificacion_control = TipoIdeControl()
 @jwt_required()
 @academic.route("/generos", methods=["GET"])
 def get_generos_estudiantes():
+    """
+    Obtiene la lista de diccionarios de generos.
+
+    Returns:
+        Response: JSON con la lista de diccionarios de generos y un codigo de estado HTTP 200.
+    """
     data = genero_control._to_dict()
     return jsonify(data), 200
 
@@ -38,6 +44,12 @@ def get_generos_estudiantes():
 @jwt_required()
 @academic.route("/tipo_identificacion", methods=["GET"])
 def get_tipo_identificacion():
+    """
+    Obtiene la lista de diccionarios  de tipo identificacion.
+
+    Returns:
+        Response: JSON con la lista de diccionarios  de tipo identificacion y un codigo de estado HTTP 200.
+    """
     data = tipo_identificacion_control._to_dict()
     return jsonify(data), 200
 
@@ -46,21 +58,14 @@ def get_tipo_identificacion():
 @jwt_required()
 @academic.route("/asignaturas", methods=["GET"])
 def get_asignaturas():
+    """
+    Obtiene la lista de diccionarios  de generos.
+
+    Returns:
+        Response: JSON con la lista de diccionarios de generos y un codigo de estado HTTP 200.
+    """
     data = asignatura_control._to_dict()
     return jsonify(data), 200
-
-
-# ? OBTENER TODOS LOS PERIODOS ACADEMICOS
-# @jwt_required()
-# @academic.route("/periodos_academicos", methods=["GET"])
-# def get_periodos_academicos():
-#     data = periodo_academico_control._to_dict()
-#     for periodo in data:
-#         periodo["fecha_inicio"] = periodo["fecha_inicio"].strftime("%d/%m/%Y")
-#         periodo["fecha_fin"] = periodo["fecha_fin"].strftime("%d/%m/%Y")
-
-#     return jsonify(data), 200
-
 
 # * -----------Estudiantes------------
 
@@ -69,14 +74,33 @@ def get_asignaturas():
 @jwt_required
 @academic.route("/estudiantes", methods=["GET"])
 def get_estudiantes():
+    """
+    Obtiene la lista de diccionarios de estudiantes.
+
+    Returns:
+        Response: JSON con la lista de diccionarios de estudiantes y un codigo de estado HTTP 200.
+    """
     data_estudiantes = estudiante_control.list_with_person_details()
-    return jsonify(data_estudiantes), 201
+    return jsonify(data_estudiantes), 200
 
 
 # ? Guardar un estudiante
 @jwt_required
 @academic.route("/estudiantes", methods=["POST"])
 def guardar_estudiante():
+    """
+    Guarda un nuevo estudiante en el sistema.
+
+    Esta solicitud POST recibe los datos del estudiante en formato JSON. Los datos 
+    necesarios incluyen nombres, apellidos, telefono, DNI, email, fecha de nacimiento,
+    tipo de identificacion, id genero y codigo de estudiante.
+
+    Returns:
+        Response:
+                - Si el estudiante se guarda correctamente, se devuelve un mensaje de exito con un codigo de estado HTTP 201.
+                - Si falta algun campo, se devuelve un mensaje de error con un cdigo de estado HTTP 400.
+                - Si ocurre un error al guardar el estudiante, se devuelve un mensaje de error con un cdigo de estado HTTP 500.
+    """
     data = request.get_json()
     required_fields = [
         "primer_nombre",
@@ -120,6 +144,20 @@ def guardar_estudiante():
 @jwt_required
 @academic.route("/estudiantes/<int:id>", methods=["PUT"])
 def update_estudiante(id):
+    """
+    Modifica los detalles de un estudiante.
+
+    Esta solicitud PUT recibe los datos actualizados del estudiante en formato JSON.
+    Se requiere que el identificador del estudiante se pase como un parametro en la URL.
+    Los datos a actualizar incluyen nombres, apellidos, telefono, DNI, email, fecha de nacimiento,
+    tipo de identificacion, genero y codigo de estudiante. 
+
+    Args:
+        id (int): Identificador del estudiante a modificar.
+
+    Returns:
+        Response: Un objeto de respuesta JSON con los datos actualizados del estudiante y un codigo de estado HTTP 201.
+    """
     try:
         data = request.json
         persona_control._persona._primer_nombre = data["primer_nombre"]
@@ -152,6 +190,16 @@ def update_estudiante(id):
 @jwt_required
 @academic.route("/obtener_docente", methods=["POST"])
 def obtener_docente():
+    """
+    Obtiene la informacion de un docente mediante un ID.
+
+    Este solicitud POST recibe el ID del docente en la solicitud en formato JSON.
+    Busca en la lista de docentes y devuelve la informacion del docente si se encuentra.
+
+    Returns:
+        Response: Un objeto de respuesta JSON con la informacion del docente y un codigo de estado HTTP 200 si el docente es encontrado.
+                  Si no se encuentra el docente, devuelve un mensaje de error con un codigo de estado HTTP 401.
+    """
     data = request.get_json()
     # print(data)
     id_docente = int(data)
@@ -167,7 +215,7 @@ def obtener_docente():
             docente_encontrado = docente
             break
 
-    # Comprobar si se encontró el docente
+    # Comprobar si se encontro el docente
     if docente_encontrado:
         # print("\n\n\n\nDocente Encontrado")
         # print(docente_encontrado)
@@ -175,21 +223,39 @@ def obtener_docente():
         return jsonify(docente_encontrado), 200
     else:
         print("Docente no encontrado")
-        return jsonify({"error": "Docente no encontrado"}), 401
+        return jsonify({"error": "Docente no encontrado"}), 400
 
 
 # ? Listar todos los docentes
 @jwt_required
 @academic.route("/docentes", methods=["GET"])
 def get_docentes():
+    """
+    Obtiene la lista de diccionarios de docentes.
+
+    Returns:
+        Response: JSON con la lista de diccionarios de docentes y un codigo de estado HTTP 200.
+    """
     data_docentes = docente_control.list_with_person_details()
-    return jsonify(data_docentes), 201
+    return jsonify(data_docentes), 200
 
 
 # ? Guardar un docente
 @jwt_required
 @academic.route("/docentes", methods=["POST"])
 def guardar_docente():
+    """
+    Guarda un nuevo docente.
+
+    Esta solicitud POST recibe los datos del docente en formato JSON. Los datos 
+    necesarios incluyen nombres, apellidos, telefono, DNI, email, fecha de nacimiento,
+    tipo de identificacion, id genero, titulo, experiencia laboral y cubiculo.
+
+    Returns:
+        Response:
+                - Si el estudiante se guarda correctamente, se devuelve un mensaje de exito con un codigo de estado HTTP 201.
+                - Si ocurre un error al guardar el estudiante, se devuelve un mensaje de error con un cdigo de estado HTTP 500.
+    """
     data = request.get_json()
     primer_nombre = data["primer_nombre"]
     segundo_nombre = data["segundo_nombre"]
@@ -229,6 +295,21 @@ def guardar_docente():
 @jwt_required
 @academic.route("/docentes/<int:id>", methods=["PUT"])
 def update_docente(id):
+    """
+    Modifica la informacion de un docente.
+
+    Esta solicitud PUT recibe los datos actualizados del docente en formato JSON. Se requiere que 
+    el identificador del estudiante se pase como un parametro en la URL. Los datos a actualizar 
+    incluyen nombres, apellidos, telefono, DNI, email, fecha de nacimiento, tipo de identificacion, 
+    id genero, titulo, experiencia laboral y cubiculo. 
+
+    Args:
+        id (int): Identificador del docente a modificar.
+
+    Returns:
+        Response: Un objeto de respuesta JSON con los datos actualizados del docente y un codigo de estado HTTP 201.
+                  Si ocurre un error, se devuelve un mensaje de error con un codigo de estado HTTP 500.
+    """
     try:
         data = request.json
         persona_control._persona._primer_nombre = data["primer_nombre"]
@@ -260,6 +341,12 @@ def update_docente(id):
 @jwt_required
 @academic.route("/asignacion_docente_asignatura", methods=["GET"])
 def get_asignacion_docente_info_completa():
+    """
+    Obtiene la lista de diccionarios de asignaciones de docentes.
+
+    Returns:
+        Response: JSON con la lista de diccionarios de asignaciones de docentes y un codigo de estado HTTP 200.
+    """
     asignacion_info_completa = run(
         asignacion_docente_control.get_asignacion_info_completa()
     )
@@ -270,6 +357,17 @@ def get_asignacion_docente_info_completa():
 @jwt_required
 @academic.route("/asignacion_docente_asignatura", methods=["POST"])
 def guardar_docente_asignado():
+    """
+    Guarda un nuevo asignacion de docente.
+
+    Esta solicitud POST recibe los datos de la asignacion del docente en formato JSON. Los datos 
+    necesarios incluyen id del docente, id de la asignatura, id del periodo acadademico.
+
+    Returns:
+        Response:
+                - Si la asignacion docente se guarda correctamente, se devuelve un mensaje de exito con un codigo de estado HTTP 201.
+                - Si ocurre un error al guardar la asignacion docente, se devuelve un mensaje de error con un cdigo de estado HTTP 500.
+    """
     try:
         data = request.json
         asignacion_docente_control._asignacion._docente_id = data["id_docente"]
@@ -279,16 +377,30 @@ def guardar_docente_asignado():
         ]
         asignacion_docente_control.save()
 
-        return jsonify({"message": "Asignación guardada correctamente"}), 201
+        return jsonify({"message": "Asignacion guardada correctamente"}), 201
 
     except Exception as e:
         print(f"Error al guardar el docente: {e}")
-        return jsonify({"error": "Error al guardar la asignación"}), 500
+        return jsonify({"error": "Error al guardar la asignacion"}), 500
 
 
 @jwt_required
 @academic.route("/asignacion_docente_asignatura/<int:id>", methods=["PUT"])
 def update_docente_asignado(id):
+    """
+    Modifica la informacion de una asignacion de docente.
+
+    Esta solicitud PUT recibe los datos actualizados de la asignacion de docente en formato JSON.
+    Se requiere que el identificador de la asignacion de docente se pase como un parametro en la URL.
+    Los datos a actualizar incluyen id del docente, id de la asignatura y id del periodo acadademico. 
+
+    Args:
+        id (int): Identificador del docente a modificar.
+
+    Returns:
+        Response: Un objeto de respuesta JSON con los datos actualizados del docente y un codigo de estado HTTP 201.
+                  Si ocurre un error, se devuelve un mensaje de error con un codigo de estado HTTP 500.
+    """
     try:
         data = request.json
         # print("\n\n\n\n")
@@ -301,15 +413,29 @@ def update_docente_asignado(id):
             "id_periodo_academico"
         ]
         asignacion_docente_control.update(id)
-        return jsonify({"message": "Asignación guardada correctamente"}), 201
+        return jsonify({"message": "Asignacion guardada correctamente"}), 201
 
     except Exception as e:
         print(f"Error al guardar el docente_asignatura: {e}")
-        return jsonify({"error": "Error al guardar la asignación"}), 500
+        return jsonify({"error": "Error al guardar la asignacion"}), 500
 
 
 @jwt_required
 @academic.route("/cursos_docente/<int:id>", methods=["GET"])
 def get_cursos_docente(id):
+    """
+    Obtener la lista de cursos asociados a un docente fico.
+
+    Esta solitud GET permite obtener todos los cursos en los que un docente,
+    mediante su ID. Se requiere que el identificador se pase como un parametro 
+    en la URL.
+
+    Args:
+        id (int): El identificador del docente el cual se obtendra los cursos
+
+    Returns:
+        Response: Una respuesta JSON con la lista de cursos asociados al docente y
+                  un codigo de estado HTTP 200  
+    """
     data = Util().get_cursos_por_docente(id)
     return jsonify(data), 200

@@ -255,7 +255,7 @@ const StudentTable = ({ subject, unit, course }) => {
       style: {
         fontSize: "11px",
         fontWeight: "bold",
-        textTransform: "uppercase",
+        textTransform: "uppercase", 
       },
     },
   };

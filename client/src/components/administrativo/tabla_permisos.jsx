@@ -152,14 +152,14 @@ const TablePermisos = ({ actions, store, id }) => {
           />
           <button
             id="btn-update"
-            className="btn-ghost"
+            className="btn-ghost text-blue-500 dark:text-purple-400"
             onClick={() => handleUpdate(row)}
-          >
+            >
             <Pencil size={20} />
           </button>
           <button
             id="btn-delete"
-            className="btn-ghost mx-2"
+            className="btn-ghost text-red-500 dark:text-green-400"
             onClick={() => handleDelete(row)}
           >
             <Trash2 size={20} />
@@ -182,12 +182,31 @@ const TablePermisos = ({ actions, store, id }) => {
         fontSize: "11px",
         fontWeight: "bold",
         textTransform: "uppercase",
+        color: 'var(--text-primary)',
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)',
+        backgroundColor: 'var(--bg-cell)',
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)',
+        color: 'var(--text-secondary)',
       },
     },
   };
 
   return (
-    <div>
+    <div className="dark:bg-gray-800 dark:text-gray-200">
       <SearchBar handleSearch={handleSearch} />
       <DataTable
         columns={columns}
@@ -203,7 +222,7 @@ const TablePermisos = ({ actions, store, id }) => {
       />
       <div className="flex justify-end mt-4">
         <button
-          className={`btn ${changes ? "btn-primary" : "btn-disabled"}`}
+          className={`btn dark:bg-green-700 dark:hover:bg-green-800 dark:text-white dark:border-none ${changes ? "btn-primary" : "btn-disabled"}`}
           onClick={handleSave}
           disabled={!changes}
         >
