@@ -12,22 +12,53 @@ import time
 
 
 class EstudianteControl(Data_Access_Object):
+    """
+    Controlador para gestionar operaciones relacionadas con los estudiantes.
+    
+    Hereda de Data_Access_Object para realizar operaciones de base de datos.
+    """
     def __init__(self):
+        """
+        Inicializa una nueva instancia de DocenteControl.
+        
+        Inicializa el controlador de persona.
+        """
         super().__init__(Estudiante)
         self.__estudiante = None
         self.__persona_control = PersonaControl()
 
     @property
     def _estudiante(self):
+        """
+        Obtiene el estudiante actual. Si no hay un estudiante actual, se crea uno nuevo.
+
+        Returns:
+            Retorna la instancia actual de estudiante.
+        """
         if self.__estudiante is None:
             self.__estudiante = Estudiante()
         return self.__estudiante
 
     @_estudiante.setter
     def _estudiante(self, value):
+        """
+        Establece el estudiante actual.
+        
+        Args:
+            value (Estudiante): La instancia de Estudiante a establecer.
+        """
         self.__estudiante = value
 
     def save(self, *args) -> bool:
+        """
+        Guarda un nuevo estudiante en la base de datos.
+
+        Args:
+            *args: Argumentos que contienen la información del estudiante.
+
+        Returns:
+            bool: True si se guarda correctamente, False en caso contrario.
+        """
         try:
             persona = PersonaControl()
             cuenta = CuentaControl()
@@ -62,6 +93,15 @@ class EstudianteControl(Data_Access_Object):
             return False
 
     def update(self, id) -> bool:
+        """
+        Actualiza el docente con el ID proporcionado.
+        
+        Args:
+            id (int): El ID de el docente a actualizar.
+        
+        Returns:
+            bool: True si la actualización fue exitosa, False en caso contrario.
+        """
         try:
             self._merge(id, self._estudiante)
             return True
@@ -70,9 +110,21 @@ class EstudianteControl(Data_Access_Object):
             return False
 
     def list(self):
+        """
+        Lista todas los estudantes.
+        
+        Returns:
+            list: Lista de todas los estudiantes.
+        """
         return self._list()
 
     def list_with_person_details(self) -> list:
+        """
+        Lista todos los estudiantes con los detalles de la persona asociada.
+
+        Returns:
+            list: Una lista de diccionarios que contiene detalles de los estudiantes y sus personas asociadas.
+        """
         try:
             return self._list_estudiante()
         except Exception as e:
@@ -82,6 +134,13 @@ class EstudianteControl(Data_Access_Object):
     # * Metodo para obtener toda la informacion de los estudiantes
 
     def _list_estudiante(self) -> list:
+        """
+        Lista todos los estudiantes con información completa.
+
+        Returns:
+            list: Una Linkedlist que contiene información completa de los estudiantes (incluye informacion de la persona asociada).
+
+        """
         try:
             inicio_tiempo = time.time()
             estudiante_info_completa = []
