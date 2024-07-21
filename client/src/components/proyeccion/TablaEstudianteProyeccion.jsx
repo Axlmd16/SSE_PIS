@@ -260,6 +260,35 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
     setFilteredData(sortedData.slice(0, parseInt(studentCount)));
   }, [performanceFilter, studentCount, estudiantes, unit]);
 
+  const customStyles = {
+    headCells: {
+      style: {
+        fontSize: "11px",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        color: 'var(--text-primary)',
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)',
+        backgroundColor: 'var(--bg-cell)',
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)',
+        color: 'var(--text-secondary)',
+      },
+    },
+  };
+
   return (
     <div className="overflow-x-auto mt-4">
       <div className="mt-4 flex justify-center">
@@ -274,6 +303,7 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
         columns={columnsWithButton}
         data={filteredData}
         progressPending={loading}
+        customStyles={customStyles}
         pagination
         highlightOnHover
         pointerOnHover

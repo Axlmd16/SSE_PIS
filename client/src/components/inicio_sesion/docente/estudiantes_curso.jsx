@@ -102,17 +102,36 @@ function Estudiantes_Curso({ actions, store }) {
         fontSize: "11px",
         fontWeight: "bold",
         textTransform: "uppercase",
+        color: 'var(--text-primary)',
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)',
+        backgroundColor: 'var(--bg-cell)',
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)',
+        color: 'var(--text-secondary)',
       },
     },
   };
 
   return (
-    <div>
+    <div className="dark:bg-gray-800 h-screen">
       <div className="flex justify-between items-center w-full mb-4">
-        <span className="text-2xl">Estudiantes del Curso</span>
+        <span className="text-2xl m-4 font-bold dark:text-cyan-400">Estudiantes del Curso</span>
       </div>
       <div className="grid grid-cols-1 gap-4">
-        <div className="bg-white rounded-lg overflow-hidden shadow-md mt-4">
+        <div className="bg-white rounded-lg overflow-hidden shadow-md mt-4 dark:bg-gray-600">
           <div className="p-4">
             <div>
               <SearchBar handleSearch={handleSearch} />

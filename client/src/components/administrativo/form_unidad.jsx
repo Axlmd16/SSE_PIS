@@ -66,10 +66,10 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
       <form className="grid" onSubmit={handleSubmit(onSubmit)}>
         <div className="my-2">
           <div className="text-xl font-poppins text-gray-900 font-bold text-center">
-            <h2>{update ? "Actualizar unidad" : "Agregar nueva unidad"}</h2>
+            <h2 className="dark:text-green-600">{update ? "Actualizar unidad" : "Agregar nueva unidad"}</h2>
             <br />
           </div>
-          <label className="text-black text-sm" htmlFor="nombre">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nombre">
             Tema
           </label>
           <input
@@ -85,7 +85,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
         </div>
         {/* Input de nro de unidad */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="nro_unidad">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nro_unidad">
             Nro. de unidad
           </label>
           <input
@@ -106,7 +106,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Input de nro de semanas */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="nro_semanas">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nro_semanas">
             Nro. de semanas
           </label>
           <input
@@ -129,7 +129,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Input de fecha_inicio */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="fecha_inicio">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="fecha_inicio">
             Fecha de inicio
           </label>
           <input
@@ -150,7 +150,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Input de fecha_fin */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="fecha_fin">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="fecha_fin">
             Fecha de finalización
           </label>
           <input
@@ -177,7 +177,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Botón de registro */}
         <div className="flex justify-end">
-          <button className="btn btn-active" type="submit">
+          <button className="btn btn-active dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" type="submit">
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>
