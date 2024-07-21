@@ -61,6 +61,10 @@ def login():
         print(e)
         return jsonify({"msg": "Error al buscar el usuario"}), 500
 
+    # Verificar si el usuario está activo
+    if user_found._estado == 0:
+        return jsonify({"msg": "La cuenta está desactivada"}), 403
+
     if (user_found._usuario == username and user_found._clave == password) or (
         user_found._usuario == username and verify_password(password, user_found._clave)
     ):
@@ -80,6 +84,36 @@ def login():
         return jsonify(access_token=access_token), 200
 
     return jsonify({"msg": "Bad username or password"}), 401
+
+
+@auth.route("/accounts/<int:id>", methods=["PUT"])
+def actualizar_cuenta(id):
+    """
+    Actualiza el estado de una cuenta de usuario.
+
+    :param id: ID de la cuenta a actualizar.
+    :returns: Mensaje de éxito en formato JSON.
+    :raises Exception: Si ocurre un error al actualizar la cuenta.
+    """
+    data = request.get_json()
+    estado = data.get("estado")
+
+    try:
+        cuenta = cc._find(id)
+        cc._cuenta._usuario = cuenta["usuario"]
+        cc._cuenta._clave = cuenta["clave"]
+        cc._cuenta._persona_id = cuenta["persona_id"]
+        cc._cuenta._estado = estado
+        cc.update(id)
+        return (
+            jsonify(
+                {"msg": f"Cuenta {'activada' if estado else 'desactivada'} con éxito"}
+            ),
+            200,
+        )
+    except Exception as e:
+        print(f"Error al actualizar la cuenta: {e}")
+        return jsonify({"msg": "Error al actualizar la cuenta"}), 500
 
 
 @auth.route("/roles", methods=["POST"])
@@ -114,18 +148,39 @@ def get_rols():
 
 @auth.route("/roles/<int:id>", methods=["GET"])
 def get_rol(id):
+    """
+    Obtiene un rol basado en su ID.
+
+    :param id: ID del rol a obtener.
+    :returns: Datos del rol en formato JSON.
+    :raises Exception: Si ocurre un error al obtener el rol.
+    """
     rol = rc._find(id)
     return jsonify(rol), 201
 
 
 @auth.route("/roles/<int:id>", methods=["DELETE"])
 def delete_rol():
-    # TODO: Buscar por id en la lista de roles y eliminar el objeto
+    """
+    Elimina un rol basado en su ID.
+
+    :param id: ID del rol a eliminar.
+    :returns: Mensaje de éxito en formato JSON.
+    :raises Exception: Si ocurre un error al eliminar el rol.
+    """
+
     return "recieved request to delete user"
 
 
 @auth.route("/roles/<int:id>", methods=["PUT"])
 def update_rol(id):
+    """
+    Actualiza un rol basado en su ID.
+
+    :param id: ID del rol a actualizar.
+    :returns: Datos del rol actualizado en formato JSON.
+    :raises Exception: Si ocurre un error al actualizar el rol.
+    """
     data = request.json
 
     rc._rol._nombre = data["nombre"]
@@ -139,12 +194,27 @@ def update_rol(id):
 
 @auth.route("/roles/<int:id>/permissions", methods=["GET"])
 def get_permisos_by_rol(id):
+    """
+    Obtiene los permisos asignados a un rol basado en su ID.
+
+    :param id: ID del rol cuyos permisos se desean obtener.
+    :returns: Datos de los permisos en formato JSON.
+    :raises Exception: Si ocurre un error al obtener los permisos.
+    """
+
     permisos = Util().get_permisos_by_rol(id)
     return jsonify(permisos), 201
 
 
 @auth.route("/roles/<int:id>/permissions", methods=["POST"])
 def add_permiso_to_rol(id):
+    """
+    Asigna un permiso a un rol.
+
+    :param id: ID del rol al que se le asignará el permiso.
+    :returns: Datos del permiso asignado en formato JSON.
+    :raises Exception: Si ocurre un error al asignar el permiso al rol.
+    """
     data = request.json
     print(f"Data: {data}")
     rpc._rol_permiso._rol_id = id
@@ -158,6 +228,14 @@ def add_permiso_to_rol(id):
 
 @auth.route("/roles/<int:id>/permissions/<int:permiso_id>", methods=["DELETE"])
 def delete_permiso_from_rol(id, permiso_id):
+    """
+    Elimina un permiso de un rol.
+
+    :param id: ID del rol al que se le eliminará el permiso.
+    :param permiso_id: ID del permiso a eliminar.
+    :returns: Mensaje de éxito en formato JSON.
+    :raises Exception: Si ocurre un error al eliminar el permiso del rol.
+    """
     primary_keys = {"rol_id": id, "permiso_id": permiso_id}
     if rpc.delete(primary_keys):
         return jsonify({"msg": "Permiso eliminado del rol"}), 201
@@ -168,6 +246,13 @@ def delete_permiso_from_rol(id, permiso_id):
 
 @auth.route("/roles/<int:id>/person", methods=["POST"])
 def add_rol_to_person(id):
+    """
+    Asigna un rol a una persona.
+
+    :param id: ID del rol a asignar.
+    :returns: Datos de la asignación en formato JSON.
+    :raises Exception: Si ocurre un error al asignar el rol a la persona.
+    """
     data = request.json
     prc._rol_persona._rol_id = id
     prc._rol_persona._persona_id = data["persona_id"]
@@ -180,6 +265,14 @@ def add_rol_to_person(id):
 
 @auth.route("/roles/<int:id>/person/<int:persona_id>", methods=["DELETE"])
 def delete_rol_from_person(id, persona_id):
+    """
+    Elimina un rol de una persona.
+
+    :param id: ID del rol a eliminar.
+    :param persona_id: ID de la persona a la que se le eliminará el rol.
+    :returns: Mensaje de éxito en formato JSON.
+    :raises Exception: Si ocurre un error al eliminar el rol de la persona.
+    """
     primary_keys = {"rol_id": id, "persona_id": persona_id}
     if prc.delete(primary_keys):
         return jsonify({"msg": "Permiso eliminado del rol"}), 201
@@ -190,6 +283,13 @@ def delete_rol_from_person(id, persona_id):
 
 @auth.route("/users/<int:id>/roles", methods=["GET"])
 def get_rols_by_user(id):
+    """
+    Obtiene los roles asignados a una persona basada en su ID.
+
+    :param id: ID de la persona cuyos roles se desean obtener.
+    :returns: Datos de los roles en formato JSON.
+    :raises Exception: Si ocurre un error al obtener los roles.
+    """
     roles = Util().get_roles(id)
     return jsonify(roles), 201
 
@@ -200,6 +300,12 @@ def get_rols_by_user(id):
 # CRUD para personas
 @auth.route("/users", methods=["POST"])
 def create_user():
+    """
+    Crea una nueva persona.
+
+    :returns: Datos de la persona creada en formato JSON.
+    :raises Exception: Si ocurre un error al guardar la persona.
+    """
     data = request.json
     pc._persona._nombres = data["nombres"]
     pc._persona._apellidos = data["apellidos"]
@@ -218,12 +324,25 @@ def create_user():
 
 @auth.route("/users", methods=["GET"])
 def get_users():
+    """
+    Obtiene todas las personas.
+
+    :returns: Datos de las personas en formato JSON.
+    :raises Exception: Si ocurre un error al obtener las personas.
+    """
     data = pc._to_dict()
     return jsonify(data), 201
 
 
 @auth.route("/users/<int:id>", methods=["GET"])
 def get_user(id):
+    """
+    Obtiene una persona basada en su ID.
+
+    :param id: ID de la persona a obtener.
+    :returns: Datos de la persona en formato JSON.
+    :raises Exception: Si ocurre un error al obtener la persona.
+    """
     person = pc._list().get(id)
     # TODO: Buscar por id en la lista de personas y retornar el objeto
     return "recieved request to get user"
@@ -231,13 +350,14 @@ def get_user(id):
 
 @auth.route("/users/<int:id>", methods=["DELETE"])
 def delete_user():
+    """
+    Elimina una persona basada en su ID.
+
+    :param id: ID de la persona a eliminar.
+    :returns: Mensaje de éxito en formato JSON.
+    :raises Exception: Si ocurre un error al eliminar la persona.
+    """
     # TODO: Buscar por id en la lista de personas y eliminar el objeto
-    return "recieved request to delete user"
-
-
-@auth.route("/users/<int:id>", methods=["PUT"])
-def update_user():
-    # TODO: Buscar por id en la lista de personas y actualizar el objeto
     return "recieved request to delete user"
 
 
@@ -247,6 +367,12 @@ def update_user():
 # CRUD para cuentas
 @auth.route("/accounts", methods=["POST"])
 def create_account():
+    """
+    Crea una nueva cuenta de usuario.
+
+    :returns: Datos de la cuenta creada en formato JSON.
+    :raises Exception: Si ocurre un error al guardar la cuenta.
+    """
     data = request.json
     cc._cuenta._usuario = data["usuario"]
     cc._cuenta._clave = data["clave"]
@@ -258,9 +384,14 @@ def create_account():
 
 @auth.route("/accounts", methods=["GET"])
 def get_accounts():
+    """
+    Obtiene todas las cuentas de usuario.
+
+    :returns: Datos de las cuentas en formato JSON.
+    :raises Exception: Si ocurre un error al obtener las cuentas.
+    """
     data = cc._to_dict()
     ids_personas = [i["persona_id"] for i in data if "persona_id" in i.keys()]
-    print(ids_personas)
 
     personas_list = pc.list()
     personas_data = []
@@ -268,14 +399,19 @@ def get_accounts():
         personas = personas_list.search_models("id", i)
         personas_data.append(personas[0].serializable())
 
-    print(personas_data)
-
     response = {"data": data, "personas": personas_data}
     return jsonify(response), 201
 
 
 @auth.route("/accounts/<int:id>", methods=["GET"])
 def get_account(id):
+    """
+    Obtiene una cuenta de usuario basada en su ID.
+
+    :param id: ID de la cuenta a obtener.
+    :returns: Datos de la cuenta en formato JSON.
+    :raises Exception: Si ocurre un error al obtener la cuenta.
+    """
     account = cc._list().get(id)
     # TODO: Buscar por id en la lista de cuentas y retornar el objeto
     return "recieved request to get user"
@@ -283,13 +419,14 @@ def get_account(id):
 
 @auth.route("/accounts/<int:id>", methods=["DELETE"])
 def delete_account():
+    """
+    Elimina una cuenta de usuario basada en su ID.
+
+    :param id: ID de la cuenta a eliminar.
+    :returns: Mensaje de éxito en formato JSON.
+    :raises Exception: Si ocurre un error al eliminar la cuenta.
+    """
     # TODO: Buscar por id en la lista de cuentas y eliminar el objeto
-    return "recieved request to delete user"
-
-
-@auth.route("/accounts/<int:id>", methods=["PUT"])
-def update_account():
-    # TODO: Buscar por id en la lista de cuentas y actualizar el objeto
     return "recieved request to delete user"
 
 
@@ -298,6 +435,12 @@ def update_account():
 
 @auth.route("/permisos", methods=["POST"])
 def create_permiso():
+    """
+    Crea un nuevo permiso.
+
+    :returns: Datos del permiso creado en formato JSON.
+    :raises Exception: Si ocurre un error al guardar el permiso.
+    """
     data = request.json
     ppc._permiso._nombre = data["nombre"]
     ppc._permiso._descripcion = data["descripcion"]
@@ -310,18 +453,38 @@ def create_permiso():
 
 @auth.route("/permisos", methods=["GET"])
 def get_permisos():
+    """
+    Obtiene todos los permisos.
+
+    :returns: Datos de los permisos en formato JSON.
+    :raises Exception: Si ocurre un error al obtener los permisos.
+    """
     data = ppc._to_dict()
     return jsonify(data), 201
 
 
 @auth.route("/permisos/<int:id>", methods=["GET"])
 def get_permiso(id):
+    """
+    Obtiene un permiso basado en su ID.
+
+    :param id: ID del permiso a obtener.
+    :returns: Datos del permiso en formato JSON.
+    :raises Exception: Si ocurre un error al obtener el permiso.
+    """
     permiso = ppc._find(id)
     return jsonify(permiso), 201
 
 
 @auth.route("/permisos/<int:id>", methods=["PUT"])
 def update_permiso(id):
+    """
+    Actualiza un permiso basado en su ID.
+
+    :param id: ID del permiso a actualizar.
+    :returns: Datos del permiso actualizado en formato JSON.
+    :raises Exception: Si ocurre un error al actualizar el permiso.
+    """
     data = request.json
     ppc._permiso._nombre = data["nombre"]
     ppc._permiso._descripcion = data["descripcion"]

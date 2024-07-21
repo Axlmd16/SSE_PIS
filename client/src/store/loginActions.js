@@ -16,6 +16,21 @@ const loginActions = ({ getStore, getActions, setStore }) => ({
       throw error;
     }
   },
+
+  actualizar_cuenta: async (id, estado) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.put(`/accounts/${id}`, {
+        estado: estado,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating account:", error);
+      throw error;
+    }
+  },
 });
 
 export default loginActions;

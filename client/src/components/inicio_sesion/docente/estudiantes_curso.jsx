@@ -39,7 +39,8 @@ function Estudiantes_Curso({ actions, store }) {
         record.primer_apellido.toLowerCase().includes(searchTerm) ||
         record.segundo_apellido.toLowerCase().includes(searchTerm) ||
         record.codigo_estudiante.toLowerCase().includes(searchTerm) ||
-        record.dni.toLowerCase().includes(searchTerm)
+        record.dni.toLowerCase().includes(searchTerm) ||
+        record.nro_de_matricula.toLowerCase().includes(searchTerm)
       );
     });
 
@@ -80,17 +81,9 @@ function Estudiantes_Curso({ actions, store }) {
       sortable: true,
     },
     {
-      name: "Acciones",
-      cell: (row) => (
-        <div className="flex justify-center items-center space-x-4">
-          <button
-            className="btn btn-warning btn-sm"
-            onClick={() => handleEmail(row)}
-          >
-            <MailPlus className="w-5 h-5" />
-          </button>
-        </div>
-      ),
+      name: "Matricula",
+      selector: (row) => row.nro_de_matricula,
+      sortable: true,
     },
   ];
 
