@@ -12,22 +12,53 @@ import asyncio
 import time 
 
 class DocenteControl(Data_Access_Object):
+    """
+    Controlador para gestionar operaciones relacionadas con los docentes.
+
+    Hereda de Data_Access_Object para realizar operaciones de base de datos.
+    """
     def __init__(self):
+        """
+        Inicializa una nueva instancia de DocenteControl.
+        
+        Inicializa el controlador de persona.
+        """
         super().__init__(Docente)
         self.__docente = None
         self.__persona_control = PersonaControl()
 
     @property
     def _docente(self):
+        """
+        Obtiene el docente actual. Si no hay un docente actual, se crea uno nuevo.
+
+        Returns:
+            Retorna la instancia actual de Docente.
+        """
         if self.__docente is None:
             self.__docente = Docente()
         return self.__docente
 
     @_docente.setter
     def _docente(self, value):
+        """
+        Establece el docente actual.
+        
+        Args:
+            value (Docente): La instancia de Docente a establecer.
+        """
         self.__docente = value
 
     def save(self, *args) -> bool:
+        """
+        Guarda un nuevo docente en la base de datos.
+
+        Args:
+            *args: Argumentos que contienen la información del docente.
+
+        Returns:
+            bool: True si se guarda correctamente, False en caso contrario.
+        """
         try:
             persona = PersonaControl()
             cuenta = CuentaControl()
@@ -71,6 +102,15 @@ class DocenteControl(Data_Access_Object):
             return False
 
     def update(self, id) -> bool:
+        """
+        Actualiza el docente con el ID proporcionado.
+        
+        Args:
+            id (int): El ID de el docente a actualizar.
+        
+        Returns:
+            bool: True si la actualización fue exitosa, False en caso contrario.
+        """
         try:
             self._merge(id, self._docente)
             return True
@@ -79,9 +119,21 @@ class DocenteControl(Data_Access_Object):
             return False
     
     def list(self):
+        """
+        Lista todas los docentes.
+        
+        Returns:
+            list: Lista de todas los docentes.
+        """
         return self._list()
 
     def list_with_person_details(self) -> list:
+        """
+        Lista todos los docentes con los detalles de la persona asociada.
+
+        Returns:
+            list: Una lista de diccionarios que contiene detalles de los docentes y sus personas asociadas.
+        """
         try:
             lista = self._list_docente()
             lista_docentes = lista.to_array
@@ -90,15 +142,14 @@ class DocenteControl(Data_Access_Object):
             print(f"Error listando docentes con detalles de persona: {e}")
             return []
         
-    def list_with_person_linked(self) -> list:
-        try:
-            lista = self._list_docente()
-            return lista
-        except Exception as e:
-            print(f"Error listando estudiantes con detalles de persona: {e}")
-            return []
-        
     def _list_docente(self) -> list:
+        """
+        Lista todos los docentes con información completa.
+
+        Returns:
+            list: Una Linkedlist que contiene información completa de los docentes (incluye informacion de la persona asociada).
+
+        """
         try:
             inicio_tiempo = time.time()
             docente_info_completa = Linked_List()
