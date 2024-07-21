@@ -27,58 +27,86 @@ token_store = {}
 #* PARA ENVIAR CORREO DE RECUPERACION
 @password.route("/send-recovery-email", methods=["POST"])
 def send_recovery_email():
-    data = request.json
-    email = data["correo"]
-    encrypted_id_cuenta = data["id_cuenta_reset_password"]
-
-    print("\n\nEncriptados: ")
-    print(encrypted_id_cuenta)
-    print(email)
-    print("\n\n\n\n")
-
-    token = generate_token()
-    token_store[token] = datetime.now() + timedelta(minutes=1)  
-
-    recovery_link = f"http://localhost:5173/reset_password/{token}/{encrypted_id_cuenta}"
-
-
-    msg = MIMEMultipart()
-    print(Config.CORREO)
-    msg['From'] = Config.CORREO
-    msg['To'] = email
-    msg['Subject'] = 'Recuperación de Contraseña'
-
-    button_style = "background-color:#0369a1; border:none; color:white; padding:10px 20px; text-align:center; text-decoration:none; display:inline-block; font-size:14px; margin:0 auto; cursor:pointer; border-radius:5px;"
-
-    html = f"""
-    <html>
-        <body>
-            <p>Hola,</p>
-            <p>Recibiste este correo electrónico porque solicitaste restablecer la contraseña de tu cuenta.</p>
-            <p>Haz clic en el siguiente botón para restablecer tu contraseña:</p>
-            <p style="text-align: center;"><a href="{recovery_link}" style="{button_style}">Restablecer Contraseña</a></p>
-            <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo electrónico de forma segura.</p>
-            <p>Gracias,<br>El equipo de soporte</p>
-        </body>
-    </html>
     """
+    Envia un correo de recuperacion con un enlace para restablecer la contraseña.
 
-    msg.attach(MIMEText(html, 'html'))
+    Esta peticion POST recibe el correo electronico y el identificador de cuenta encriptado. Y genera un token de 
+    recuperacion. Luego, se envia el correo con el enlace para restablecer la contraseña.
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
+    Returns:
+        Respuesta JSON con un mensaje de éxito y estado HTTP 200 si el correo se envia correctamente.
+        Respuesta JSON con un mensaje de error y estado HTTP 500 si ocurre un error.
+    """
+    try:
+        data = request.json
+        email = data["correo"]
+        encrypted_id_cuenta = data["id_cuenta_reset_password"]
 
-    server.login(Config.CORREO, Config.CLAVE_SECRETA)  
+        print("\n\nEncriptados: ")
+        print(encrypted_id_cuenta)
+        print(email)
+        print("\n\n\n\n")
 
-    server.sendmail(Config.CORREO, email, msg.as_string())
+        token = generate_token()
+        token_store[token] = datetime.now() + timedelta(minutes=1)  
+        print(f"Token: {token}")
+        print(f"Id encriptado: {encrypted_id_cuenta}")
 
-    server.quit()
+        recovery_link = f"http://localhost:5173/reset_password/{token}/{encrypted_id_cuenta}"
 
-    return jsonify({"msg": "Correo de recuperación enviado"}), 200
+
+        msg = MIMEMultipart()
+        print(Config.CORREO)
+        msg['From'] = Config.CORREO
+        msg['To'] = email
+        msg['Subject'] = 'Recuperacion de Contraseña'
+
+        button_style = "background-color:#0369a1; border:none; color:white; padding:10px 20px; text-align:center; text-decoration:none; display:inline-block; font-size:14px; margin:0 auto; cursor:pointer; border-radius:5px;"
+
+        html = f"""
+        <html>
+            <body>
+                <p>Hola,</p>
+                <p>Recibiste este correo electronico porque solicitaste restablecer la contraseña de tu cuenta.</p>
+                <p>Haz clic en el siguiente boton para restablecer tu contraseña:</p>
+                <p style="text-align: center;"><a href="{recovery_link}" style="{button_style}">Restablecer Contraseña</a></p>
+                <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo electronico de forma segura.</p>
+                <p>Gracias,<br>El equipo de soporte</p>
+            </body>
+        </html>
+        """
+
+        msg.attach(MIMEText(html, 'html'))
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+
+        server.login(Config.CORREO, Config.CLAVE_SECRETA)  
+
+        server.sendmail(Config.CORREO, email, msg.as_string())
+
+        server.quit()
+
+        return jsonify({"msg": "Correo de recuperacion enviado"}), 200
+
+    except Exception as e:
+        print(f"Error en send_recovery_email: {e}")
+        return jsonify({"msg": "Error al enviar el correo de recuperacion"}), 500
 
 #* VERIFICAR USUARIO
 @password.route("/verificar_usuario", methods=["POST"])
 def login():
+    """
+    Verifica las credenciales del usuario y retorna los datos del usuario si son correctas.
+
+    Esta peticion POST recibe el usuario y la contrasena en formato JSON. Luego, busca la cuenta y 
+    el usuario en la base de datos, verifica la contrasena y retorna los datos del usuario si son correctas.
+
+    Returns:
+        Response: JSON con los datos del usuario y estado HTTP 200 si las credenciales son correctas.
+        Response: JSON con un mensaje de error y estado HTTP 401 si las credenciales son incorrectas.
+        Response: JSON con un mensaje de error y estado HTTP 500 si ocurre un error.
+    """
     username = request.json.get("usuario", None)
     password = request.json.get("clave", None)
 
@@ -124,6 +152,21 @@ def login():
 #* Verificar password
 @password.route("/verificar_password/<id_cuenta>/<password>", methods=["POST"])
 def verificar_password(id_cuenta, password):
+    """
+    Verifica si la contraseña proporcionada es correcta para la cuenta especifica.
+
+    Esta peticion POST recibe el ID de la cuenta y la contraseña en formato JSON. Busca la cuenta en 
+    la base de datos y verifica la contraseña.
+
+    Args:
+        id_cuenta (str): ID de la cuenta.
+        password (str): Contraseña a verificar.
+
+    Returns:
+        Response: JSON con True y estado HTTP 201 si la contraseña es correcta.
+        Response: JSON con False y estado HTTP 201 si la contraseña es incorrecta.
+        Response: JSON con un mensaje de error y estado HTTP 401 si ocurre un error.
+    """
     try:
         verificado = False
         lista_cuenta = cuenta_control._list()
@@ -142,6 +185,19 @@ def verificar_password(id_cuenta, password):
 #* Cambiar password
 @password.route("/cambiar_password/<int:id_cuenta>", methods=["PUT"])
 def cambiar_password(id_cuenta):
+    """
+    Cambia la contraseña de la cuenta especificada.
+
+    Esta peticion PUT recibe el ID de la cuenta y la nueva contraseña en formato JSON. Busca la cuenta en 
+    la base de datos y cambia la contraseña.
+
+    Args:
+        id_cuenta (int): ID de la cuenta.
+
+    Returns:
+        Response: JSON con un mensaje de éxito y estado HTTP 201 si la contraseña se cambia correctamente.
+        Response: JSON con un mensaje de error y estado HTTP 401 si ocurre un error.
+    """
     try:
         print("\n\n\n\n\n\n")
 
@@ -159,6 +215,17 @@ def cambiar_password(id_cuenta):
 #* Verificar usuario para cambiar password
 @password.route("/validar_usuario_cambio_password", methods=["POST"])
 def verificar_usuario_cambio_password():
+    """
+    Verifica si el usuario existe y si el correo coincide para el cambio de contraseña.
+
+    Esta peticion POST recibe el correo y el usuario en formato JSON. Busca la persona y la cuenta en la base de datos, 
+    y verifica que el usuario y el correo coincidan.
+
+    Returns:
+        Response: JSON con el ID de la cuenta y estado HTTP 201 si el usuario y el correo son correctos.
+        Response: JSON con False y estado HTTP 201 si el usuario o el correo son incorrectos.
+        Response: JSON con un mensaje de error y estado HTTP 401 si ocurre un error.
+    """
     try:
         data = request.json
         num_identificacion = data["numIdentificacion"]
@@ -189,43 +256,62 @@ def verificar_usuario_cambio_password():
 #* Resetear password
 @password.route("/reset_password", methods=["PUT"])
 def reset_password():
+    """
+    Restablece la contraseña de la cuenta utilizando un token de recuperacion.
+
+    Esta peticion PUT recibe el token y la contraseña en formato JSON. Busca la cuenta en la base de datos.
+    Luego, verifica el token y la fecha de expiracion. Y cambia la contrasena de la cuenta.
+
+    Returns:
+        Response: JSON con un mensaje de éxito y estado HTTP 200 si la contraseña se restablece correctamente.
+        Response: JSON con un mensaje de error y estado HTTP 400 si el token es invelido o ha expirado.
+    """
     try:
         data = request.json
+        # print("1")
         token = data["token"]
+        # print("2")
         if token in token_store:
+            # print("3")
             if token_store[token] > datetime.now():
-                id = data["id_cuenta"]
-                id_int = int(id)
-                print("1")
+                # print("4")
+                id_int = int(data["id_cuenta"])  
+                # print("5")
                 lista_cuenta = cuenta_control._list()
-                print("2")
+                # print("6")
                 lista_cuentas_ordenada = lista_cuenta.quick_sort_with_attribute(lista_cuenta.to_array, "_id", 1)
-                print("3")
+                # print("7")
                 user_found = lista_cuenta.busqueda_binaria_atribute(lista_cuentas_ordenada,"_id", id_int)
-                print("4")
+                # print("8")
                 
                 cuenta_control._cuenta._clave = encrypt_password(data["password"])
-                print("5")
+                # print("9")
                 cuenta_control._cuenta._usuario = user_found._usuario
-                print("6")
+                # print("10")
                 cuenta_control._cuenta._estado = int(user_found._estado)        
-                print("7")
+                # print("11")
                 cuenta_control._cuenta._persona_id = int(user_found._persona_id)          
-                print("8")
+                # print("12")
                 if cuenta_control.update(id_int):
-                    print("9")
+                    # print("13")
                     del token_store[token] 
-                    print("10")
-                    return jsonify(True), 201
+                    # print("14")
+                    return jsonify(True), 200
         else:
             print("\n\n\ntoken no encontrado")
-            return jsonify(False), 201
+            return jsonify(False), 400
     except Exception as e:
         print(f"Error en reset_password: {e}")
-        return jsonify("errpr"), 401
+        return jsonify("errpr"), 404
     
-#* Función para generar un token único
+#* Funcion para generar un token unico
 def generate_token():
+    """
+    Genera un token aleatorio para la recuperacion de contraseña.
+
+    Returns:
+        random_string (str): Token aleatorio generado.
+    """
     random_numbers = [str(random.randint(0, 9)) for _ in range(4)]
     random_string = ''.join(random_numbers)
     return random_string  

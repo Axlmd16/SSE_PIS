@@ -25,7 +25,7 @@ const Proyeccion = ({ actions }) => {
   //* PARA UNIDAD 2, PROYECCION UNIDAD 3
   const handleDataSelection = async (data) => {
     setInfoEstudiante(data);
-    console.log({ data });
+    // console.log({ data });
     setImage(null);
     setIsLoading(true);
     if ((infoEstudiante !== null)) {
@@ -44,7 +44,7 @@ const Proyeccion = ({ actions }) => {
   //* PARA PROYECCION POR CRITERIO DE EVALUACION
   const handleDataSelectionCriterioEvaluacion = async (data) => {
     setInfoEstudiante(data);
-    console.log({ data });
+    // console.log({ data });
     setImage(null);
     setIsLoading(true);
     if (infoEstudiante !== null) {
@@ -62,7 +62,7 @@ const Proyeccion = ({ actions }) => {
   //* PARA UNIDAD 3, PROYECCION SUPLETORIO
   const handleDataSelectionSupletorio = async (data) => {
     setInfoEstudiante(data);
-    console.log({ data });
+    // console.log({ data });
     setImage(null);
     setIsLoading(true);
     const nota_promedio = data.unidad_3 + data.unidad_2 + data.unidad_1
@@ -82,7 +82,7 @@ const Proyeccion = ({ actions }) => {
 
   //*PARA PROYECCION DE TODOS LOS ESTUDIANTES PARA NOTA DE UNIDAD 3
   const handleSelectAllStudents = async (data) => {
-    console.log({ data });
+    // console.log({ data });
     setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
@@ -101,7 +101,7 @@ const Proyeccion = ({ actions }) => {
 
   //*PARA HACER LA PROYECCION DE TODOS LOS ESTUDIANTES POR CRITERIO DE EVALUACION(DEPENDE DE UNIDAD)
   const handleSelectAllStudentsCriterios = async (data) => {
-    console.log({ data });
+    // console.log({ data });
     setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
@@ -119,7 +119,7 @@ const Proyeccion = ({ actions }) => {
 
   //*PARA LA PROYECCION DE TODOS LOS ESTUDIANTES (NOTA FINAL)
   const handleSelectAllStudentsFinalSupletorio = async (data) => {
-    console.log({ data });
+    // console.log({ data });
     setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
@@ -137,7 +137,7 @@ const Proyeccion = ({ actions }) => {
 
   //*PARA PROYECCION DE TODOS LOS ESTUDIANTES QUE ESTAN EN SUPLETORIO
   const handleSelectAllStudentseEnSupletorio = async (data) => {
-    console.log({ data });
+    // console.log({ data });
     setInfoTodosEstudiantes(data);
     setImage(null);
     setIsLoading(true);
@@ -216,10 +216,10 @@ const Proyeccion = ({ actions }) => {
   const handleSharePDF = async () => {
     // Solicitar email al usuario
     const { value: email } = await MySwal.fire({
-      title: 'Introduce tu correo electrónico',
+      title: 'Enviar Proyeccion',
       input: 'email',
-      inputLabel: 'Tu correo electrónico',
-      inputPlaceholder: 'Introduce tu correo electrónico',
+      inputLabel: 'Ingrese el gmail',
+      inputPlaceholder: 'Gmail',
     });
       if (email) {
         exportToPDFProyeccion(image, selectedCourse, selectedSubject, selectedUnit, "share", email, actions);
