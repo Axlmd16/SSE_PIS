@@ -77,10 +77,10 @@ function Form_Malla({ update = false, mesh = {} }) {
       <form className="grid" onSubmit={handleSubmit(onSubmit)}>
         <div className="my-2">
           <div className="text-xl font-poppins text-gray-900 font-bold text-center">
-            <h2>{update ? "Actualizar malla" : "Agregar nueva malla"}</h2>
+            <h2 className="dark:text-green-600">{update ? "Actualizar malla" : "Agregar nueva malla"}</h2>
             <br />
           </div>
-          <label className="text-black text-sm" htmlFor="carrera_id">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="carrera_id">
             Carrera
           </label>
           <select
@@ -102,7 +102,7 @@ function Form_Malla({ update = false, mesh = {} }) {
           )}
         </div>
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="fecha_registro">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="fecha_registro">
             Fecha de registro
           </label>
           <input
@@ -121,7 +121,7 @@ function Form_Malla({ update = false, mesh = {} }) {
           )}
         </div>
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="estado">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="estado">
             Estado de la malla
           </label>
           <select
@@ -140,7 +140,7 @@ function Form_Malla({ update = false, mesh = {} }) {
           )}
         </div>
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="descripcion">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="descripcion">
             Descripción
           </label>
           <textarea
@@ -151,7 +151,7 @@ function Form_Malla({ update = false, mesh = {} }) {
           />
         </div>
         <div className="flex justify-end">
-          <button className="btn btn-active" type="submit">
+          <button className="btn btn-active dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" type="submit">
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>

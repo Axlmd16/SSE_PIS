@@ -16,7 +16,7 @@ const BuscarAsignacionDocente = ({ actions, onDataSelect }) => {
         if (DocentesAsignatura.length > 0) {
             const filteredResults = DocentesAsignatura.filter(person =>
                 person.docente_nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                person.asignatura_nombre.toLowerCase().includes(searchTerm.toLowerCase()) 
+                person.asignatura_nombre.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setSearchResultsDocente(filteredResults);
             setSelectedPerson(null); //* Limpiar la selección al cambiar el término de búsqueda
@@ -47,7 +47,7 @@ const BuscarAsignacionDocente = ({ actions, onDataSelect }) => {
 
     return (
         <div className="">
-            <div className="p-4 bg-white shadow rounded-lg">
+            <div className="p-4 bg-white dark:bg-gray-900 shadow rounded-lg">
                 <input
                     type="text"
                     className="w-full px-3 py-2 mb-4 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -61,7 +61,7 @@ const BuscarAsignacionDocente = ({ actions, onDataSelect }) => {
                         <li
                             key={person.id}
                             onClick={() => handleSelectPerson(person)}
-                            className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white rounded-md"
+                            className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white dark:bg-green-700 dark:hover:bg-green-800 dark:border-none dark:mt-1 dark:text-white rounded-md"
                         >
                             {person.docente_nombre} - {person.asignatura_nombre}
                         </li>
@@ -70,8 +70,8 @@ const BuscarAsignacionDocente = ({ actions, onDataSelect }) => {
 
                 {selectedPerson && (
                     <div className="mt-4">
-                        <h2 className="text-lg font-bold">Persona seleccionada:</h2>
-                        <p className="mt-2">{selectedPerson.docente_nombre} {selectedPerson.asignatura_nombre}</p>
+                        <h2 className="text-lg font-bold dark:text-green-600">Persona seleccionada:</h2>
+                        <p className="mt-2 dark:text-cyan-400">{selectedPerson.docente_nombre} {selectedPerson.asignatura_nombre}</p>
                     </div>
                 )}
             </div>

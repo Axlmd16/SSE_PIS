@@ -112,14 +112,14 @@ const TableUser = ({ actions }) => {
         <div className="">
           <button
             id="btn-delete"
-            className="btn-ghost"
+            className="btn-ghost text-black dark:text-white"
             onClick={() => handleDetails(row)}
           >
             <Info size={20} />
           </button>
           <button
             id="btn-delete"
-            className="btn-ghost"
+            className="btn-ghost text-red-500 dark:text-green-400"
             onClick={() => handleDelete(row)}
           >
             <Trash2 size={20} />
@@ -142,12 +142,31 @@ const TableUser = ({ actions }) => {
         fontSize: "11px",
         fontWeight: "bold",
         textTransform: "uppercase",
+        color: 'var(--text-primary)', 
+        backgroundColor: 'var(--bg-table)', 
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)', 
+        backgroundColor: 'var(--bg-cell)', 
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)', 
+        color: 'var(--text-secondary)', 
       },
     },
   };
 
   return (
-    <div>
+    <div className="dark:bg-gray-800 dark:text-gray-200">
       <SearchBar handleSearch={handleSearch} />
 
       <DataTable
