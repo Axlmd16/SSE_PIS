@@ -1,5 +1,14 @@
 class Unidad:
+    """
+    Representa una unidad académica dentro de una asignatura, incluyendo información sobre su duración y fechas.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
+        """
+        Inicializa una nueva instancia de la clase Unidad con valores predeterminados.
+        """
         self.__id = None
         self.__nro_unidad = 0
         self.__nombre = " "
@@ -64,7 +73,20 @@ class Unidad:
     def _asignatura_id(self, value):
         self.__asignatura_id = value
 
-    def serializable(self):
+    def __str__(self) -> str:
+        """
+        Devuelve una representación en cadena de la instancia de Unidad.
+
+        :returns: Una cadena que representa la instancia de Unidad.
+        """
+        return f"{self.__nro_unidad} - {self.__nombre} - {self.__asignatura_id}"
+
+    def serializable(self) -> dict:
+        """
+        Convierte la instancia de Unidad en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Unidad.
+        """
         return {
             "id": self.__id,
             "nro_unidad": self.__nro_unidad,
@@ -75,10 +97,14 @@ class Unidad:
             "asignatura_id": self.__asignatura_id,
         }
 
-    def __str__(self):
-        return f"{self.__nro_unidad} - {self.__nombre} - {self.__asignatura_id}"
+    @staticmethod
+    def deserializable(data: dict) -> "Unidad":
+        """
+        Crea una instancia de Unidad a partir de un diccionario.
 
-    def deserializable(data: dict):
+        :param data: Diccionario con los datos de la instancia de Unidad.
+        :returns: Una instancia de Unidad.
+        """
         unidad = Unidad()
         unidad._id = data["id"]
         unidad._nro_unidad = data["nro_unidad"]

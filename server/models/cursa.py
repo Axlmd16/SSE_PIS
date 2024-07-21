@@ -1,5 +1,14 @@
 class Cursa:
+    """
+    Representa la asignación de un estudiante a un paralelo específico dentro de un ciclo académico.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
+        """
+        Inicializa una nueva instancia de la clase Cursa.
+        """
         self.__id = None
         self.__paralelo = " "
         self.__asignacion_id = 0
@@ -37,7 +46,20 @@ class Cursa:
     def _ciclo_id(self, value):
         self.__ciclo_id = value
 
+    def __str__(self) -> str:
+        """
+        Devuelve el identificador de la instancia Cursa como cadena.
+
+        :returns: El identificador de la instancia Cursa.
+        """
+        return str(self.__id)
+
     def serializable(self):
+        """
+        Convierte la instancia de Cursa en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Cursa.
+        """
         return {
             "id": self.__id,
             "paralelo": self.__paralelo,
@@ -45,10 +67,14 @@ class Cursa:
             "ciclo_id": self.__ciclo_id,
         }
 
-    def __str__(self):
-        return str(self.__id)
-
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Cursa a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la instancia Cursa.
+        :returns: Una instancia de Cursa.
+        """
         cursa = Cursa()
         cursa._id = data["id"]
         cursa._paralelo = data["paralelo"]

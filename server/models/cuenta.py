@@ -1,5 +1,14 @@
 class Cuenta:
+    """
+    Representa una cuenta de usuario con sus atributos básicos.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
+        """
+        Inicializa una nueva instancia de la clase Cuenta.
+        """
         self.__id = None
         self.__usuario = " "
         self.__clave = " "
@@ -46,7 +55,20 @@ class Cuenta:
     def _persona_id(self, value):
         self.__persona_id = value
 
+    def __str__(self) -> str:
+        """
+        Devuelve el nombre de usuario de la cuenta.
+
+        :returns: El nombre de usuario de la cuenta.
+        """
+        return self.__usuario
+
     def serializable(self):
+        """
+        Convierte la instancia de Cuenta en un diccionario +serializable.
+
+        :returns: Un diccionario que representa la instancia de Cuenta.
+        """
         return {
             "id": self.__id,
             "usuario": self.__usuario,
@@ -55,10 +77,14 @@ class Cuenta:
             "persona_id": self.__persona_id,
         }
 
-    def __str__(self):
-        return self.__usuario
-
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Cuenta a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la cuenta.
+        :returns: Una instancia de Cuenta.
+        """
         cuenta = Cuenta()
         cuenta._id = data["id"]
         cuenta._usuario = data["usuario"]
