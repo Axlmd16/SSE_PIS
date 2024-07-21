@@ -8,8 +8,10 @@ import {
   PersonStandingIcon,
   SlidersVertical,
   UsersRound,
+  Sun,
+  Moon
 } from "lucide-react";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Route,
   BrowserRouter as Router,
@@ -86,7 +88,7 @@ const Rutas = () => {
       {token && isAdmin ? (
         <div className="flex h-screen text-sm ">
           <Navigation_Auth />
-          <div className="w-full h-full overflow-y-auto p-9">
+          <div className="w-full h-full overflow-y-auto">
             <Routes>
               <Route>
                 <Route path="/home-admin" element={<Home_Principal />} />
@@ -207,8 +209,24 @@ const Rutas = () => {
 export default Rutas;
 
 function Navigation_Auth() {
+
+
+  const [theme, setTheme] = useState("light");
   const { actions } = useContext(Context);
   const location = useLocation();
+
+  const handleChangeTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      // console.log(theme);
+      document.querySelector('html').classList.add('dark');
+    } else {
+      document.querySelector('html').classList.remove('dark');
+    }
+  }, [theme]);
 
   return (
     <div className="z-50 font-poppins shadow-lg">
@@ -231,7 +249,6 @@ function Navigation_Auth() {
           to="/docentes"
           active={location.pathname === "/docentes"}
         />
-        {/* <hr /> */}
         <SidebarItem
           text="Asignar Docente"
           icon={<LucidePencil size={20} />}
@@ -250,7 +267,6 @@ function Navigation_Auth() {
           to="/estudiante-cursa"
           active={location.pathname === "/estudiante-cursa"}
         />
-        {/* <hr /> */}
         <SidebarItem
           text="Carreras"
           icon={<LayoutDashboard size={20} />}
@@ -269,7 +285,6 @@ function Navigation_Auth() {
           to="/subjects"
           active={location.pathname === "/subjects"}
         />
-        {/* <hr /> */}
         <SidebarItem
           text="Usuarios"
           icon={<PersonStandingIcon size={20} />}
@@ -288,7 +303,24 @@ function Navigation_Auth() {
           to="/crear-catalogo"
           active={location.pathname === "/crear-catalogo"}
         />
+        <button
+          onClick={handleChangeTheme}
+          className="flex items-center px-2 py-2 text-white  focus:outline-none bg-gray-900"
+        >
+          {theme === 'dark' ? (
+            <div className="flex items-center">
+              <Sun className="h-6 w-6" />
+              {/* <span className="ml-2">Modo Claro</span> */}
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <Moon className="h-6 w-6" />
+              {/* <span className="ml-2">Modo Oscuro</span> */}
+            </div>
+          )}
+        </button>
       </Sidebar>
     </div>
+
   );
 }
