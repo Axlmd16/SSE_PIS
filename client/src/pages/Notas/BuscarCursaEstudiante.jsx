@@ -101,7 +101,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
 
   return (
     <div className="flex gap-4">
-      <div className="relative p-4 bg-white shadow rounded-lg w-1/2">
+      <div className="relative p-4 bg-white shadow rounded-lg w-1/2 dark:bg-gray-900">
         <input
           type="text"
           className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -122,7 +122,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
             <li
               key={person.id}
               onClick={() => handleSelectPerson(person)}
-              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white rounded-md"
+              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white dark:bg-green-700 dark:hover:bg-green-800 dark:border-none dark:mt-1 dark:text-white rounded-md"
             >
               {person.primer_nombre} {person.segundo_nombre}{" "}
               {person.primer_apellido} {person.segundo_apellido}
@@ -132,8 +132,8 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
 
         {selectedEstudiante && (
           <div className="mt-4">
-            <h2 className="text-lg font-bold">Estudiante seleccionado:</h2>
-            <p className="mt-2">
+            <h2 className="text-lg font-bold dark:text-green-600">Estudiante seleccionado:</h2>
+            <p className="mt-2 dark:text-cyan-400">
               {selectedEstudiante.primer_nombre}{" "}
               {selectedEstudiante.segundo_nombre}{" "}
               {selectedEstudiante.primer_apellido}{" "}
@@ -142,7 +142,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
           </div>
         )}
       </div>
-      <div className="relative p-4 bg-white shadow rounded-lg w-1/2">
+      <div className="relative p-4 bg-white shadow rounded-lg w-1/2 dark:bg-gray-900">
         <input
           type="text"
           className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -163,7 +163,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
             <li
               key={cursa.id}
               onClick={() => handleSelectCursa(cursa)}
-              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white rounded-md"
+              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white dark:bg-green-700 dark:hover:bg-green-800 dark:border-none dark:mt-1 dark:text-white rounded-md"
             >
               {cursa.ciclo_id}° {cursa.paralelo} - {cursa.asignatura_nombre} -{" "}
               {cursa.docente_nombre}
@@ -173,8 +173,8 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
 
         {selectedCursa && (
           <div className="mt-4">
-            <h2 className="text-lg font-bold">Curso seleccionado:</h2>
-            <p className="mt-2">{`${selectedCursa.ciclo_id}° - ${selectedCursa.paralelo} - ${selectedCursa.asignatura_nombre}`}</p>
+            <h2 className="text-lg font-bold dark:text-green-600">Curso seleccionado:</h2>
+            <p className="mt-2 dark:text-cyan-400">{`${selectedCursa.ciclo_id}° - ${selectedCursa.paralelo} - ${selectedCursa.asignatura_nombre}`}</p>
           </div>
         )}
       </div>

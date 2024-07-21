@@ -9,8 +9,12 @@ export default {
       fontSize: {
         xxs: " .9rem",
       },
+      colors: {
+        aux: "#172339",
+      },
     },
   },
+  "darkMode": "class",
   plugins: [require("daisyui")],
   daisyui: {
     themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]

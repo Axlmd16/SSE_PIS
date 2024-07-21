@@ -58,7 +58,7 @@ function FormEstudiantesCursa({
 
   return (
     <div className="w-full">
-      <h1 className="text-xl font-poppins text-gray-900 font-bold text-center">
+      <h1 className="text-xl font-poppins text-gray-900 font-bold text-center dark:text-green-600">
         Actualizar Estudiante-Cursa
       </h1>
       <BuscarCursaEstudiante
@@ -69,7 +69,7 @@ function FormEstudiantesCursa({
       />
       <div className="text-center">
         <button
-          className="mt-6 bg-indigo-600 text-white font-bold"
+          className="mt-6 bg-indigo-600 text-white font-bold dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none "
           onClick={actualizarEstuianteCura}
         >
           <p>Actualizar Estudiante-Cursa</p>

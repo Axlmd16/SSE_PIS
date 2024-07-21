@@ -9,19 +9,16 @@ const MySwal = withReactContent(Swal);
 
 function Form_Asignatura({ update = false, subject = {} }) {
   const [meshes, setMeshes] = useState([]);
-  const [groups, setGroups] = useState([]);
   const { actions } = useContext(Context);
 
-  // Llamada a la API para obtener las mallas y grupos
+  // Llamada a la API para obtener las mallas
   useEffect(() => {
     const fetchData = async () => {
       try {
         const dataMesh = await actions.get_all_meshes();
         setMeshes(dataMesh);
-        const data = await actions.get_all_groups();
-        setGroups(data);
       } catch (error) {
-        console.error("Error al obtener las mallas o los grupos:", error);
+        console.error("Error al obtener las mallas :", error);
       }
     };
 
@@ -43,9 +40,8 @@ function Form_Asignatura({ update = false, subject = {} }) {
       setValue("ciclo_id", subject.ciclo_id);
       setValue("malla_id", subject.malla_id);
       setValue("total_horas", subject.total_horas);
-      setValue("grupo_id", subject.grupo_id);
     }
-  }, [update, subject, setValue, meshes, groups]);
+  }, [update, subject, setValue, meshes]);
 
   const onSubmit = async (data) => {
     try {
@@ -75,20 +71,20 @@ function Form_Asignatura({ update = false, subject = {} }) {
   };
 
   return (
-    <div className="w-full text-sm">
+    <div className="w-full text-sm dark:text-cyan-400">
       <form
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="col-span-1 md:col-span-2 text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-green-600">
             {update ? "Actualizar asignatura" : "Agregar nueva asignatura"}
           </h2>
         </div>
         {/* Campo de Malla Académica */}
         <div className="my-2 flex flex-col">
           <label
-            className="text-gray-700 text-sm font-semibold"
+            className="text-gray-700 text-sm dark:text-cyan-400 font-semibold"
             htmlFor="malla_id"
           >
             Malla Académica
@@ -111,36 +107,10 @@ function Form_Asignatura({ update = false, subject = {} }) {
             </p>
           )}
         </div>
-        {/* Campo de Grupos */}
-        <div className="my-2 flex flex-col">
-          <label
-            className="text-gray-700 text-sm font-semibold"
-            htmlFor="grupo_id"
-          >
-            Criterios de Calificación
-          </label>
-          <select
-            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="grupo_id"
-            {...register("grupo_id", { required: "El grupo es obligatorio" })}
-          >
-            <option value="">Grupos de calificación</option>
-            {groups.map((group) => (
-              <option key={group.id} value={group.id}>
-                {group.descripcion}
-              </option>
-            ))}
-          </select>
-          {errors.grupo_id && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.grupo_id.message}
-            </p>
-          )}
-        </div>
         {/* Campo de Ciclos */}
         <div className="my-2 flex flex-col">
           <label
-            className="text-gray-700 text-sm font-semibold"
+            className="text-gray-700 text-sm dark:text-cyan-400 font-semibold"
             htmlFor="ciclo_id"
           >
             Ciclo Académico
@@ -171,7 +141,7 @@ function Form_Asignatura({ update = false, subject = {} }) {
         {/* Campo de Nombre */}
         <div className="my-2 flex flex-col">
           <label
-            className="text-gray-700 text-sm font-semibold"
+            className="text-gray-700 text-sm dark:text-cyan-400 font-semibold"
             htmlFor="nombre"
           >
             Nombre de la asignatura
@@ -190,7 +160,7 @@ function Form_Asignatura({ update = false, subject = {} }) {
         {/* Campo de Horas Totales */}
         <div className="my-2 flex flex-col">
           <label
-            className="text-gray-700 text-sm font-semibold"
+            className="text-gray-700 text-sm dark:text-cyan-400 font-semibold"
             htmlFor="total_horas"
           >
             Horas totales
@@ -213,7 +183,7 @@ function Form_Asignatura({ update = false, subject = {} }) {
         {/* Campo de Descripción */}
         <div className="my-2 flex flex-col col-span-1 md:col-span-2">
           <label
-            className="text-gray-700 text-sm font-semibold"
+            className="text-gray-700 text-sm dark:text-cyan-400 font-semibold"
             htmlFor="descripcion"
           >
             Descripción
@@ -227,7 +197,7 @@ function Form_Asignatura({ update = false, subject = {} }) {
         </div>
         <div className="flex justify-end col-span-1 md:col-span-2 mt-6">
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none"
             type="submit"
           >
             {update ? "Actualizar" : "Registrar"}

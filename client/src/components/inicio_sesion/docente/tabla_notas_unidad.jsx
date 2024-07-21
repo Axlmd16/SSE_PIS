@@ -122,6 +122,8 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
         icon: "warning",
         title: "Valor máximo excedido",
         text: `El valor no puede ser mayor que ${max}.`,
+        showConfirmButton: false,
+        timer: 1500,
       });
     }
   };
@@ -146,7 +148,7 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
       name: (
         <div className="flex items-center space-x-1">
           <span>{criterion}</span>
-          <span className="text-xs text-gray-500">({porcentaje}%)</span>
+          <span className="text-xs text-gray-500 dark:text-white">({porcentaje}%)</span>
         </div>
       ),
       selector: (row) => (
@@ -156,9 +158,8 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
             min="0"
             max={porcentaje}
             step="0.1"
-            className={`border rounded p-1 w-20 text-center ${
-              isEditing ? "bg-gray-200" : "bg-white"
-            } 
+            className={`border rounded p-1 w-20 text-center dark:text-black dark:bg-gray-300 ${isEditing ? "bg-gray-200" : "bg-white"
+              } 
                         focus:outline-none focus:ring-2 focus:ring-blue-500`}
             value={row.criteria[criterion]?.nota_criterio || ""}
             onChange={(e) =>
@@ -202,6 +203,25 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
         fontSize: "11px",
         fontWeight: "bold",
         textTransform: "uppercase",
+        color: 'var(--text-primary)',
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)',
+        backgroundColor: 'var(--bg-cell)',
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)',
+        color: 'var(--text-secondary)',
       },
     },
   };
@@ -258,51 +278,50 @@ const Notas_Unidad = ({ actions, unidad_id, curso_id }) => {
   };
 
   return (
-    <div className="p-4 my-2">
-      <button
-        aria-label="Editar"
-        className={`float-right btn btn-md ${
-          isEditing ? "btn-danger" : "btn-accent"
-        } mb-5`}
-        onClick={() => {
-          if (!isEditing) {
-            setOriginalData(JSON.parse(JSON.stringify(data)));
-          }
-          setIsEditing(!isEditing);
-        }}
-      >
-        <Edit2 size={16} />
-      </button>
-      <DataTable
-        columns={columns}
-        data={data}
-        pagination
-        highlightOnHover
-        striped
-        progressPending={loading}
-        paginationComponentOptions={paginationComponentOptions}
-        customStyles={customStyles}
-      />
-      {isEditing && (
-        <div className="mt-8">
-          <button
-            className={`btn btn-md btn-success float-right ${
-              isSaveDisabled ? "opacity-50" : ""
-            }`}
-            onClick={() => handleSave(data)}
-            disabled={isSaveDisabled}
-          >
-            <SaveAll size={22} />
-          </button>
-          <button
-            className="btn btn-md btn-warning float-right mr-2"
-            onClick={handleCancel}
-          >
-            <ClipboardX size={22} />
-          </button>
-        </div>
-      )}
-    </div>
+      <div className="p-4 my-2 ">
+        <button
+          aria-label="Editar"
+          className={`float-right btn btn-md ${isEditing ? "btn-danger" : "btn-accent"
+            } mb-5`}
+          onClick={() => {
+            if (!isEditing) {
+              setOriginalData(JSON.parse(JSON.stringify(data)));
+            }
+            setIsEditing(!isEditing);
+          }}
+        >
+          <Edit2 size={16} />
+        </button>
+        <DataTable
+          columns={columns}
+          data={data}
+          pagination
+          highlightOnHover
+          striped
+          progressPending={loading}
+          paginationComponentOptions={paginationComponentOptions}
+          customStyles={customStyles}
+        />
+        {isEditing && (
+          <div className="mt-8">
+            <button
+              className={`btn btn-md btn-success float-right ${isSaveDisabled ? "opacity-50" : ""
+                }`}
+              onClick={() => handleSave(data)}
+              disabled={isSaveDisabled}
+            >
+              <SaveAll size={22} />
+            </button>
+            <button
+              className="btn btn-md btn-warning float-right mr-2"
+              onClick={handleCancel}
+            >
+              <ClipboardX size={22} />
+            </button>
+          </div>
+        )}
+      </div>
+
   );
 };
 

@@ -11,12 +11,10 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  LabelList,
 } from "recharts";
 
 const CriteriaStatistics = ({ data, unit }) => {
-  console.log(data);
-  console.log(unit);
-
   const totalStudents = data.length;
 
   // Filtrar estudiantes de bajo rendimiento basado en la suma de las notas de los criterios
@@ -49,27 +47,31 @@ const CriteriaStatistics = ({ data, unit }) => {
   const averageScoreData = [
     {
       criterio: "AA",
-      average:
+      average: (
         averageScores.criterio_1.reduce((sum, score) => sum + score, 0) /
-        averageScores.criterio_1.length,
+        averageScores.criterio_1.length
+      ).toFixed(2),
     },
     {
       criterio: "APE",
-      average:
+      average: (
         averageScores.criterio_2.reduce((sum, score) => sum + score, 0) /
-        averageScores.criterio_2.length,
+        averageScores.criterio_2.length
+      ).toFixed(2),
     },
     {
       criterio: "ACD",
-      average:
+      average: (
         averageScores.criterio_3.reduce((sum, score) => sum + score, 0) /
-        averageScores.criterio_3.length,
+        averageScores.criterio_3.length
+      ).toFixed(2),
     },
     {
       criterio: "EVALUACION",
-      average:
+      average: (
         averageScores.criterio_4.reduce((sum, score) => sum + score, 0) /
-        averageScores.criterio_4.length,
+        averageScores.criterio_4.length
+      ).toFixed(2),
     },
   ];
 
@@ -81,11 +83,11 @@ const CriteriaStatistics = ({ data, unit }) => {
   const COLORS = ["#00C49F", "#FF8042"];
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg mt-6">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="p-4 bg-white shadow-md rounded-lg mt-6 dark:bg-gray-800">
+      <h2 className="text-xl font-bold mb-4 dark:text-blue-400">
         Estadísticas del Curso: {unit.displayName}
       </h2>
-      <div className="flex flex-col lg:flex-row justify-between items-center">
+      <div className="flex flex-col lg:flex-row justify-between items-cente dark:text-white">
         <div className="mb-4 lg:mb-0 lg:w-1/2">
           <h3 className="text-lg font-semibold mb-2">
             Promedio de Notas por Criterio
@@ -94,10 +96,11 @@ const CriteriaStatistics = ({ data, unit }) => {
             <BarChart data={averageScoreData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="criterio" stroke="#4B5563" />
-              <YAxis domain={[0, 10]} stroke="#4B5563" />
+              <YAxis domain={[0, 3.5]} stroke="#4B5563" />
               <Tooltip wrapperClassName="border bg-gray-100" />
-              <Bar dataKey="average" fill="#8884d8" />
-              <Legend />
+              <Bar dataKey="average" fill="#8884d8" barSize={50}>
+                <LabelList dataKey="average" position="top" />{" "}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>

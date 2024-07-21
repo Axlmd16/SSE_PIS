@@ -34,3 +34,11 @@ class UnidadControl(Data_Access_Object):
 
     def list(self):
         return self._list()
+
+    def delete(self, id) -> bool:
+        try:
+            self._delete(id)
+            return True
+        except Exception as e:
+            print(f"Error al eliminar la unidad: {e}")
+            return False

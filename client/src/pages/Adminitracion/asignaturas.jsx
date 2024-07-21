@@ -28,12 +28,12 @@ function Asignaturas() {
   };
 
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-800 h-screen p-9">
       <Bread_Crumbs items={breadcrumbItems} />
       <div className="mt-10 font-poppins flex justify-between items-center">
-        <h1 className="text-3xl my-5">Modulo de Asignaturas</h1>
+        <h1 className="text-3xl my-5 dark:text-white">Modulo de Asignaturas</h1>
         <button
-          className="btn btn-active flex items-center gap-2"
+          className="btn btn-active flex items-center gap-2 dark:bg-green-700 dark:hover:bg-green-800 dark:text-white dark:border-none" 
           onClick={handleOpenModalForCreation}
         >
           <Plus size={20} />

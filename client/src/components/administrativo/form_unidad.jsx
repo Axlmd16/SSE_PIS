@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Context } from "../../store/context";
@@ -18,22 +18,30 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
   useEffect(() => {
     if (update && unit) {
-      setValue("nombre", unit.nombre);
+      const formattedDateInicio = new Date(unit.fecha_inicio)
+        .toISOString()
+        .split("T")[0];
+
+      const formattedDateFin = new Date(unit.fecha_fin)
+        .toISOString()
+        .split("T")[0];
+
+      setValue("nombre", unit.unidad_nombre);
       setValue("nro_unidad", unit.nro_unidad);
       setValue("nro_semanas", unit.nro_semanas);
-      setValue("fecha_inicio", unit.fecha_inicio);
-      setValue("fecha_fin", unit.fecha_fin);
-      setValue("asignatura_id", unit.asignatura_id);
+      setValue("fecha_inicio", formattedDateInicio);
+      setValue("fecha_fin", formattedDateFin);
+      setValue("asignatura_id", id_subject);
     }
-  }, [update, unit, setValue]);
+  }, [update, unit, setValue, id_subject]);
 
   const onSubmit = async (data) => {
+    console.log("Datos enviados:", data); // Agrega este log
     try {
-      console.log("Data:", data);
       if (update) {
         await actions.update_unit(unit.id, data);
       } else {
-        await actions.create_unit(data, id_curso);
+        await actions.create_unit(data);
       }
       MySwal.fire({
         icon: "success",
@@ -58,10 +66,10 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
       <form className="grid" onSubmit={handleSubmit(onSubmit)}>
         <div className="my-2">
           <div className="text-xl font-poppins text-gray-900 font-bold text-center">
-            <h2>{update ? "Actualizar unidad" : "Agregar nueva unidad"}</h2>
+            <h2 className="dark:text-green-600">{update ? "Actualizar unidad" : "Agregar nueva unidad"}</h2>
             <br />
           </div>
-          <label className="text-black text-sm" htmlFor="nombre">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nombre">
             Tema
           </label>
           <input
@@ -77,13 +85,14 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
         </div>
         {/* Input de nro de unidad */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="nro_unidad">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nro_unidad">
             Nro. de unidad
           </label>
           <input
             className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
             id="nro_unidad"
             type="number"
+            inputMode="numeric"
             aria-label="Nro. de unidad"
             {...register("nro_unidad", {
               required: "Ingrese el número de la unidad",
@@ -97,13 +106,14 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Input de nro de semanas */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="nro_semanas">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nro_semanas">
             Nro. de semanas
           </label>
           <input
             className="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded-lg mt-2"
             id="nro_semanas"
             type="number"
+            inputMode="numeric"
             aria-label="Nro. de semanas"
             {...register("nro_semanas", {
               required: "Ingrese el número de semanas",
@@ -119,7 +129,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Input de fecha_inicio */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="fecha_inicio">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="fecha_inicio">
             Fecha de inicio
           </label>
           <input
@@ -140,7 +150,7 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
 
         {/* Input de fecha_fin */}
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="fecha_fin">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="fecha_fin">
             Fecha de finalización
           </label>
           <input
@@ -157,17 +167,17 @@ function Form_Unidad({ update = false, unit = {}, id_subject, id_curso }) {
           )}
         </div>
 
-        {/* Input oculto con el id_subject */}
+        {/* input oculto de asignatura id */}
         <input
           type="hidden"
-          id="asignatura_id"
+          inputMode="numeric"
           value={id_subject}
-          {...register("asignatura_id")}
+          {...register("asignatura_id", { required: true })}
         />
 
         {/* Botón de registro */}
         <div className="flex justify-end">
-          <button className="btn btn-active" type="submit">
+          <button className="btn btn-active dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" type="submit">
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>

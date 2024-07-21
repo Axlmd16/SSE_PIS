@@ -21,6 +21,12 @@ class Data_Access_Object(Generic[T]):
         self.name = self.atype.__name__.lower()
         self.cnx = ConnectionDB().connection()
 
+    def get(self, id: int) -> T:
+        row = self._find(id)
+        if row:
+            return self.atype.deserializable(row)
+        return None
+
     def _list(self) -> T:
         lista = Linked_List()
         cursor = self.cnx._db.cursor()
@@ -106,10 +112,10 @@ class Data_Access_Object(Generic[T]):
         cursor.close()
         self.cnx.commit()
 
-    def _delete(self, data: T) -> None:
+    def _delete(self, id: int) -> None:
         cursor = self.cnx._db.cursor()
         sql = f"DELETE FROM {self.name} WHERE ID = :id"
-        params = {"id": data.serializable()["id"]}
+        params = {"id": id}
         cursor.execute(sql, params)
         cursor.close()
         self.cnx.commit()

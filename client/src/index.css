@@ -80,11 +80,40 @@ button:focus-visible {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(8, 93, 163, 0.5); 
+  /* background: rgba(8, 93, 163, 0.5);  */
   z-index: 1;
 }
 
 .blue-filter img {
   position: relative;
   z-index: 0;
+}
+
+.dark {
+  --bg-table: #0f172a; /* Fondo de la tabla en modo oscuro */
+  --bg-cell: #1a1b26;  /* Fondo de las celdas en modo oscuro */
+  --text-primary: #ffffff; /* Texto primario en modo oscuro */
+  --text-secondary: #ffffff; /* Texto secundario en modo oscuro */
+}
+
+
+.pagination-container {
+  background-color: var(--bg-pagination);
+  color: var(--text-secondary);
+}
+
+.pagination-button {
+  background-color: var(--bg-pagination-btn);
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 0.25rem; /* Ajusta el radio del borde si es necesario */
+}
+
+.pagination-button:hover {
+  background-color: var(--bg-pagination-btn-hover);
+}
+
+.pagination-button:disabled {
+  background-color: var(--bg-pagination-btn-disabled);
+  color: var(--text-disabled);
 }

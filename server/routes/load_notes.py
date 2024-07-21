@@ -93,18 +93,15 @@ def guardar_estudiante_cursa():
 
         # Guardar matrícula
         mc._matricula._estudiante_cursa_id = id_estudiante_cursa
-        mc._matricula._codigo_matricula = data["codigo_matricula"]
+        mc._matricula._codigo_matricula = mc.generate_cod_matricula()
         mc._matricula._nro_de_matricula = data["nro_de_matricula"]
         mc._matricula._fecha_matricula = datetime.datetime.now()
         mc.save()
 
         # Obtener cursa y asignatura
         cursa = cursa_control._find(cursa_id)
-        print(f"cursa: {cursa}")
         asignacion = ac._find(cursa["asignacion_id"])
-        print(f"asignacion: {asignacion}")
         asignatura = asigc._find(asignacion["asignatura_id"])
-        print(f"asignatura: {asignatura}")
 
         # Obtener unidades de la asignatura
         unidades = [
@@ -113,7 +110,6 @@ def guardar_estudiante_cursa():
 
         # Guardar unidad_estudiante y notas de criterio si hay unidades
         if unidades:
-            print(f"unidades: {unidades}")
             criterios = crc._to_dict()
             for unidad in unidades:
                 ue._unidad_estudiante._unidad_id = unidad._id

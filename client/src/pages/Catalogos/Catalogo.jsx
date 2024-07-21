@@ -9,7 +9,7 @@ import { User, Key, HelpCircle } from 'lucide-react';
 const MySwal = withReactContent(Swal);
 
 const CatalogoCard = ({ to, IconComponent, titulo, descripcion }) => (
-    <div className='text-center bg-gray-800 p-3 rounded-lg mb-4 w-full transform transition duration-300 ease-in-out hover:scale-105'>
+    <div className='text-center bg-gray-800 dark:bg-gray-900 p-3 rounded-lg mb-4 w-full transform transition duration-300 ease-in-out hover:scale-105'>
         <Link to={to} className="block h-full">
             <div className="flex flex-col items-center">
                 <IconComponent size={24} className="mb-2 text-white" />
@@ -39,10 +39,10 @@ const CrearCatalogo = () => {
     ];
 
     return (
-        <div>
+        <div className="bg-white dark:bg-gray-800 h-screen p-9">
             <Bread_Crumbs items={breadcrumbItems} />
             <div className="mt-10 font-poppins flex justify-between items-center">
-                <h1 className="text-3xl my-5">Catalogos</h1>
+                <h1 className="text-3xl my-5 dark:text-white">Catalogos</h1>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <CatalogoCard

@@ -492,19 +492,23 @@ const adminActions = ({ getStore, getActions, setStore }) => ({
     }
   },
 
-  create_unit: async (data, curso_id) => {
+  create_unit: async (data) => {
     const { token } = getStore();
     const api = getStore().api;
 
     try {
-      const response = await api.post(`/units/${curso_id}`, data, {
+      const response = await api.post("/units", data, {
         headers: {
-          //Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
+      console.log("Respuesta del servidor:", response.data); // Agrega este log
       return response.data;
     } catch (error) {
-      console.error("Flux: Error creando la unidad", error);
+      console.error(
+        "Flux: Error creando la unidad",
+        error.response ? error.response.data : error
+      );
       throw error;
     }
   },
@@ -526,6 +530,23 @@ const adminActions = ({ getStore, getActions, setStore }) => ({
       return response.data;
     } catch (error) {
       console.error("Flux: Error actualizando la unidad", error);
+      throw error;
+    }
+  },
+
+  delete_unit: async (id) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.delete(`/units/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error eliminando la unidad", error);
       throw error;
     }
   },

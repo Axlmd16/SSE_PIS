@@ -14,7 +14,6 @@ import {
 } from "recharts";
 
 const Statistics = ({ data }) => {
-  console.log("DAta", data);
   const totalStudents = data.length;
 
   const passedStudents = data.filter((student) => {
@@ -54,7 +53,7 @@ const Statistics = ({ data }) => {
   const COLORS = ["#00C49F", "#FF8042"];
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg mt-6">
+    <div className="p-4 bg-white shadow-md rounded-lg mt-6 dark:bg-gray-800">
       <h2 className="text-xl font-bold mb-4">Estadísticas del Curso</h2>
       <div className="flex flex-col lg:flex-row justify-between items-center">
         <div className="mb-4 lg:mb-0 lg:w-1/2">

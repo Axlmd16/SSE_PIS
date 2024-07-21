@@ -195,6 +195,40 @@ const academicActions = ({ getStore, getActions, setStore }) => ({
 
   //* ------------------DOCENTES-----------------
 
+  get_docente: async (data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.post("/obtener_docente", data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error obtenido el docente", error);
+      throw error;
+    }
+  },
+
+  get_email_docente: async (data) => {
+    const { token } = getStore();
+    const api = getStore().api;
+
+    try {
+      const response = await api.post("/obtener_correo_docente", data, {
+        headers: {
+          //Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Flux: Error obtenido el correo del docente", error);
+      throw error;
+    }
+  },
+
   get_all_docentes: async () => {
     const { token } = getStore();
     const api = getStore().api;

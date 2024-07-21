@@ -121,7 +121,6 @@ def get_mesh(id):
 @admin.route("/meshes/<int:id>", methods=["PUT"])
 def update_mesh(id):
     data = request.json
-    print(data)
     mc._malla._descripcion = data["descripcion"]
     mc._malla._carrera_id = data["carrera_id"]
     mc._malla._estado = data["estado"]
@@ -146,11 +145,10 @@ def get_subjects():
 @admin.route("/subjects", methods=["POST"])
 def create_subject():
     data = request.json
-    print(data)
     ac._asignatura._nombre = data["nombre"]
     ac._asignatura._descripcion = data["descripcion"]
     ac._asignatura._malla_id = data["malla_id"]
-    ac._asignatura._grupo_id = data["grupo_id"]
+    ac._asignatura._grupo_id = gc.list()[0]._id
     ac._asignatura._ciclo_id = data["ciclo_id"]
     ac._asignatura._total_horas = data["total_horas"]
 
@@ -227,25 +225,27 @@ def update_group(id):
 # ----------------------------------------------------------------------------------------
 # Unidades
 @jwt_required
-@admin.route("/units/<int:curso_id>", methods=["POST"])
-def create_unit(curso_id):
+@admin.route("/units", methods=["POST"])
+def create_unit():
     try:
         data = request.json
+        print("Datos recibidos del frontend:", data)
         uc._unidad._nombre = data["nombre"]
         uc._unidad._nro_unidad = int(data["nro_unidad"])
         uc._unidad._nro_semanas = int(data["nro_semanas"])
+        uc._unidad._asignatura_id = int(data["asignatura_id"])
         uc._unidad._fecha_inicio = datetime.strptime(data["fecha_inicio"], "%Y-%m-%d")
         uc._unidad._fecha_fin = datetime.strptime(data["fecha_fin"], "%Y-%m-%d")
-        uc._unidad._asignatura_id = int(data["asignatura_id"])
 
         id_unidad = uc.save()
+        print("id_unidad", id_unidad)
         estudiantes_cursas = Util().get_estudiantes_por_asignatura(
-            int(data["asignatura_id"])
+            data["asignatura_id"]
         )
         criterios = crc._to_dict()
 
         for estudiante in estudiantes_cursas:
-            uec._unidad_estudiante._unidad_id = int(id_unidad)
+            uec._unidad_estudiante._unidad_id = id_unidad
             uec._unidad_estudiante._estudiante_cursa_id = int(
                 estudiante["id_estudiante_cursa"]
             )
@@ -274,7 +274,6 @@ def get_units():
 @admin.route("/units/<int:id>", methods=["GET"])
 def get_unit(id):
     unit = uc._find(id)
-    print(unit)
     return jsonify(unit), 201
 
 
@@ -293,6 +292,15 @@ def update_unit(id):
         return jsonify(data), 201
     else:
         return jsonify({"msg": "Error al actualizar la unidad"}), 500
+
+
+@jwt_required
+@admin.route("/units/<int:id>", methods=["DELETE"])
+def delete_unit(id):
+    if uc.delete(id):
+        return jsonify({"msg": "Unidad eliminada"}), 201
+    else:
+        return jsonify({"msg": "Error al eliminar la unidad"}), 500
 
 
 # ----------------------------------------------------------------------------------------

@@ -215,7 +215,7 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
       cell: (row) => (
         <button
           onClick={() => handleButtonClick(row)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded dark:bg-green-700 dark:hover:bg-green-800 dark:border-none"
         >
           Ver Info
         </button>
@@ -260,12 +260,41 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
     setFilteredData(sortedData.slice(0, parseInt(studentCount)));
   }, [performanceFilter, studentCount, estudiantes, unit]);
 
+  const customStyles = {
+    headCells: {
+      style: {
+        fontSize: "11px",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        color: 'var(--text-primary)',
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)',
+        backgroundColor: 'var(--bg-cell)',
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)',
+        color: 'var(--text-secondary)',
+      },
+    },
+  };
+
   return (
     <div className="overflow-x-auto mt-4">
       <div className="mt-4 flex justify-center">
         <button
           onClick={handleSelectAllStudents}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 dark:bg-green-700 dark:hover:bg-green-800 dark:border-none"
         >
           Seleccionar Todos los Estudiantes
         </button>
@@ -274,6 +303,7 @@ const TablaEstudianteProyeccion = ({ subject, unit, course, onDataSelect, onData
         columns={columnsWithButton}
         data={filteredData}
         progressPending={loading}
+        customStyles={customStyles}
         pagination
         highlightOnHover
         pointerOnHover
