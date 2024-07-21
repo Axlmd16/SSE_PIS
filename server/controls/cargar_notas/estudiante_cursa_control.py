@@ -9,7 +9,17 @@ import time
 
 
 class EstudianteCursaControl(Data_Access_Object):
+    """
+    Controlador para gestionar las inscripciones de estudiantes en cursas.
+
+    Hereda de Data_Access_Object para realizar operaciones de base de datos.
+    """
     def __init__(self):
+        """
+        Inicializa una nueva instancia de EstudianteCursaControl.
+        
+        Inicializa los controladores necesarios para gestionar estudiantes y cursas.
+        """
         super().__init__(Estudiante_Cursa)
         self.__estudiante_cursa = None
         self.__estudiante_control = EstudianteControl()
@@ -17,31 +27,55 @@ class EstudianteCursaControl(Data_Access_Object):
 
     @property
     def _estudiante_control(self):
+        """
+        Obtiene el controlador de estudiante actual.
+        """
         return self.__estudiante_control
 
     @_estudiante_control.setter
     def _estudiante_control(self, value):
+        """
+        Establece el controlador de estudiante.
+        """
         self.__estudiante_control = value
 
     @property
     def _cursa_control(self):
+        """
+        Obtiene el controlador de cursa actual.
+        """
         return self.__cursa_control
 
     @_cursa_control.setter
     def _cursa_control(self, value):
+        """
+        Establece el controlador de cursa.
+        """
         self.__cursa_control = value
 
     @property
     def _estudiante_cursa(self):
+        """
+        Obtiene la inscripción de estudiante en cursa actual. Si no hay una inscripción actual, se crea una nueva.
+        """
         if self.__estudiante_cursa is None:
             self.__estudiante_cursa = Estudiante_Cursa()
         return self.__estudiante_cursa
 
     @_estudiante_cursa.setter
     def _estudiante_cursa(self, value):
+        """
+        Establece la inscripción de estudiante en cursa actual.
+        """
         self.__estudiante_cursa = value
 
     def save(self):
+        """
+        Guarda la inscripción de estudiante en cursa actual en la base de datos.
+        
+        Returns:
+            int: El ID de la inscripción guardada.
+        """
         try:
             id = self._save_id(self._estudiante_cursa)
             return id
@@ -49,6 +83,15 @@ class EstudianteCursaControl(Data_Access_Object):
             print(f"Error al guardar la estudiante_cursa: {e}")
 
     def update(self, id):
+        """
+        Actualiza la inscripción de estudiante en cursa con el ID proporcionado.
+        
+        Args:
+            id (int): El ID de la inscripción a actualizar.
+        
+        Returns:
+            bool: True si la actualización fue exitosa, False en caso contrario.
+        """
         try:
             self._merge(id, self._estudiante_cursa)
             return True
@@ -57,9 +100,21 @@ class EstudianteCursaControl(Data_Access_Object):
             return False
 
     def list(self):
+        """
+        Lista todas las inscripciones de estudiantes en cursas.
+        
+        Returns:
+            list: Lista de todas las inscripciones de estudiantes en cursas.
+        """
         return self._list()
 
     def get_estudiante_cursa_info_completa(self):
+        """
+        Obtiene la información completa de todas las inscripciones de estudiantes en cursas.
+        
+        Returns:
+            list: Lista con la información completa de todas las inscripciones de estudiantes en cursas.
+        """
         inicio = time.time()
         estudiante_cursa_info_completa = []
 
