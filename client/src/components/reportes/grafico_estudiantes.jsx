@@ -28,7 +28,7 @@ const StudentChart = ({ data }) => {
   const getBarColor = (nota) => (nota >= 7 ? "#00C49F" : "#FF8042");
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
+    <div className="p-4 bg-white shadow-md rounded-lg border border-gray-200 dark:bg-gray-800">
       <ResponsiveContainer width="70%" height={250} className="mx-auto">
         <BarChart
           data={chartData}
@@ -47,7 +47,7 @@ const StudentChart = ({ data }) => {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="text-center mt-4 font-medium">
+      <div className="text-center mt-4 font-medium dark:text-white">
         Estudiante: {student.nombre}
       </div>
     </div>

@@ -83,11 +83,11 @@ const CriteriaStatistics = ({ data, unit }) => {
   const COLORS = ["#00C49F", "#FF8042"];
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg mt-6">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="p-4 bg-white shadow-md rounded-lg mt-6 dark:bg-gray-800">
+      <h2 className="text-xl font-bold mb-4 dark:text-blue-400">
         Estadísticas del Curso: {unit.displayName}
       </h2>
-      <div className="flex flex-col lg:flex-row justify-between items-center">
+      <div className="flex flex-col lg:flex-row justify-between items-cente dark:text-white">
         <div className="mb-4 lg:mb-0 lg:w-1/2">
           <h3 className="text-lg font-semibold mb-2">
             Promedio de Notas por Criterio

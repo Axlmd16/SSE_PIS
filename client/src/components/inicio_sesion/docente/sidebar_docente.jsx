@@ -81,7 +81,7 @@ function Sidebar_Docente({ actions, store }) {
   const toggleMenuVisibility = (unitId) => {
     setMenuVisibility((prevVisibility) => ({
       ...Object.keys(prevVisibility).reduce((acc, key) => {
-        acc[key] = false; // Cierra todos los menús
+        acc[key] = false;
         return acc;
       }, {}),
       [unitId]: !prevVisibility[unitId],
@@ -105,9 +105,9 @@ function Sidebar_Docente({ actions, store }) {
     location.pathname === `/course/detail/${curso_id}/${asignatura_id}`;
 
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open dark:text-gray-300">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col p-7 font-poppins">
+      <div className="drawer-content flex flex-col font-poppins">
         {showDetailCourse ? <DetailCourse /> : <Outlet />}
         <label
           htmlFor="my-drawer-2"
@@ -122,11 +122,11 @@ function Sidebar_Docente({ actions, store }) {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-200 text-base-content min-h-full w-64 p-4 space-y-5">
+        <ul className="menu bg-base-200 dark:bg-gray-900 text-base-content min-h-full w-64 p-4 space-y-5">
           <li>
             <Link
               to={`/course/detail/${curso_id}/${asignatura_id}`}
-              className="flex items-center space-x-2 text-gray-700"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
             >
               <Home className="w-5 h-5" />
               <span>Inicio</span>
@@ -135,23 +135,17 @@ function Sidebar_Docente({ actions, store }) {
           <li>
             <Link
               to="estudiantes"
-              className="flex items-center space-x-2 text-gray-700"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
             >
               <Users className="w-5 h-5" />
               <span>Estudiantes</span>
             </Link>
           </li>
-          {/* <li>
-            <Link to="#" className="flex items-center space-x-2 text-gray-700">
-              <FileText className="w-5 h-5" />
-              <span>Calificaciones</span>
-            </Link>
-          </li> */}
           {units.map((unit) => (
             <li key={unit.id} className="relative dropdown">
               <Link
                 to={`unidad/${unit.id}`}
-                className={`flex items-center justify-between text-gray-700 ${
+                className={`flex items-center justify-between text-gray-700 dark:text-gray-300 ${
                   location.pathname.includes(`unidad/${unit.id}`)
                     ? "bg-slate-800 text-white text-opacity-90 "
                     : ""
@@ -162,7 +156,7 @@ function Sidebar_Docente({ actions, store }) {
                   <span>Unidad {unit.nro_unidad}</span>
                 </div>
                 <button
-                  className="text-gray-500 btn btn-sm btn-ghost btn-circle"
+                  className="text-gray-500 btn btn-sm btn-ghost btn-circle dark:text-gray-400"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleMenuVisibility(unit.id);
@@ -172,14 +166,14 @@ function Sidebar_Docente({ actions, store }) {
                 </button>
               </Link>
               <ul
-                className={`dropdown-content dropdown-bottom menu p-2 shadow bg-base-100 rounded-box w-auto ${
+                className={`dropdown-content dropdown-bottom menu p-2 shadow bg-base-100 dark:bg-gray-700 rounded-box w-auto ${
                   menuVisibility[unit.id] ? "block" : "hidden"
                 } absolute right-0 top-0`}
               >
                 <li>
                   <button
                     onClick={() => handleUpdate(unit)}
-                    className="text-blue-600 btn btn-ghost btn-sm"
+                    className="text-blue-600 btn btn-ghost btn-sm dark:text-blue-400"
                   >
                     <Edit size={16} />
                   </button>
@@ -187,7 +181,7 @@ function Sidebar_Docente({ actions, store }) {
                 <li>
                   <button
                     onClick={() => handleDelete(unit.id)}
-                    className="text-red-600 btn btn-ghost btn-sm"
+                    className="text-red-600 btn btn-ghost btn-sm dark:text-red-400"
                   >
                     <Trash size={16} />
                   </button>
@@ -198,7 +192,7 @@ function Sidebar_Docente({ actions, store }) {
           <li>
             <button
               onClick={handleOpenModalForCreation}
-              className="btn btn-ghost btn-sm flex items-center space-x-2 text-gray-900"
+              className="btn btn-ghost btn-sm flex items-center space-x-2 text-gray-900 dark:text-gray-300"
             >
               <PlusCircle size={16} />
               <span>Nueva unidad</span>
