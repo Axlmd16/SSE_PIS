@@ -14,20 +14,43 @@ T = TypeVar("T")
 
 
 class Data_Access_Object(Generic[T]):
+    """
+    Clase genérica para el acceso a datos que implementa operaciones CRUD básicas.
+
+    :param atype: Tipo de dato para el cual se implementa el DAO.
+    :type atype: TypeVar
+    """
+
     atype: T
 
     def __init__(self, atype: T):
+        """
+        Inicializa la instancia del DAO.
+
+        :param atype: Tipo de dato para el cual se implementa el DAO.
+        """
         self.atype = atype
         self.name = self.atype.__name__.lower()
         self.cnx = ConnectionDB().connection()
 
     def get(self, id: int) -> T:
+        """
+        Obtiene un registro por su ID.
+
+        :param id: ID del registro a obtener.
+        :returns: Instancia del tipo `T` con los datos del registro, o None si no se encuentra.
+        """
         row = self._find(id)
         if row:
             return self.atype.deserializable(row)
         return None
 
     def _list(self) -> T:
+        """
+        Lista todos los registros de la tabla asociada.
+
+        :returns: Lista enlazada con todas las instancias del tipo `T`.
+        """
         lista = Linked_List()
         cursor = self.cnx._db.cursor()
         cursor.execute(f"SELECT * FROM {self.name}")
@@ -38,6 +61,12 @@ class Data_Access_Object(Generic[T]):
         return lista
 
     def _save(self, data: T):
+        """
+        Guarda un nuevo registro en la base de datos.
+
+        :param data: Instancia del tipo `T` con los datos a guardar.
+        :raises Exception: Si ocurre un error al ejecutar la operación.
+        """
         cursor = None
         try:
             cursor = self.cnx._db.cursor()
@@ -70,6 +99,12 @@ class Data_Access_Object(Generic[T]):
                 cursor.close()
 
     def _save_id(self, data: T):
+        """
+        Guarda un nuevo registro en la base de datos y retorna el ID generado.
+
+        :param data: Instancia del tipo `T` con los datos a guardar.
+        :returns: ID del nuevo registro.
+        """
         cursor = self.cnx._db.cursor()
         data_dict = data.serializable()
         id_present = "id" in data_dict
@@ -96,6 +131,12 @@ class Data_Access_Object(Generic[T]):
         return id
 
     def _merge(self, id: int, data: T) -> None:
+        """
+        Actualiza un registro existente.
+
+        :param id: ID del registro a actualizar.
+        :param data: Instancia del tipo `T` con los nuevos datos.
+        """
         cursor = self.cnx._db.cursor()
         columns = ", ".join([f"{key} = :{key}" for key in data.serializable().keys()])
         sql = f"UPDATE {self.name} SET {columns} WHERE ID = :id"
@@ -113,6 +154,11 @@ class Data_Access_Object(Generic[T]):
         self.cnx.commit()
 
     def _delete(self, id: int) -> None:
+        """
+        Elimina un registro por su ID.
+
+        :param id: ID del registro a eliminar.
+        """
         cursor = self.cnx._db.cursor()
         sql = f"DELETE FROM {self.name} WHERE ID = :id"
         params = {"id": id}
@@ -121,6 +167,12 @@ class Data_Access_Object(Generic[T]):
         self.cnx.commit()
 
     def _find(self, id: int) -> T:
+        """
+        Encuentra un registro por su ID.
+
+        :param id: ID del registro a encontrar.
+        :returns: Diccionario con los datos del registro, o None si no se encuentra.
+        """
         cursor = self.cnx._db.cursor()
         sql = f"SELECT * FROM {self.name} WHERE ID = :id"
         params = {"id": id}
@@ -130,12 +182,22 @@ class Data_Access_Object(Generic[T]):
         return row
 
     def __transform__(self):
+        """
+        Transforma la lista de registros en una cadena JSON.
+
+        :returns: Cadena JSON representando la lista de registros.
+        """
         return json.dumps(
             [self.lista.get(i).serializable() for i in range(self.lista._length)],
             indent=4,
         )
 
     def _to_dict(self):
+        """
+        Convierte todos los registros de la tabla en una lista de diccionarios.
+
+        :returns: Lista de diccionarios con los datos de todos los registros.
+        """
         cursor = self.cnx._db.cursor()
         dict = []
         cursor.execute(f"SELECT * FROM {self.name}")
@@ -150,9 +212,6 @@ class Data_Access_Object(Generic[T]):
         Args:
         - table_name (str): Nombre de la tabla en la base de datos.
         - primary_keys (dict): Diccionario con las columnas de clave primaria y sus valores.
-
-        Example:
-        - primary_keys = {"ROL_ID": 1, "PERMISO_ID": 2}
         """
         cursor = self.cnx._db.cursor()
         columns = ", ".join(primary_keys.keys())

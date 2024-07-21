@@ -9,7 +9,7 @@ import {
   SlidersVertical,
   UsersRound,
   Sun,
-  Moon
+  Moon,
 } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -63,6 +63,7 @@ import { Context } from "./store/context";
 import PerfilUsuario from "./components/inicio_sesion/password/PerfilUsuario";
 import VerificarUsuarioDocente from "./components/inicio_sesion/password/VerificarUsuarioDocente";
 import Autores from "./pages/Autores";
+import Home_Admin from "./pages/Principal/Home_Admin";
 
 const Rutas = () => {
   const { store, actions } = useContext(Context);
@@ -91,7 +92,7 @@ const Rutas = () => {
           <div className="w-full h-full overflow-y-auto">
             <Routes>
               <Route>
-                <Route path="/home-admin" element={<Home_Principal />} />
+                <Route path="/home-admin" element={<Home_Admin />} />
                 <Route path="/users" element={<User />} />
                 <Route path="/careers" element={<Carreras />} />
                 <Route path="/meshes" element={<Mallas />} />
@@ -209,22 +210,20 @@ const Rutas = () => {
 export default Rutas;
 
 function Navigation_Auth() {
-
-
   const [theme, setTheme] = useState("light");
   const { actions } = useContext(Context);
   const location = useLocation();
 
   const handleChangeTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   useEffect(() => {
-    if (theme === 'dark') {
+    if (theme === "dark") {
       // console.log(theme);
-      document.querySelector('html').classList.add('dark');
+      document.querySelector("html").classList.add("dark");
     } else {
-      document.querySelector('html').classList.remove('dark');
+      document.querySelector("html").classList.remove("dark");
     }
   }, [theme]);
 
@@ -307,7 +306,7 @@ function Navigation_Auth() {
           onClick={handleChangeTheme}
           className="flex items-center px-2 py-2 text-white  focus:outline-none bg-gray-900"
         >
-          {theme === 'dark' ? (
+          {theme === "dark" ? (
             <div className="flex items-center">
               <Sun className="h-6 w-6" />
               {/* <span className="ml-2">Modo Claro</span> */}
@@ -321,6 +320,5 @@ function Navigation_Auth() {
         </button>
       </Sidebar>
     </div>
-
   );
 }
