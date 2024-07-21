@@ -1,4 +1,10 @@
 class Asignacion:
+    """
+    Representa una asignación de un docente a una asignatura en un periodo académico específico.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self) -> None:
         self.__id = None
         self.__docente_id = 0
@@ -38,9 +44,19 @@ class Asignacion:
         self.__periodo_academico_id = value
 
     def __str__(self) -> str:
+        """
+        Devuelve una representación en cadena de la asignación.
+
+        :returns: Cadena que representa la asignación con los IDs de docente, asignatura y periodo académico.
+        """
         return f"Docente: {self.__docente_id} Asignatura: {self.__asignatura_id} Periodo: {self.__periodo_academico_id}"
 
     def serializable(self):
+        """
+        Convierte la asignación en un diccionario serializable.
+
+        :returns: Diccionario con los datos de la asignación para su serialización.
+        """
         return {
             "id": self.__id,
             "docente_id": self.__docente_id,
@@ -48,7 +64,14 @@ class Asignacion:
             "periodo_academico_id": self.__periodo_academico_id,
         }
 
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Asignacion a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la asignación.
+        :returns: Una instancia de Asignacion con los datos proporcionados.
+        """
         asignacion = Asignacion()
         asignacion._id = data["id"]
         asignacion._docente_id = data["docente_id"]

@@ -1,5 +1,14 @@
 class Nota_Criterio:
+    """
+    Representa la nota asignada a un criterio específico para una unidad de estudiante.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self) -> None:
+        """
+        Inicializa una nueva instancia de la clase Nota_Criterio.
+        """
         self.__id = None
         self.__criterio_id = 0
         self.__unidad_estudiante_id = 0
@@ -38,9 +47,19 @@ class Nota_Criterio:
         self.__nota_criterio = value
 
     def __str__(self) -> str:
+        """
+        Devuelve una representación en cadena de la instancia de Nota_Criterio.
+
+        :returns: Una cadena que representa la instancia de Nota_Criterio.
+        """
         return f"Criterio: {self.__criterio_id} Unidad_Estudiante: {self.__unidad_estudiante_id} Nota: {self.__nota_criterio}"
 
     def serializable(self):
+        """
+        Convierte la instancia de Nota_Criterio en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Nota_Criterio.
+        """
         return {
             "id": self.__id,
             "criterio_id": self.__criterio_id,
@@ -48,7 +67,14 @@ class Nota_Criterio:
             "nota_criterio": self.__nota_criterio,
         }
 
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Nota_Criterio a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la instancia de Nota_Criterio.
+        :returns: Una instancia de Nota_Criterio.
+        """
         nota_criterio = Nota_Criterio()
         nota_criterio._id = data["id"]
         nota_criterio._criterio_id = data["criterio_id"]

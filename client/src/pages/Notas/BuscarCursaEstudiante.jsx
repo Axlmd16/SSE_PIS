@@ -48,10 +48,7 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
             .toLowerCase()
             .includes(searchTerm.toLowerCase()) ||
           cursa.paralelo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          cursa.docente_nombre
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          cursa.ciclo_id.toLowerCase().includes(searchTerm.toLowerCase())
+          cursa.docente_nombre.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setSearchResultsCursa(filteredResults);
       setSelectedCursa(null);
@@ -100,11 +97,11 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
   }, [actions]);
 
   return (
-    <div className="flex gap-4">
-      <div className="relative p-4 bg-white shadow rounded-lg w-1/2 dark:bg-gray-900">
+    <div className="flex gap-6">
+      <div className="relative p-4 bg-white shadow-lg rounded-lg w-1/2 dark:bg-gray-800">
         <input
           type="text"
-          className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          className="w-full px-4 py-2 text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           placeholder="Buscar Estudiantes..."
           value={searchTermEstudiante}
           onChange={handleSearchDocente}
@@ -112,17 +109,17 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
         {searchTermEstudiante && (
           <button
             onClick={handleClearSearchEstudiante}
-            className="absolute top-5 right-5 btn btn-ghost btn-sm"
+            className="absolute top-5 right-5 btn btn-sm btn-circle dark:bg-green-700 dark:hover:bg-green-800 dark:text-white dark:border-none"
           >
-            <XCircle size={16} className="text-gray-800" />
+            <XCircle size={20} />
           </button>
         )}
-        <ul className="divide-y divide-gray-200 mt-2">
+        <ul className="mt-3 divide-y divide-gray-200 dark:divide-gray-700">
           {searchResultsEstudiante.map((person) => (
             <li
               key={person.id}
               onClick={() => handleSelectPerson(person)}
-              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white dark:bg-green-700 dark:hover:bg-green-800 dark:border-none dark:mt-1 dark:text-white rounded-md"
+              className="p-3 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-800 rounded-md transition-colors duration-150"
             >
               {person.primer_nombre} {person.segundo_nombre}{" "}
               {person.primer_apellido} {person.segundo_apellido}
@@ -131,9 +128,11 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
         </ul>
 
         {selectedEstudiante && (
-          <div className="mt-4">
-            <h2 className="text-lg font-bold dark:text-green-600">Estudiante seleccionado:</h2>
-            <p className="mt-2 dark:text-cyan-400">
+          <div className="mt-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-md">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+              Estudiante seleccionado:
+            </h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">
               {selectedEstudiante.primer_nombre}{" "}
               {selectedEstudiante.segundo_nombre}{" "}
               {selectedEstudiante.primer_apellido}{" "}
@@ -142,28 +141,28 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
           </div>
         )}
       </div>
-      <div className="relative p-4 bg-white shadow rounded-lg w-1/2 dark:bg-gray-900">
+      <div className="relative p-4 bg-white shadow-lg rounded-lg w-1/2 dark:bg-gray-800">
         <input
           type="text"
-          className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          className="w-full px-4 py-2 text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           placeholder="Buscar Cursos..."
           value={searchTermCursa}
           onChange={handleSearchCursa}
         />
         {searchTermCursa && (
           <button
-            onClick={handleClearSearchCursa}
-            className="absolute top-5 right-5 btn btn-ghost btn-sm"
+            onClick={handleClearSearchEstudiante}
+            className="absolute top-5 right-5 btn btn-sm btn-circle dark:bg-green-700 dark:hover:bg-green-800 dark:text-white dark:border-none"
           >
-            <XCircle size={16} className="text-gray-800" />
+            <XCircle size={20} />
           </button>
         )}
-        <ul className="divide-y divide-gray-200 mt-2">
+        <ul className="mt-3 divide-y divide-gray-200 dark:divide-gray-700">
           {searchResultsCursa.map((cursa) => (
             <li
               key={cursa.id}
               onClick={() => handleSelectCursa(cursa)}
-              className="p-2 cursor-pointer hover:bg-gray-800 hover:text-white dark:bg-green-700 dark:hover:bg-green-800 dark:border-none dark:mt-1 dark:text-white rounded-md"
+              className="p-3 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-800 rounded-md transition-colors duration-150"
             >
               {cursa.ciclo_id}° {cursa.paralelo} - {cursa.asignatura_nombre} -{" "}
               {cursa.docente_nombre}
@@ -172,9 +171,11 @@ const BuscarCursaEstudiante = ({ actions, onDataSelect, update = false }) => {
         </ul>
 
         {selectedCursa && (
-          <div className="mt-4">
-            <h2 className="text-lg font-bold dark:text-green-600">Curso seleccionado:</h2>
-            <p className="mt-2 dark:text-cyan-400">{`${selectedCursa.ciclo_id}° - ${selectedCursa.paralelo} - ${selectedCursa.asignatura_nombre}`}</p>
+          <div className="mt-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-md">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+              Curso seleccionado:
+            </h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">{`${selectedCursa.ciclo_id}° - ${selectedCursa.paralelo} - ${selectedCursa.asignatura_nombre}`}</p>
           </div>
         )}
       </div>

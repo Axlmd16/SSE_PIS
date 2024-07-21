@@ -1,4 +1,10 @@
 class Asignatura:
+    """
+    Representa una asignatura con sus detalles correspondientes.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
         self.__id = None
         self.__nombre = " "
@@ -64,7 +70,20 @@ class Asignatura:
     def _malla_id(self, value):
         self.__malla_id = value
 
+    def __str__(self) -> str:
+        """
+        Devuelve el nombre de la asignatura.
+
+        :returns: Nombre de la asignatura.
+        """
+        return self.__nombre
+
     def serializable(self):
+        """
+        Convierte la asignatura en un diccionario serializable.
+
+        :returns: Diccionario con los datos de la asignatura para su serialización.
+        """
         return {
             "id": self.__id,
             "nombre": self.__nombre,
@@ -75,10 +94,14 @@ class Asignatura:
             "malla_id": self.__malla_id,
         }
 
-    def __str__(self):
-        return self.__nombre
-
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Asignatura a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la asignatura.
+        :returns: Una instancia de Asignatura con los datos proporcionados.
+        """
         asignatura = Asignatura()
         asignatura._id = data["id"]
         asignatura._nombre = data["nombre"]
