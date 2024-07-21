@@ -103,11 +103,11 @@ function Form_Docente({ update = false, docente = {} }) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="col-span-2 text-xl font-poppins text-gray-900 font-bold text-center">
-          <h2>{update ? "Actualizar Docente" : "Agregar nuevo Docente"}</h2>
+          <h2 className="dark:text-green-600">{update ? "Actualizar Docente" : "Agregar nuevo Docente"}</h2>
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="primer_nombre">
+          <label className="text-black text-sm dark:text-white" htmlFor="primer_nombre">
             Primer nombre
           </label>
           <input
@@ -123,7 +123,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="segundo_nombre">
+          <label className="text-black text-sm dark:text-white" htmlFor="segundo_nombre">
             Segundo nombre
           </label>
           <input
@@ -139,7 +139,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="primer_apellido">
+          <label className="text-black text-sm dark:text-white" htmlFor="primer_apellido">
             Primer apellido
           </label>
           <input
@@ -155,7 +155,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="segundo_apellido">
+          <label className="text-black text-sm dark:text-white" htmlFor="segundo_apellido">
             Segundo apellido
           </label>
           <input
@@ -171,7 +171,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="tipo_identificacion">
+          <label className="text-black text-sm dark:text-white" htmlFor="tipo_identificacion">
             Tipo de identificación
           </label>
           <select
@@ -195,7 +195,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="dni">
+          <label className="text-black text-sm dark:text-white" htmlFor="dni">
             DNI
           </label>
           <input
@@ -209,7 +209,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="telefono">
+          <label className="text-black text-sm dark:text-white" htmlFor="telefono">
             Teléfono
           </label>
           <input
@@ -226,12 +226,12 @@ function Form_Docente({ update = false, docente = {} }) {
             })}
           />
           {errors.telefono && (
-            <p className="text-red-500 text-sm ">{errors.telefono.message}</p>
+            <p className="text-red-500 text-sm dark:text-white ">{errors.telefono.message}</p>
           )}
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="fecha_nacimiento">
+          <label className="text-black text-sm dark:text-white" htmlFor="fecha_nacimiento">
             Fecha de nacimiento
           </label>
           <DatePicker
@@ -251,7 +251,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="email">
+          <label className="text-black text-sm dark:text-white" htmlFor="email">
             Email
           </label>
           <input
@@ -267,7 +267,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="genero_id">
+          <label className="text-black text-sm dark:text-white" htmlFor="genero_id">
             Género
           </label>
           <select
@@ -289,7 +289,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="titulo">
+          <label className="text-black text-sm dark:text-white" htmlFor="titulo">
             Titulo Docente
           </label>
           <input
@@ -305,7 +305,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="experiencia_laboral">
+          <label className="text-black text-sm dark:text-white" htmlFor="experiencia_laboral">
             Experiencia Laboral
           </label>
           <input
@@ -323,7 +323,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="cubiculo">
+          <label className="text-black text-sm dark:text-white" htmlFor="cubiculo">
             Cubiculo
           </label>
           <input
@@ -339,7 +339,7 @@ function Form_Docente({ update = false, docente = {} }) {
         </div>
 
         <div className="flex justify-end col-span-2">
-          <button className="btn btn-active" type="submit">
+          <button className="btn btn-active dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" type="submit">
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>

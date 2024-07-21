@@ -92,10 +92,10 @@ const Cursa = () => {
   };
 
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-800 h-screen p-9">
       <Bread_Crumbs items={breadcrumbItems} />
       <div className="mt-10 font-poppins flex justify-between items-center my-5">
-        <h1 className="text-3xl ">Crear Curso</h1>
+        <h1 className="text-3xl dark:text-white">Crear Curso</h1>
       </div>
       <div className="flex gap-4">
         <div className="w-1/2">
@@ -109,7 +109,7 @@ const Cursa = () => {
           <div className="w-1/2 flex justify-center items-center flex-col">
             {/* <h2 className="font-bold text-center ">CICLO</h2> */}
             <select
-              className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-green-700 dark:text-white dark:border-none"
               onChange={handleCicloChange}
             >
               <option value="">Seleccionar ciclo</option>
@@ -120,10 +120,10 @@ const Cursa = () => {
               ))}
             </select>
           </div>
-          <div className="w-1/2 flex justify-center items-center flex-col mx-5 text-gray-700">
+          <div className="w-1/2 flex justify-center items-center flex-col mx-5 text-gray-700 ">
             {/* <h2 className="font-bold text-center">PARALELO</h2> */}
             <select
-              className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-green-700 dark:text-white dark:border-none"
               onChange={handleParaleloChange}
             >
               <option value="">Seleccionar paralelo</option>
@@ -140,7 +140,7 @@ const Cursa = () => {
       </div>
       <div className="text-center">
         <button
-          className="mt-6 bg-indigo-600 text-white font-bold"
+          className="mt-6 bg-indigo-600 text-white font-bold dark:bg-green-700 dark:hover:bg-green-800 dark:border-none"
           onClick={creareCursa}
         >
           <p>Asignar Curso</p>

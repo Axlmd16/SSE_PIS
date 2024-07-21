@@ -81,14 +81,14 @@ const TablaDocenteAsignatura = ({ actions, store, actualizar }) => {
         <div className="">
           <button
             id="btn-delete"
-            className="btn-ghost mx-2"
+            className="btn-ghost text-red-500 dark:text-green-400"
             onClick={() => handleDelete(row)}
           >
             <Trash2 size={20} />
           </button>
           <button
             id="btn-update"
-            className="btn-ghost"
+            className="btn-ghost text-blue-500 dark:text-purple-400"
             onClick={() => handleUpdate(row)}
           >
             <Pencil size={20} />
@@ -113,13 +113,32 @@ const TablaDocenteAsignatura = ({ actions, store, actualizar }) => {
         fontSize: "11px",
         fontWeight: "bold",
         textTransform: "uppercase",
+        color: 'var(--text-primary)', 
+        backgroundColor: 'var(--bg-table)', 
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)', 
+        backgroundColor: 'var(--bg-cell)',
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)',
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)', 
+        color: 'var(--text-secondary)', 
       },
     },
   };
 
   //* Renderizado de la tabla
   return (
-    <div>
+    <div className="dark:bg-gray-800 dark:text-gray-200">
       <SearchBar handleSearch={handleSearch} />
 
       <DataTable

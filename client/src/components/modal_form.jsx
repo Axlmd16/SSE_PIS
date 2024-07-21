@@ -20,8 +20,8 @@ function Modal_Form({ children }) {
 
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="modal modal-open">
-        <div className="modal-box w-5/12 max-w-5xl">
+      <div className="modal modal-open dark:text-white">
+        <div className="modal-box w-5/12 max-w-5xl dark:bg-gray-800 ">
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={actions.handleModal}

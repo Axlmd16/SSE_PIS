@@ -57,7 +57,7 @@ function FormCursa({ cursa = {}, actions, store, setActualizarTabla }) {
 
     return (
         <div className="w-full">
-            <h1 className="text-xl font-poppins text-gray-900 font-bold text-center">Actualizar Cursa</h1>
+            <h1 className="text-xl font-poppins text-gray-900 font-bold text-center dark:text-green-600">Actualizar Cursa</h1>
             <BuscarAsignacionDocente
                 actions={actions}
                 store={store}
@@ -65,9 +65,9 @@ function FormCursa({ cursa = {}, actions, store, setActualizarTabla }) {
                 update={update}
             />
             <div className="text-center mt-5">
-                    <h2 className="font-bold text-center">PARALELO</h2>
+                    <h2 className="font-bold text-center dark:text-green-600">PARALELO</h2>
                     <select
-                        className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-green-700 dark:text-white dark:border-none"
                         onChange={handleParaleloChange}
                     >
                         <option value="">Seleccionar paralelo</option>
@@ -81,7 +81,7 @@ function FormCursa({ cursa = {}, actions, store, setActualizarTabla }) {
                     </select>
                 </div>
             <div className="text-center">
-                <button className="mt-6 bg-indigo-600 text-white font-bold" onClick={actualizarCursa}>
+                <button className="mt-6 bg-indigo-600 text-white font-bold dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" onClick={actualizarCursa}>
                     <p>Actualizar Cursa</p>
                 </button>
             </div>

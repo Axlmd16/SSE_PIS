@@ -19,9 +19,9 @@ function User() {
     },
   ];
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-800 h-screen p-9">
       <Bread_Crumbs items={breadcrumbItems} />
-      <div className="text-3xl mt-10 font-poppins">Cuentas de Usuarios</div>
+      <div className="text-3xl mt-10 font-poppins dark:text-white">Cuentas de Usuarios</div>
       <div className="mt-12">
         <TableUser actions={actions} />
       </div>

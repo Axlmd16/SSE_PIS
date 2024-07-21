@@ -55,7 +55,7 @@ function FormAsingancionDocente({docente_asignacion = {}, actions, store, setAct
 
   return (
     <div className="w-full">
-      <h1 className="text-xl font-poppins text-gray-900 font-bold text-center">Actualizar Asignacion Docente</h1>
+      <h1 className="text-xl font-poppins text-gray-900 font-bold text-center dark:text-green-600 mb-2">Actualizar Asignacion Docente</h1>
         <BuscarAsignaturaDocente 
           actions = {actions}
           store = {store}
@@ -63,7 +63,7 @@ function FormAsingancionDocente({docente_asignacion = {}, actions, store, setAct
           update = {update}
         />
          <div className="text-center">
-                <button className="mt-6 bg-indigo-600 text-white font-bold" onClick={actualizarAsignacionDocente}>
+                <button className="mt-6 bg-indigo-600 text-white font-bold dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" onClick={actualizarAsignacionDocente}>
                     <p>Actualizar Docnete-Asignatura</p>
                 </button>
             </div>
