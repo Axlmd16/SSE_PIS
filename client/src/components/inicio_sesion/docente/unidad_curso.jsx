@@ -25,14 +25,14 @@ function Unidad_Curso({ actions, store }) {
   }, [actions, unidad_id]);
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center w-full mb-4">
-        <span className="text-2xl font-poppins font-bold">
+    <div className="p-4 dark:bg-gray-800 h-screen">
+      <div className="flex justify-between items-center w-full mb-4 ">
+        <span className="text-2xl font-poppins font-bold dark:text-teal-400">
           Unidad {unidad.nro_unidad}: {unidad.nombre}{" "}
         </span>
       </div>
       <div className="grid grid-cols-1 gap-4">
-        <div className="bg-white rounded-lg overflow-hidden shadow-md mt-4">
+        <div className="bg-white  rounded-lg overflow-hidden shadow-md mt-4 dark:bg-gray-700">
           <div className="">
             <Notas_Unidad
               actions={actions}

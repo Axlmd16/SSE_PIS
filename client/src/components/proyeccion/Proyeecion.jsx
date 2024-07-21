@@ -5,6 +5,10 @@ import CourseSelector from "../reportes/searchs/CourseSelector";
 import SubjectSelector from "../reportes/searchs/SubjectSelector";
 import UnitSelector from "../reportes/searchs/UnitSelector";
 import TablaEstudianteProyeccion from "./TablaEstudianteProyeccion";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 const Proyeccion = ({ actions }) => {
   const [selectedCourse, setSelectedCourse] = useState("");
@@ -138,6 +142,14 @@ const Proyeccion = ({ actions }) => {
       await handleDataSelection(data)
     }else if("criterio_nombre_1" in data){
       await handleDataSelectionCriterioEvaluacion(data)
+    }else if("unidad_1" in data){
+      setImage(null)
+        MySwal.fire({
+        icon: "info",
+        title: "Informacion Insufeciente para Proyeccion",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
@@ -149,6 +161,14 @@ const Proyeccion = ({ actions }) => {
       await handleSelectAllStudents(data)
     }else if("criterio_nombre_1" in data[0]){
       await handleSelectAllStudentsCriterios(data)
+    }else if("unidad_1" in data[0]){
+      setImage(null)
+        MySwal.fire({
+        icon: "info",
+        title: "Informacion Insufeciente para Proyeccion",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
