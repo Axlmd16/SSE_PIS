@@ -1,5 +1,14 @@
 class Malla:
+    """
+    Representa la malla curricular de una carrera, incluyendo su estado y fecha de registro.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
+        """
+        Inicializa una nueva instancia de la clase Malla.
+        """
         self.__id = None
         self.__descripcion = " "
         self.__fecha_registro = None
@@ -47,6 +56,11 @@ class Malla:
         self.__carrera_id = value
 
     def serializable(self):
+        """
+        Convierte la instancia de Malla en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Malla.
+        """
         return {
             "id": self.__id,
             "descripcion": self.__descripcion,
@@ -56,9 +70,21 @@ class Malla:
         }
 
     def __str__(self):
+        """
+        Devuelve una representación en cadena de la descripción de la malla.
+
+        :returns: La descripción de la malla.
+        """
         return self.__descripcion
 
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Malla a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la instancia de Malla.
+        :returns: Una instancia de Malla.
+        """
         malla = Malla()
         malla._id = data["id"]
         malla._descripcion = data["descripcion"]

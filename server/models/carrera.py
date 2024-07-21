@@ -1,5 +1,14 @@
 class Carrera:
+    """
+    Representa una carrera universitaria con sus atributos básicos.
+
+    :param None: No recibe parámetros al inicializarse.
+    """
+
     def __init__(self):
+        """
+        Inicializa una nueva instancia de la clase Carrera.
+        """
         self.__id = None
         self.__nombre = " "
         self.__descripcion = " "
@@ -47,6 +56,11 @@ class Carrera:
         self.__titulo_otorgado = value
 
     def serializable(self):
+        """
+        Convierte la instancia de Carrera en un diccionario serializable.
+
+        :returns: Un diccionario que representa la instancia de Carrera.
+        """
         return {
             "id": self.__id,
             "nombre": self.__nombre,
@@ -56,9 +70,21 @@ class Carrera:
         }
 
     def __str__(self):
+        """
+        Devuelve el nombre de la carrera.
+
+        :returns: El nombre de la carrera.
+        """
         return self.__nombre
 
+    @staticmethod
     def deserializable(data: dict):
+        """
+        Crea una instancia de Carrera a partir de un diccionario.
+
+        :param data: Diccionario con los datos de la carrera.
+        :returns: Una instancia de Carrera.
+        """
         carrera = Carrera()
         carrera._id = data["id"]
         carrera._nombre = data["nombre"]
