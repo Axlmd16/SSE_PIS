@@ -54,10 +54,10 @@ function FormCiclo
       <form className="grid" onSubmit={handleSubmit(onSubmit)}>
         <div className="my-2">
           <div className="text-xl font-poppins text-gray-900 font-bold text-center">
-            <h2>{update ? "Actualizar Ciclo" : "Agregar nuevo ciclo"}</h2>
+            <h2 className="dark:text-green-400">{update ? "Actualizar Ciclo" : "Agregar nuevo ciclo"}</h2>
             <br />
           </div>
-          <label className="text-black text-sm" htmlFor="ciclo">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="ciclo">
             Ciclo
           </label>
           <input
@@ -72,7 +72,7 @@ function FormCiclo
           )}
         </div>
         <div className="flex justify-end">
-          <button className="btn btn-active" type="submit">
+          <button className="btn btn-active dark:bg-green-600 dark:hover:bg-green-700 dark:text-white dark:border-none" type="submit">
             {update ? "Actualizar" : "Registrar"}
           </button>
         </div>

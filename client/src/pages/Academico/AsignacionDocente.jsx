@@ -72,10 +72,10 @@ const AsignacionDocente = () => {
 
 
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-800 h-screen p-9">
       <Bread_Crumbs items={breadcrumbItems} />
       <div className="mt-10 font-poppins flex justify-between items-center">
-        <h1 className="text-3xl my-5">Asignacion Docentes</h1>
+        <h1 className="text-3xl my-5 dark:text-white">Asignacion Docentes</h1>
       </div>
       <BuscarAsignaturaDocente
         actions={actions}
@@ -84,7 +84,7 @@ const AsignacionDocente = () => {
       />
       <div className="text-center">
         <button
-          className="mt-6 bg-indigo-600 text-white font-bold"
+          className="mt-6 bg-indigo-600 text-white font-bold dark:bg-green-700 dark:hover:bg-green-800 dark:border-none"
           onClick={creareAsignacionDocente}
         >
           <p>Asignar Materia a Docente</p>

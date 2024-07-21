@@ -55,10 +55,10 @@ function Form_Carrera({ update = false, career = {} }) {
       <form className="grid" onSubmit={handleSubmit(onSubmit)}>
         <div className="my-2">
           <div className="text-xl font-poppins text-gray-900 font-bold text-center">
-            <h2>{update ? "Actualizar carrera" : "Agregar nueva carrera"}</h2>
+            <h2 className="dark:text-green-600">{update ? "Actualizar carrera" : "Agregar nueva carrera"}</h2>
             <br />
           </div>
-          <label className="text-black text-sm" htmlFor="nombre">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="nombre">
             Nombre
           </label>
           <input
@@ -69,11 +69,11 @@ function Form_Carrera({ update = false, career = {} }) {
             {...register("nombre", { required: "El nombre es obligatorio" })}
           />
           {errors.nombre && (
-            <p className="text-red-500 text-sm">{errors.nombre.message}</p>
+            <p className="text-red-500 text-sm dark:text-cyan-400">{errors.nombre.message}</p>
           )}
         </div>
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="duracion">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="duracion">
             Años de duración
           </label>
           <input
@@ -87,11 +87,11 @@ function Form_Carrera({ update = false, career = {} }) {
             })}
           />
           {errors.duracion && (
-            <p className="text-red-500 text-sm ">{errors.duracion.message}</p>
+            <p className="text-red-500 text-sm dark:text-cyan-400 ">{errors.duracion.message}</p>
           )}
         </div>
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="titulo_otorgado">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="titulo_otorgado">
             Titulo otorgado
           </label>
           <input
@@ -103,7 +103,7 @@ function Form_Carrera({ update = false, career = {} }) {
           />
         </div>
         <div className="my-2">
-          <label className="text-black text-sm" htmlFor="descripcion">
+          <label className="text-black text-sm dark:text-cyan-400" htmlFor="descripcion">
             Descripción
           </label>
           <textarea

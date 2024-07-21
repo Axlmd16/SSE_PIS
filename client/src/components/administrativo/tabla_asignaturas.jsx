@@ -8,7 +8,6 @@ const TableSubjects = ({ actions, store }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Llamada a la API para obtener las mallas
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -26,7 +25,6 @@ const TableSubjects = ({ actions, store }) => {
     fetchData();
   }, [actions]);
 
-  // Función para filtrar las asignaturas
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     const filtered = subjects.filter(
@@ -38,19 +36,15 @@ const TableSubjects = ({ actions, store }) => {
     setFilteredData(filtered);
   };
 
-  // Función para manejar el borrado logico de una asignatura
   const handleDelete = (row) => {
-    // Implementar la función para manejar la eliminación de una asignatura
     console.log("Eliminar asignatura:", row);
   };
 
-  // Función para manejar la actualización de una asignatura
   const handleUpdate = (row) => {
     actions.setSelectedSubject(row);
     actions.handleModal();
   };
 
-  // Columnas de la tabla
   const columns = [
     {
       name: "Nro.",
@@ -75,17 +69,17 @@ const TableSubjects = ({ actions, store }) => {
     {
       name: "Acciones",
       cell: (row) => (
-        <div className="">
+        <div className="flex space-x-2">
           <button
             id="btn-delete"
-            className="btn-ghost mx-2"
+            className="btn-ghost text-red-500 dark:text-green-400"
             onClick={() => handleDelete(row)}
           >
             <Trash2 size={20} />
           </button>
           <button
             id="btn-update"
-            className="btn-ghost"
+            className="btn-ghost text-blue-500 dark:text-purple-400"
             onClick={() => handleUpdate(row)}
           >
             <Pencil size={20} />
@@ -95,7 +89,6 @@ const TableSubjects = ({ actions, store }) => {
     },
   ];
 
-  // Opciones de paginación
   const paginationComponentOptions = {
     rowsPerPageText: "Filas por página",
     rangeSeparatorText: "de",
@@ -103,20 +96,37 @@ const TableSubjects = ({ actions, store }) => {
     selectAllRowsItemText: "Todos",
   };
 
-  // Estilos personalizados para la tabla
   const customStyles = {
     headCells: {
       style: {
         fontSize: "11px",
         fontWeight: "bold",
         textTransform: "uppercase",
+        color: 'var(--text-primary)', // Color del texto de las cabeceras en modo oscuro
+        backgroundColor: 'var(--bg-table)', // Fondo de la tabla en modo oscuro
+      },
+    },
+    cells: {
+      style: {
+        color: 'var(--text-secondary)', // Color del texto en las celdas en modo oscuro
+        backgroundColor: 'var(--bg-cell)', // Fondo de las celdas en modo oscuro
+      },
+    },
+    table: {
+      style: {
+        backgroundColor: 'var(--bg-table)', // Fondo general de la tabla
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: 'var(--bg-pagination)', // Fondo de la paginación en modo oscuro
+        color: 'var(--text-secondary)', // Color del texto de la paginación en modo oscuro
       },
     },
   };
-
-  // Renderizado de la tabla
+ 
   return (
-    <div>
+    <div className="dark:bg-gray-800 dark:text-gray-200">
       <SearchBar handleSearch={handleSearch} />
 
       <DataTable

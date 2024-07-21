@@ -78,10 +78,10 @@ const EstudianteCursa = () => {
   };
 
   return (
-    <div className="font-poppins">
+    <div className="font-poppins bg-white dark:bg-gray-800 h-screen p-9">
       <Bread_Crumbs items={breadcrumbItems} />
       <div className="mt-10 font-poppins flex justify-between items-center">
-        <h1 className="text-3xl my-5">Asignar Estudiantes a Cursos</h1>
+        <h1 className="text-3xl my-5 dark:text-white">Asignar Estudiantes a Cursos</h1>
       </div>
       <div className="mt-6">
         <form onSubmit={handleSubmit(creareEstuianteCura)}>
@@ -98,7 +98,7 @@ const EstudianteCursa = () => {
                 {...register("nro_de_matricula", {
                   required: "Este campo es requerido",
                 })}
-                className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-green-700 dark:text-white dark:border-none"
               >
                 <option className="text-gray-300" value="">
                   Seleccione...
@@ -117,7 +117,7 @@ const EstudianteCursa = () => {
 
           <div className="text-center">
             <button
-              className="mt-6 bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="mt-6 btn btn-active gap-2 dark:bg-green-700 dark:hover:bg-green-800 dark:text-white dark:border-none" 
               type="submit"
             >
               Asignar Curso
