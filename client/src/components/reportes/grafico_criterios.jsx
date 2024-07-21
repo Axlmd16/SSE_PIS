@@ -25,8 +25,12 @@ const CriteriaChart = ({ data }) => {
     }));
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
-      <ResponsiveContainer width="70%" height={250} className="mx-auto">
+    <div className="p-4 bg-white shadow-md rounded-lg dark:bg-gray-800">
+      <ResponsiveContainer
+        width="70%"
+        height={250}
+        className="mx-auto dark:text-white"
+      >
         <BarChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
@@ -40,7 +44,7 @@ const CriteriaChart = ({ data }) => {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="text-center mt-4 font-medium">
+      <div className="text-center mt-4 font-medium dark:text-white">
         Estudiante: {student.nombre}
       </div>
     </div>

@@ -1,6 +1,13 @@
+from email import encoders
+from email.mime.base import MIMEBase
 from flask import Blueprint, request, jsonify
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import random
+from datetime import datetime, timedelta
 from controls.reportes.util import Util
+from config.config import Config
 
 reports = Blueprint("reports", __name__)
 
@@ -83,3 +90,53 @@ def get_notas_criterio_por_unidad(unidad_id, cursa_id):
 
     except Exception as e:
         return jsonify({"message": str(e)}), 500
+
+
+# Enviar correo con archivo adjunto de notas
+@reports.route("/send_email", methods=["POST"])
+def send_report_email():
+    email = request.form.get("correo")
+    file = request.files.get("file")
+
+    print(email)
+    print(file)
+
+    if email and file:
+        msg = MIMEMultipart()
+        msg["From"] = Config.CORREO
+        msg["To"] = email
+        msg["Subject"] = "Reporte de Rendimiento Académico"
+
+        body = """
+        <html>
+            <body>
+                <p>Hola,</p>
+                <p>Adjunto encontrarás el reporte de rendimiento académico solicitado.</p>
+                <p>Si tienes alguna duda o inquietud, no dudes en contactarnos.</p>
+                <p>Atentamente,</p>
+                <p>Equipo de soporte</p>
+            </body>
+        </html>
+        """
+        msg.attach(MIMEText(body, "html"))
+
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(file.read())
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename={file.filename}",
+        )
+        msg.attach(part)
+
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(Config.CORREO, Config.CLAVE_SECRETA)
+            server.sendmail(Config.CORREO, email, msg.as_string())
+            server.quit()
+            return jsonify({"msg": "Reporte enviado correctamente"}), 201
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    return jsonify({"error": "Correo o archivo no proporcionado"}), 400
