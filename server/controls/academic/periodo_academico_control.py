@@ -8,6 +8,7 @@ class PeriodoAcademicoControl(Data_Access_Object):
 
     Hereda de Data_Access_Object para realizar operaciones de base de datos.
     """
+
     def __init__(self):
         """
         Inicializa una nueva instancia de PeriodoAcademicoControl.
@@ -31,7 +32,7 @@ class PeriodoAcademicoControl(Data_Access_Object):
     def _periodo_acedemico(self, value):
         """
         Establece el peirodo academico actual.
-        
+
         Args:
             value (periodo_academico): La instancia de periodo_academico a establecer.
         """
@@ -72,7 +73,7 @@ class PeriodoAcademicoControl(Data_Access_Object):
     def list(self):
         """
         Lista todas los periodos academicos.
-        
+
         Returns:
             list: Lista de todas los periodos academicos.
         """
