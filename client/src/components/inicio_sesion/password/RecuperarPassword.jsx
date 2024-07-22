@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Context } from "../../../store/context";
 import { useNavigate } from "react-router-dom";
-import { encrypt } from "../../Utilidades/encriptado";
+import { encrypt, decrypt } from "../../Utilidades/encriptado";
 import { User } from "lucide-react";
 
 const MySwal = withReactContent(Swal);
@@ -34,6 +34,11 @@ const RecuperarPassword = () => {
     if (id_cuenta_reset_password) {
       const id = id_cuenta_reset_password.toString();
       const encryptedId = encrypt(id, secretKey);
+
+      console.log({encryptedId});
+
+      const id_descriptado = decrypt(encryptedId, secretKey);
+      console.log({id_descriptado});
 
       const data_info = {
         correo,

@@ -166,7 +166,7 @@ export function Navbar() {
             Acciones - Contraseña
           </Link>
           <Link
-            to="/"
+            to="/autores"
             className="text-gray-800 text-center block px-4 py-2 m-1 text-sm font-bold hover:bg-gray-800 hover:text-white rounded-md dark:text-white dark:hover:bg-green-950"
             onClick={closeMenu}
           >

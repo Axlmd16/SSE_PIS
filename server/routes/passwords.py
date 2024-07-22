@@ -49,8 +49,8 @@ def send_recovery_email():
 
         token = generate_token()
         token_store[token] = datetime.now() + timedelta(minutes=1)  
-        print(f"Token: {token}")
-        print(f"Id encriptado: {encrypted_id_cuenta}")
+        # print(f"Token: {token}")
+        # print(f"Id encriptado: {encrypted_id_cuenta}")
 
         recovery_link = f"http://localhost:5173/reset_password/{token}/{encrypted_id_cuenta}"
 
@@ -270,6 +270,7 @@ def reset_password():
         data = request.json
         # print("1")
         token = data["token"]
+        # print(token)
         # print("2")
         if token in token_store:
             # print("3")
@@ -298,10 +299,10 @@ def reset_password():
                     # print("14")
                     return jsonify(True), 200
         else:
-            print("\n\n\ntoken no encontrado")
-            return jsonify(False), 400
+            # print("\n\n\ntoken no encontrado")
+            return jsonify(False), 200
     except Exception as e:
-        print(f"Error en reset_password: {e}")
+        # print(f"Error en reset_password: {e}")
         return jsonify("errpr"), 404
     
 #* Funcion para generar un token unico
