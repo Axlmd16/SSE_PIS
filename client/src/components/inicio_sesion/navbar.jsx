@@ -59,11 +59,14 @@ export function SidebarItem({ icon, text, active, alert, to, click }) {
       onClick={() => {
         click && click();
       }}
-      className={`relative flex items-center py-2 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center font-medium rounded-md cursor-pointer transition-colors group ${
         active ? "bg-aux text-white" : "hover:bg-gray-700 text-gray-400"
       } ${alert ? "mt-4" : "mt-2"}`}
     >
-      <Link className="flex items-center w-full text-gray-300" to={to}>
+      <Link
+        className="flex items-center w-full p-2 rounded-md text-gray-300 group-hover:text-white dark:text-gray-200 dark:group-hover:text-white"
+        to={to}
+      >
         <span className="mr-2">{icon}</span>
         <span
           className={`overflow-hidden transition-all ${
